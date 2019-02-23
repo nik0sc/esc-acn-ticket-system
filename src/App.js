@@ -41,6 +41,8 @@ class App extends Component {
               </Route>
               <Route path="/admin" component={Admin} >
               </Route>
+              <Route path="/dashboard" component={Dashboard} >
+              </Route>
           
           </div>
 

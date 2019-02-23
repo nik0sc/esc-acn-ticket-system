@@ -5,9 +5,9 @@ import {Redirect} from 'react-router-dom'
 
 class Form extends React.Component{
 
-  // state= {
-  //   redirect: false
-  // }
+  state= {
+    redirect: false
+  }
 
     getUser = async(e) => {
         e.preventDefault();
@@ -20,17 +20,26 @@ class Form extends React.Component{
             }
           })
           .then((res) => {
-            console.log(res)
+            if(res)
+            this.setState({
+              redirect: true
+            })
           }
-          )
+          
+        )
         }
       }
       
     render(){
 
+      if(this.state.redirect){
+        return <Redirect to="/dashboard" />
+      }
+
 
         return(
-            <form onSubmit={this.getUser}>
+          
+            <form onSubmit={this.getUser.bind(this)}>
                 <input type="text" name="email" placeholder="Email" />
                 <input type="text" name="password" placeholder="Password" />
                 <button> Login </button>
