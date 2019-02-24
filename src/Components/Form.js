@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import {Redirect} from 'react-router-dom'
+import {Redirect, NavLink} from 'react-router-dom'
 
 
 class Form extends React.Component{
@@ -20,10 +20,13 @@ class Form extends React.Component{
             }
           })
           .then((res) => {
-            if(res)
-            this.setState({
-              redirect: true
-            })
+            if(res.request.status === 200){
+              this.setState({
+                redirect: true
+              })
+            }else{
+              
+            }
           }
           
         )
@@ -35,84 +38,20 @@ class Form extends React.Component{
       if(this.state.redirect){
         return <Redirect to="/dashboard" />
       }
-
-
         return(
-          
+          <div>
+          <div className="PageSwitcher">
+                <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
+                <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink>
+              </div>
             <form onSubmit={this.getUser.bind(this)}>
                 <input type="text" name="email" placeholder="Email" />
                 <input type="text" name="password" placeholder="Password" />
                 <button> Login </button>
             </form>
+            </div>
         )
     }
 }
 
 export default Form;
-
-
-// import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
-
-// class Form extends Component {
-//     constructor() {
-//         super();
-
-//         this.state = {
-//             email: '',
-//             password: ''
-//         };
-
-//         this.handleChange = this.handleChange.bind(this);
-//         this.handleSubmit = this.handleSubmit.bind(this);
-//     }
-
-//     handleChange(e) {
-//         let target = e.target;
-//         let value = target.type === 'checkbox' ? target.checked : target.value;
-//         let name = target.name;
-
-//         const username = e.target.elements.name.value;
-//         const password = e.target.elements.password.value;
-//         if(username && password){
-
-//             this.setState({
-//                 email: this.state.username,
-//                 password: this.state.password
-//               });
-
-//         }
-
-    
-//     }
-
-//     handleSubmit(e) {
-//         e.preventDefault();
-
-//         console.log('The form was submitted with the following data:');
-//         console.log(this.state);
-//     }
-
-//     render() {
-//         return (
-//         <div>
-//             <form onSubmit={this.handleSubmit}>
-//             <div>
-//                 <label>Name</label>
-//                 <input type="email" id="name" placeholder="Enter your email" name="name" value={this.state.name} onChange={this.handleChange} />
-//               </div>
-//               <div>
-//                 <label>Password</label>
-//                 <input type="password" id="password" placeholder="Enter your password" name="password" value={this.state.password} onChange={this.handleChange} />
-//               </div>
-
-//               <div>
-//                   <button>Sign In</button> <Link to="/">Create an account</Link>
-//               </div>
-//             </form>
-//           </div>
-//         );
-//     }
-// }
-
-// export default Form;

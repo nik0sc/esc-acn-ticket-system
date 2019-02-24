@@ -1,5 +1,7 @@
 import React from 'react'
 import axios from 'axios'
+import { NavLink} from 'react-router-dom'
+
 
 class Register extends React.Component{
 
@@ -27,6 +29,11 @@ class Register extends React.Component{
 
     render(){
         return(
+          <div>
+              <div className="PageSwitcher">
+                <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
+                <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink>
+              </div>
             <form onSubmit={this.makeUser} >
                 <input type="text" name="username" placeholder="Put a username" />
                 <input type="text" name="email" placeholder="Put your email" />
@@ -36,63 +43,9 @@ class Register extends React.Component{
 
                 <button> Register </button>
             </form>
+            </div>
         )
     }
 }
-
-// export default Register;
-
-
-
-    // constructor() {
-    //     super();
-
-    //     this.state = {
-    //         email: '',
-    //         password: '',
-    //         name: '',
-    //     };
-
-    //     this.handleChange = this.handleChange.bind(this);
-    //     this.handleSubmit = this.handleSubmit.bind(this);
-    // }
-
-    // handleChange(e) {
-    //     let target = e.target;
-    //     let value = target.type === 'checkbox' ? target.checked : target.value;
-    //     let name = target.name;
-
-    //     this.setState({
-    //       [name]: value
-    //     });
-    // }
-
-    // handleSubmit(e) {
-    //     e.preventDefault();
-
-    //     console.log('The form was submitted with the following data:');
-    //     console.log(this.state);
-    // }
-
-
-
-//     render() {
-//         return (
-//         <div>
-//             <form onSubmit={this.makeUser}>
-//               <div >
-//                 <input type="text" name="username" placeholder="Enter your full name" value={this.state.name}/>
-//               </div>
-//               <div >
-//                 <input type="password" name="password" placeholder="Enter your password" value={this.state.password}/>
-//               </div>
-//               <div>
-//                   <button>Sign Up</button> <Link to="/sign-in">I'm already member</Link>
-//               </div>
-//             </form>
-//           </div>
-//         );
-//     }
-// }
 
 export default Register;
