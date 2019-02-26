@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 import Register from './Components/Register'
-import Form from './Components/Form';
+import Login from './Components/Login'
 import Admin from './Components/Admin';
-
+import Tickets from './Components/Tickets'
 import './App.css';
 import Dashboard from './Components/Dashboard';
 import ButtonAppBar from './Components/ButtonAppBar';
@@ -30,11 +30,13 @@ class App extends Component {
 
               <Route path="/register" component={Register}>
               </Route>
-              <Route exact path="/" component={Form}  >
+              <Route exact path="/" component={Login}  >
               </Route>
               <Route path="/admin" component={Admin} >
               </Route>
               <Route path="/dashboard" component={Dashboard} >
+              </Route>
+              <Route path="/tickets" component={Tickets}>
               </Route>
           
           </div>

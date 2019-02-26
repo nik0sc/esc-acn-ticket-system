@@ -34,3 +34,7 @@
 .PageSwitcher {
   align-items: unset;
 }
+
+.icon{
+  transform: scale(1.9);
+}

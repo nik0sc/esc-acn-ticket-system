@@ -1,8 +1,13 @@
 import React from 'react'
 import axios from 'axios'
+import {Redirect} from 'react-router-dom'
 
 
 class Admin extends React.Component{
+  
+  state = {
+    redirect: false
+  }
 
     getAdmin = async(e) => {
         e.preventDefault();
@@ -16,12 +21,18 @@ class Admin extends React.Component{
           })
           .then((res) => {
             console.log(res)
+            this.setState= {
+              redirect:true
+            }
           }
           )
         }
       }
       
     render(){
+      if(this.state.redirect){
+        return <Redirect to="/tickets" />
+      }
         return(
             <form onSubmit={this.getAdmin}>
                 <input type="text" name="email" placeholder="Email" />
