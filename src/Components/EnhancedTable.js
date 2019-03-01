@@ -144,7 +144,11 @@ let EnhancedTableToolbar = props => {
   const { numSelected, classes } = props;
 
   return (
+    <div>
+              <DetailedExpansionPanel />
+
     <Toolbar
+  
       className={classNames(classes.root, {
         [classes.highlight]: numSelected > 0,
       })}
@@ -159,8 +163,6 @@ let EnhancedTableToolbar = props => {
             Tickets
           </Typography>
         )}
-        <DetailedExpansionPanel />
-
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
@@ -179,6 +181,8 @@ let EnhancedTableToolbar = props => {
         )}
       </div>
     </Toolbar>
+    </div>
+
   );
 };
 
@@ -208,10 +212,10 @@ class EnhancedTable extends React.Component {
     orderBy: 'topics',
     selected: [],
     data: [
-      createData('#1', 'Smart Home, AR Theatre', '10/2/19', 'john@example.com', 'Open'),
-      createData('#2', 'AR Car', '20/1/19', 'tom@example.com', 'In Progress'),
-      createData('#3', 'Queuing System', '9/2/19', 'mary@example.com', 'Open'),
-      createData('#4', 'Service', '28/1/19', 'dog@example.com', 'Closed'),
+      createData('#1', 'Smart Home, AR Theatre', '10-2-19', 'john@example.com', 'Open'),
+      createData('#2', 'AR Car', '20-1-19', 'tom@example.com', 'In Progress'),
+      createData('#3', 'Queuing System', '9-2-19', 'mary@example.com', 'Open'),
+      createData('#4', 'Service', '28-  1-19', 'dog@example.com', 'Closed'),
       // createData('Gingerbread', 356, 16.0, 49, 3.9),
       // createData('Honeycomb', 408, 3.2, 87, 6.5),
       // createData('Ice cream sandwich', 237, 9.0, 37, 4.3),

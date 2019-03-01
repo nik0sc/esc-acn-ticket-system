@@ -7,6 +7,8 @@ import Tickets from './Components/Tickets'
 import './App.css';
 import Dashboard from './Components/Dashboard';
 import ButtonAppBar from './Components/ButtonAppBar';
+import SignIn from './Components/SignIn'
+import RegisterNew from './Components/RegisterNew';
 
 class App extends Component {
   
@@ -22,15 +24,11 @@ class App extends Component {
 
             
           <div className="App">
-     
-
-              {/* <div className="FormTitle">
-                  <NavLink to="/sign-in" activeClassName="FormTitle__Link--Active" className="FormTitle__Link">Sign In</NavLink> or <NavLink exact to="/" activeClassName="FormTitle__Link--Active" className="FormTitle__Link">Sign Up</NavLink>
-              </div> */}
-
+          <div className="App_Aside"></div>
+          <div className="App_Form" >
               <Route path="/register" component={Register}>
               </Route>
-              <Route exact path="/" component={Login}  >
+              <Route exact path="/" component={SignIn}  >
               </Route>
               <Route path="/admin" component={Admin} >
               </Route>
@@ -38,6 +36,7 @@ class App extends Component {
               </Route>
               <Route path="/tickets" component={Tickets}>
               </Route>
+              </div>
           
           </div>
 

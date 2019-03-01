@@ -1,7 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 import {Redirect, NavLink} from 'react-router-dom'
-
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 class Login extends React.Component{
 
@@ -52,14 +53,18 @@ class Login extends React.Component{
           <div>
           <div className="PageSwitcher">
                 <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
-                <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink>
-              </div>
-            <form onSubmit={this.getUser.bind(this)}>
-                <input type="text" name="email" placeholder="Email" />
-                <input type="text" name="password" placeholder="Password" />
-                <button> Login </button>
+                <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink> 
+            </div>
+            <form onSubmit={this.getUser.bind(this)} >
+            <input className="form" type="text" name="email" placeholder="Email" />
+  
+            <input className="form" type="text" name="password" placeholder="Password" />
+            <button> Login </button>
             </form>
             </div>
+  
+       
+          
         )
     }
 }

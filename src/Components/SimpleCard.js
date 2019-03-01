@@ -66,7 +66,10 @@ class SimpleCard extends React.Component{
         <Grid item xs = {12} sm = {6}>
         <Card className={classes.card}>
             <CardContent>
-                <h1> Hello</h1>
+              <Typography>
+              Welcome to Accenture's ticket system
+              </Typography>
+                {/* <h3> Welcome to Accenture's ticket system</h3> */}
 
             </CardContent>
 
