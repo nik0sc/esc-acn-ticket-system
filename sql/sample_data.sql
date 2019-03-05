@@ -27,9 +27,12 @@ insert into tickets (id, title, message, attachment_path, open_time, close_time,
 (2, 'Speech analysis is broken', 'The transcriber doesn\'t understand my recording file', 'sample.mp3', '2019-03-02 09:13:20', null, 2, 2, 1, 2);
 
 insert into chatrooms (id, description, ticket_id) values 
-(1, 'Log in problem chat', 1);
+(1, 'Log in problem chat', 1),
+(2, 'Speech analysis problem chat', 2);
 
 insert into chat_messages (id, message, sent_time, sent_user_id, chatroom_id) values
 (1, 'Hello, what seems to be the problem?', '2019-03-01 16:32:01', 3, 1),
 (2, 'I generated a token using the admin panel but I can\'t authenticate using it!', '2019-03-01 19:00:52', 1, 1),
-(3, 'Ok, we\'re working on it!', '2019-03-02 08:52:31', 4, 1);
+(3, 'Ok, we\'re working on it!', '2019-03-02 08:52:31', 4, 1),
+(4, 'I tried to upload a recording but the API said the format was wrong. It was an MP3 file. Any advice?', '2019-03-02 09:20:41', 2, 2),
+(5, 'Thanks dudes you da best', '2019-03-02 09:30:02', 1, 1);
