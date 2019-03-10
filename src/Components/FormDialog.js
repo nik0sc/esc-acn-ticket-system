@@ -7,6 +7,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Add from '@material-ui/icons/AddCircle';
 import { TextField } from '@material-ui/core';
+import DropzoneDialogExample from './DropzoneWithPreview';
+import DropzoneWithPreview from './DropzoneWithPreview';
+import 'filepond/dist/filepond.min.css';
+import * as FilePond from 'filepond';
+import FileAttach from './FileAttach';
 
 
 class FormDialog extends React.Component {
@@ -41,45 +46,54 @@ class FormDialog extends React.Component {
             </DialogContentText>
             <TextField
               autoFocus
-              margin="dense"
-              id="name"
+              margin="normal"
+              id="outlined-email"
               label="Email Address"
               type="email"
+              variant="outlined"
               fullWidth
             />
             <TextField
               autoFocus
-              margin="dense"
-              id="name"
+              margin="normal"
+              id="outlined-name"
               label="Name"
-              type="email"
+              variant="outlined"
               fullWidth
             />
             <TextField
               autoFocus
-              margin="dense"
-              id="name"
+              margin="normal"
+              id="outlined-contact"
               label="Contact"
-              type="email"
+              type="contact"
+              variant="outlined"
               fullWidth
             />
             <TextField
               autoFocus
-              margin="dense"
-              id="name"
+              margin="normal"
+              id="outlined-phone"
               label="Phone"
-              type="email"
+              type="phone"
+              variant="outlined"
               fullWidth
             />
             <TextField
               autoFocus
-              margin="dense"
-              id="name"
+              margin="normal"
+              id="outlined-question"
               label="Question"
-              type="email"
+              type="question"
+              variant="outlined"
               fullWidth
+              multiline
             />
-          </DialogContent>
+            <DialogContentText>
+              Attachments
+            </DialogContentText>
+            <FileAttach />
+            </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
               Cancel

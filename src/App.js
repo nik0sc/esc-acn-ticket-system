@@ -26,7 +26,7 @@ class App extends Component {
           <div className="App">
           <div className="App_Aside"></div>
           <div className="App_Form" >
-              <Route path="/register" component={Register}>
+              <Route path="/register" component={RegisterNew}>
               </Route>
               <Route exact path="/" component={SignIn}  >
               </Route>
@@ -36,6 +36,7 @@ class App extends Component {
               </Route>
               <Route path="/tickets" component={Tickets}>
               </Route>
+            
               </div>
           
           </div>
