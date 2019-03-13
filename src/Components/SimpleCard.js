@@ -15,7 +15,6 @@ import Divider from '@material-ui/core/Divider';
 import { ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import Add from '@material-ui/icons/AddCircle';
 import Icon from '@material-ui/core/Icon';
-import red from '@material-ui/core/colors/red';
 import FormDialog from "./FormDialog";
 
 
@@ -23,6 +22,7 @@ const styles = {
   card: {   
     minWidth: 275,
     margin: 20,
+    height: 500,
     
   },
   title: {
@@ -31,6 +31,29 @@ const styles = {
   pos: {
     marginBottom: 12,
   },
+
+menu: {
+  margin: 20,
+  minWidth: 275,
+},
+
+stats: {
+  margin: 20,
+  minWidth: 275,
+  height: 200,
+
+},
+
+number:{
+  display: 'flex',
+  margin: 20,
+},
+
+rows:{
+  display: "flex",
+},
+
+
 
 };
 
@@ -64,21 +87,29 @@ class SimpleCard extends React.Component{
     </Card>
         </Grid>
         <Grid item xs = {12} sm = {6}>
-        <Card className={classes.card}>
+        <Card className={classes.menu}>
             <CardContent>
-              <Typography>
+              <Typography variant="h5">
               Welcome to Accenture's ticket system
               </Typography>
-                {/* <h3> Welcome to Accenture's ticket system</h3> */}
-
             </CardContent>
-
-
+        </Card> 
+        <Card className={classes.stats}>
+          <CardContent>
+            <Typography variant="h5"> 
+                Live Chat
+            </Typography>
+            <Divider />
+            {/* <Grid item xs={6} sm={3} container direction="row" justify="space-between" alignItems="center"> */}
+          {/* </Grid> */}
+            </CardContent>
         </Card>
+        
 
     
         
         </Grid>
+        
 
 
       </Grid>
