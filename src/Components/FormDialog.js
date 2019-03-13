@@ -7,8 +7,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Add from '@material-ui/icons/AddCircle';
 import { TextField } from '@material-ui/core';
-import DropzoneDialogExample from './DropzoneWithPreview';
-import DropzoneWithPreview from './DropzoneWithPreview';
 import 'filepond/dist/filepond.min.css';
 import * as FilePond from 'filepond';
 import FileAttach from './FileAttach';

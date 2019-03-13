@@ -16,7 +16,8 @@ import CustomizedSelects from './CustomizedSelects';
 const styles = theme => ({
   root: {
     padding: 30,
-    width: '75%',
+    width: '100%',
+    
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -58,24 +59,8 @@ function DetailedExpansionPanel(props) {
           <div className={classes.column}>
             <Typography className={classes.heading}>Filter Search</Typography>
           </div>
-          {/* <div className={classes.column}>
-            <Typography className={classes.secondaryHeading}>Select trip destination</Typography>
-          </div> */}
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-          {/* <div className={classes.column} />
-          <div className={classes.column}>
-            <Chip label="Barbados" className={classes.chip} onDelete={() => {}} />
-          </div>
-          <div className={classNames(classes.column, classes.helper)}>
-            <Typography variant="caption">
-              Select your destination of choice
-              <br />
-              <a href="#sub-labels-and-columns" className={classes.link}>
-                Learn more
-              </a>
-            </Typography>
-          </div> */}
           <CustomizedSelects />
         </ExpansionPanelDetails>
         <Divider />

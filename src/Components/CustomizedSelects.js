@@ -7,11 +7,16 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
+import Input from '@material-ui/core/Input';
+import MultipleSelect from './MultipleSelect';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, TimePicker, DatePicker } from 'material-ui-pickers';
+
 
 const BootstrapInput = withStyles(theme => ({
   root: {
     'label + &': {
-      marginTop: theme.spacing.unit * 3,
+      //marginTop: theme.spacing.unit * 3,
     },
   },
   input: {
@@ -46,12 +51,10 @@ const BootstrapInput = withStyles(theme => ({
 
 const styles = theme => ({
   root: {
-    display: 'flex',
-    
-
+    display: 'flex', 
   },
   margin: {
-    margin: theme.spacing.unit,
+    margin: 20,
   },
   bootstrapFormLabel: {
     fontSize: 18,
@@ -60,57 +63,69 @@ const styles = theme => ({
 
 class CustomizedSelects extends React.Component {
   state = {
-    age: '',
+    name: [],
+    clearedDate: null,
   };
 
   handleChange = event => {
-    this.setState({ age: event.target.value });
+    this.setState({ name: event.target.value });
   };
 
+  handleDateChange = date => {
+    this.setState({ clearedDate: date });
+  };
+
+  handleChangeMultiple = event => {
+    const { options } = event.target;
+    const value = [];
+    for (let i = 0, l = options.length; i < l; i += 1) {
+      if (options[i].selected) {
+        value.push(options[i].value);
+      }
+    }
+    this.setState({
+      name: value,
+    });
+  };
   render() {
     const { classes } = this.props;
+    const { clearedDate } = this.state;
 
     return (
       <form className={classes.root} autoComplete="off">
-        <FormControl className={classes.margin}>
-          <InputLabel htmlFor="age-customized-select" className={classes.bootstrapFormLabel}>
-            Ticket Number
+        <FormControl className={classes.margin} >
+          <h6>Ticket Number</h6>
+          <InputLabel htmlFor="age-customized-select" className={classes.bootstrapFormLabel} >
           </InputLabel>
           <BootstrapInput />
         </FormControl>
-        {/* <FormControl className={classes.margin}>
-          <InputLabel htmlFor="age-customized-select" className={classes.bootstrapFormLabel}>
-            Age
-          </InputLabel> */}
-          {/* <Select
-            value={this.state.age}
-            onChange={this.handleChange}
-            input={<BootstrapInput name="age" id="age-customized-select" />}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
+        <MultipleSelect/>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <FormControl className={classes.margin}>
-          <InputLabel htmlFor="age-customized-native-simple" className={classes.bootstrapFormLabel}>
-            Age
+          <h6>Date Opened</h6>
+        <DatePicker
+            margin="normal"
+            value={clearedDate}
+            onChange={this.handleDateChange}
+          />
+          </FormControl>
+          <FormControl className={classes.margin}>
+            <h6>Time Opened</h6>
+          <TimePicker
+            margin="normal"
+            value={clearedDate}
+            onChange={this.handleDateChange}
+          />
+        </FormControl>
+      </MuiPickersUtilsProvider> 
+      <FormControl className={classes.margin} >
+          <h6>Email</h6>
+          <InputLabel htmlFor="age-customized-select" className={classes.bootstrapFormLabel} >
           </InputLabel>
-          <NativeSelect
-            value={this.state.age}
-            onChange={this.handleChange}
-            input={<BootstrapInput name="age" id="age-customized-native-simple" />}
-          >
-            <option value="" />
-            <option value={10}>Ten</option>
-            <option value={20}>Twenty</option>
-            <option value={30}>Thirty</option>
-          </NativeSelect> */}
-        {/* </FormControl> */}
+          <BootstrapInput />
+        </FormControl>       
       </form>
+
     );
   }
 }
