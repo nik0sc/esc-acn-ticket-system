@@ -52,13 +52,15 @@ app.get('/ticket/:ticketId', (req, res) => {
 
 // Middleware function to check tokens against acnapi
 // If the token checks out, the session object is injected into request object
+// Use it to check if this user is authorized to access the object
 function check_session_token(req, res, next) {
     axios.get('https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/sessions/me', {
         headers: {
             'Server-Token': process.env.ACN_SERVER_TOKEN,
             'Content-Type': 'application/json',
             'X-Parse-Session-Token': req.header('X-Parse-Session-Token')
-        }
+        },
+        timeout: 3000 // 3sec
     }).then((res2) => {
         req.acn_session = res2.data;
         if (typeof next === 'function') {
@@ -69,12 +71,12 @@ function check_session_token(req, res, next) {
             // Invalid session token
             if (err.response.status === 400 && err.response.data.code === 209) {
                 res.status(401).json({
-                    'error': 'Invalid session token'
+                    error: 'Invalid session token'
                 });
             } else if (err.response.status === 504) {
                 console.log('acn timeout');
                 res.status(504).json({
-                    'error': 'Upstream timeout in acn session management'
+                    error: 'Upstream timeout in acn session management'
                 });
             } else {
                 console.log('error in session verification');
@@ -82,15 +84,22 @@ function check_session_token(req, res, next) {
                         err.response.statusText;
                 console.log(status_string);
                 res.status(500).json({
-                    'error': 'Upstream error from acn session management',
-                    'response': status_string
+                    error: 'Upstream error from acn session management',
+                    response: status_string
                 });
             }
+        } else if (err.code === 'ECONNABORTED') {
+            console.log('acn timeout');
+            res.status(504).json({
+                error: 'Upstream timeout in acn session management'
+            });
+
         } else {
             console.log('error in session verification - no response');
             console.log(err);
             res.status(500).json({
-                'error': 'Check server log'
+                error: 'Check server log',
+                error_code: err.code 
             });
         }
     });
@@ -117,15 +126,15 @@ app.post('/ticket', check_session_token, (req, res) => {
     
     query.then((id) => {
         res.json({
-            'success': 'true',
-            'id': id
+            success: 'true',
+            id: (typeof id === 'object' && id.length === 1) ? id[0] : id
         });
     })
     .catch((err) => {
         res.status(500)
         .json({
-            'error': 'Database error while inserting ticket',
-            'ex': err
+            error: 'Database error while inserting ticket',
+            ex: err.toString()
         });
     });
 
@@ -135,7 +144,7 @@ app.put('/ticket/:ticketId', (req, res) => {
 
 });
 
-app.put('/ticket/:ticketId/attachment', (req, res) => {
+app.put('/ticket/:ticketId/attachment', check_session_token, (req, res) => {
     // Make sure this ticket exists
     var query = knex('tickets')
         .first('id', 'attachment_path')
@@ -146,7 +155,7 @@ app.put('/ticket/:ticketId/attachment', (req, res) => {
     query.then((row) => {
         if (typeof row === 'undefined') {
             res.status(404).json({
-                'error': 'Ticket id does not exist'
+                error: 'Ticket id does not exist'
             });
             return;
         }
@@ -160,11 +169,13 @@ app.put('/ticket/:ticketId/attachment', (req, res) => {
 
             
         } 
+
+        res.end();
     })
     .catch((err) => {
         console.log(err);
         res.status(500).json({
-            'error': 'Database query error'
+            error: 'Database query error'
         });
     });
 });
