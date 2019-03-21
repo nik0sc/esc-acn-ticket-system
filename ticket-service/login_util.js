@@ -3,7 +3,7 @@ const axios = require('axios');
 // Middleware function to check tokens against acnapi
 // If the token checks out, the session object is injected into request object
 // Use it to check if this user is authorized to access the object
-function __check_session_token(req, res, next) {
+exports.check_session_token = function (req, res, next) {
     var session_token = req.header('X-Parse-Session-Token');
 
     if (typeof session_token === 'undefined') {
@@ -52,7 +52,6 @@ function __check_session_token(req, res, next) {
             res.status(504).json({
                 error: 'Upstream timeout in acn session management'
             });
-
         } else {
             console.log('error in session verification - no response');
             console.log(err);
@@ -62,8 +61,4 @@ function __check_session_token(req, res, next) {
             });
         }
     });
-}
-
-module.exports = {
-    check_session_token: __check_session_token
 };
