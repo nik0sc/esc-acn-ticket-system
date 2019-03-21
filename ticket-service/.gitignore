@@ -24,3 +24,4 @@ yarn-error.log*
 
 # Loads of secrets inside
 run.sh
+.env

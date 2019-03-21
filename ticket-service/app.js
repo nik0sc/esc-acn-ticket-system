@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const bodyparser = require('body-parser');
-const axios = require('axios');
 const fs = require('fs');
+const login_util = require('./login_util');
 
 app.use(bodyparser.json());
 
@@ -50,62 +50,9 @@ app.get('/ticket/:ticketId', (req, res) => {
     });
 });
 
-// Middleware function to check tokens against acnapi
-// If the token checks out, the session object is injected into request object
-// Use it to check if this user is authorized to access the object
-function check_session_token(req, res, next) {
-    axios.get('https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/sessions/me', {
-        headers: {
-            'Server-Token': process.env.ACN_SERVER_TOKEN,
-            'Content-Type': 'application/json',
-            'X-Parse-Session-Token': req.header('X-Parse-Session-Token')
-        },
-        timeout: 3000 // 3sec
-    }).then((res2) => {
-        req.acn_session = res2.data;
-        if (typeof next === 'function') {
-            next();
-        }
-    }).catch((err) => {
-        if (err.response) {
-            // Invalid session token
-            if (err.response.status === 400 && err.response.data.code === 209) {
-                res.status(401).json({
-                    error: 'Invalid session token'
-                });
-            } else if (err.response.status === 504) {
-                console.log('acn timeout');
-                res.status(504).json({
-                    error: 'Upstream timeout in acn session management'
-                });
-            } else {
-                console.log('error in session verification');
-                var status_string = err.response.status + ' ' + 
-                        err.response.statusText;
-                console.log(status_string);
-                res.status(500).json({
-                    error: 'Upstream error from acn session management',
-                    response: status_string
-                });
-            }
-        } else if (err.code === 'ECONNABORTED') {
-            console.log('acn timeout');
-            res.status(504).json({
-                error: 'Upstream timeout in acn session management'
-            });
 
-        } else {
-            console.log('error in session verification - no response');
-            console.log(err);
-            res.status(500).json({
-                error: 'Check server log',
-                error_code: err.code 
-            });
-        }
-    });
-}
 
-app.post('/ticket', check_session_token, (req, res) => {
+app.post('/ticket', login_util.check_session_token, (req, res) => {
     console.log('Creating new ticket');
 
     let user_object_id = req.acn_session.user.objectId;
@@ -144,7 +91,8 @@ app.put('/ticket/:ticketId', (req, res) => {
 
 });
 
-app.put('/ticket/:ticketId/attachment', check_session_token, (req, res) => {
+app.put('/ticket/:ticketId/attachment',
+        login_util.check_session_token, (req, res) => {
     // Make sure this ticket exists
     var query = knex('tickets')
         .first('id', 'attachment_path')
