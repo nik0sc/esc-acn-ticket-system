@@ -13,6 +13,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import { ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import Add from '@material-ui/icons/AddCircle';
+import Icon from '@material-ui/core/Icon';
 import FormDialog from "./FormDialog";
 
 
@@ -50,6 +52,9 @@ number:{
 rows:{
   display: "flex",
 },
+
+
+
 };
 
 class SimpleCard extends React.Component{
@@ -68,11 +73,9 @@ class SimpleCard extends React.Component{
               <h3>Tickets</h3>
             </ListItemText>
             <ListItemSecondaryAction>
-              <IconButton className="button"
-              style = {{backgroundColor: 'transparent'}}
-              >
+              <IconButton>
                 <FormDialog />
-              </IconButton>
+              </IconButton> 
             </ListItemSecondaryAction>
             </ListItem>
             <Divider />
@@ -97,6 +100,8 @@ class SimpleCard extends React.Component{
                 Live Chat
             </Typography>
             <Divider />
+            {/* <Grid item xs={6} sm={3} container direction="row" justify="space-between" alignItems="center"> */}
+          {/* </Grid> */}
             </CardContent>
         </Card>
         
@@ -112,6 +117,61 @@ class SimpleCard extends React.Component{
     )
   }
 }
+
+// function SimpleCard(props) {
+//   const { classes } = props;
+
+  
+
+//   return (
+    //   <Grid container spacing = {10 } >
+    //     <Grid item xs= {12} sm={6}>
+    //     <Card className={classes.card}>
+    //   <CardContent>
+    //     <List>
+    //       <ListItem button>
+    //         <ListItemText>hello</ListItemText>
+    //       </ListItem>
+
+    //     </List>
+    //     <h3> Tickets </h3>
+    //     <Typography variant="h5" component="h2">
+    //       shjkfhs
+    //     </Typography>
+    //     <Typography className={classes.pos} color="textSecondary">
+    //       adjective
+    //     </Typography>
+    //     <Typography component="p">
+    //       well meaning and kindly.
+    //       <br />
+    //       {'"a benevolent smile"'}
+    //     </Typography>
+    //   </CardContent>
+    //   <CardActions>
+    //     <Button size="small">Learn More</Button>
+    //   </CardActions>
+    // </Card>
+    //     </Grid>
+    //     <Grid item xs = {12} sm = {6}>
+    //     <Card className={classes.card}>
+    //         <CardContent>
+    //             <h1> Hello</h1>
+
+    //         </CardContent>
+
+
+    //     </Card>
+
+    
+        
+    //     </Grid>
+
+
+    //   </Grid>
+
+   
+//   );
+// }
 
 SimpleCard.propTypes = {
   classes: PropTypes.object.isRequired,

@@ -8,15 +8,15 @@ truncate table chat_messages;
 set FOREIGN_KEY_CHECKS = 1;
 
 -- I don't think multi-row insert is standards compliant
-insert into users (id, username, acn_id, acn_session_token, long_name, user_type, extra) values
-(1, 'nikos', 'fake!1', '', 'Nikos Chan', 1, null),
-(2, 'kim', 'fake!2', '', 'Koh Seu Kim', 1, null),
-(3, 'zhubo', 'fake!3', '', 'Zhu Bo', 2, null),
-(4, 'junwei', 'fake!4', '', 'Chan Jun Wei', 2, null);
+insert into users (id, username, passwd, email, phone_no, long_name, user_type) values
+(1, 'nikos', '$1$nikos$pUnMnI0A9iEoaypzPuJo6/', 'nikos@example.com', '555-867-5309', 'Nikos Chan', 1),
+(2, 'kim', '$1$kim$9/yZtyREIsSKXoqwPVT3N1', 'kim@example.com', '555-123-0451', 'Koh Seu Kim', 1),
+(3, 'zhubo', '$1$zhubo$2uNmk0b.b2rU//NKtB8jr/', 'zhubo@example.com', '62353535', 'Zhu Bo', 2),
+(4, 'junwei', '$1$junwei$0C.0lsDIAGQiEC7v7XdnO/', 'junwei@example.com', '0118 999 881 999 119 7253', 'Chan Jun Wei', 2);
 
 insert into teams (id, team_name) values 
-(1, 'Default Team'),
-(2, 'Accenture API');
+(1, "Default Team"),
+(2, "Accenture API");
 
 insert into admin_team_relation (team_id, admin_id) values
 (1, 3),

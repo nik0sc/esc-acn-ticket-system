@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
+import Register from './Components/Register'
+import Login from './Components/Login'
 import Admin from './Components/Admin';
 import Tickets from './Components/Tickets'
 import './App.css';
@@ -7,7 +9,7 @@ import Dashboard from './Components/Dashboard';
 import ButtonAppBar from './Components/ButtonAppBar';
 import SignIn from './Components/SignIn'
 import RegisterNew from './Components/RegisterNew';
-
+npm
 class App extends Component {
   
   render() {

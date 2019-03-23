@@ -1,20 +1,17 @@
--- lepak.sg:24573/esc-1
-
-drop database `esc-1`;
-create database `esc-1`
+drop database ticketsystem;
+create database ticketsystem
 	character set utf8mb4 
 	collate utf8mb4_unicode_ci;
-use `esc-1`;
+use ticketsystem;
 
--- Use accenture user management
 create table users (
 	id integer primary key,
     username varchar(100) not null,
+    passwd varchar(100) not null,
+	email varchar(100) not null,
+    phone_no varchar(100) not null,
     long_name varchar(100) not null,
-    acn_id varchar(100) unique not null,		-- objectId
-	acn_session_token varchar(100) not null,	-- sessionToken
-    user_type integer not null,					-- normal or admin?
-    extra json									-- other stuff from parse api
+    user_type integer not null
 );
 
 create table teams (
