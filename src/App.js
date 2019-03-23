@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
-import Register from './Components/Register'
-import Login from './Components/Login'
 import Admin from './Components/Admin';
 import Tickets from './Components/Tickets'
 import './App.css';

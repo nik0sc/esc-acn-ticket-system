@@ -35,6 +35,20 @@ function desc(a, b, orderBy) {
   return 0;
 }
 
+function date(a, b){
+  a = new Date(a).getTime();
+  b = new Date(b).getTime();
+  if(a < b){
+    return 1;
+  }
+  else if(a > b){
+    return -1;
+  }
+  else{
+    return 0;
+  }
+}
+
 function stableSort(array, cmp) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {

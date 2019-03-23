@@ -45,13 +45,13 @@ class FormDialog extends React.Component {
             <TextField
               autoFocus
               margin="normal"
-              id="outlined-email"
-              label="Email Address"
-              type="email"
+              id="outlined-subject"
+              label="Subject"
+              type="subject"
               variant="outlined"
               fullWidth
             />
-            <TextField
+            <TextField   // pls change to topics
               autoFocus
               margin="normal"
               id="outlined-name"
@@ -59,24 +59,7 @@ class FormDialog extends React.Component {
               variant="outlined"
               fullWidth
             />
-            <TextField
-              autoFocus
-              margin="normal"
-              id="outlined-contact"
-              label="Contact"
-              type="contact"
-              variant="outlined"
-              fullWidth
-            />
-            <TextField
-              autoFocus
-              margin="normal"
-              id="outlined-phone"
-              label="Phone"
-              type="phone"
-              variant="outlined"
-              fullWidth
-            />
+          
             <TextField
               autoFocus
               margin="normal"

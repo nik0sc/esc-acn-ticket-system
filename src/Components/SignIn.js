@@ -14,11 +14,6 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {Redirect, NavLink, Route} from 'react-router-dom'
 import axios from 'axios'
-import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
-import { DialogContent, DialogContentText } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import LoginRequired, {openSnackbar} from './LoginRequired';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -71,6 +66,12 @@ handleChange = (event) => {
   this.setState({ password });
 }
 
+handleInputChange = (e) => {
+  this.setState({
+    [e.target.name]: e.target.value
+  })
+}
+
 
 
   getUser = async(e) => {
@@ -84,31 +85,31 @@ handleChange = (event) => {
         }
       })
       .then((res) => {
+        var session_token = res.data.sessionToken;
+        // keep token so that can pass to backend
+        if (typeof session_token === 'undefined') {
+          // Die
+          return;
+        }
+
+
+
         if(res.request.status === 200){
           console.log(res)
           this.setState({
             redirect: true,
           })
-          // const sessiontoken = res.data.sessionToken;
-          // const x = axios.get(`https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/sessions/me`,{
-          //   headers:{
-          //     'Server-Token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlF6Y3hRVEl5UkRVeU1qYzNSakEzTnpKQ01qVTROVVJFUlVZelF6VTRPRUV6T0RreE1UVTVPQSJ9.eyJpc3MiOiJodHRwczovL2FjbmFwaS1wcm9kLmF1dGgwLmNvbS8iLCJzdWIiOiJnWVppRDZzbzJLcXNMT1hmVUt5TjZpdHVXUXhaQnkyN0BjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9wbGFjZWhvbGRlci5jb20vcGxhY2UiLCJpYXQiOjE1NDk5NTI2NDksImV4cCI6MTU1MjU0NDY0OSwiYXpwIjoiZ1laaUQ2c28yS3FzTE9YZlVLeU42aXR1V1F4WkJ5MjciLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.uSISsVSh1REzY3UuMWm_QTEd4xs10cqoWtQpHj3xz9HhKx1_N0s4Wj7A-rQRsQJzQ12IiB5A05lQ17DdkaQkfi_4zeNTGQTo3MvE9Glf1wfcWCMe2WAPr78GSL0RQKuyKZpwrlFuxNghN_-sEVrG4gI7VZyWEc6S_m2076TXVPigTF29u9dA6NgzQkVRaqssulgO_SaZtG9mFwAJ19CaQluqrx10GHsd6OKN2YXPzvSBFa2ouUHlncePbgtKsOl660MQFnyTGtLTzYZPJRX7mpTHSSb4RWoY45lwtt5vfV0HwSC84nKyZvfkK6frFZkpltfSjiWRo6R62lzt5r1dcw',
-          //     'X-Parse-Session-Token': sessiontoken,
-          //     'Content-Type': 'application/json',
-          //   }
-          // })
-          // console.log(x)
-        
         }
       }
     )
-    .catch(error => {
-      console.log("kjhdhdahl");
-      
+    .catch(error => {      
       openSnackbar({ message: 'Login failed. Wrong email/password.' });
-    
     });
     }
+    else if(!email || !password){
+      openSnackbar({message: 'Empty fields detected. Please fill in your email and password'})
+    }
+
   }
   render(){
     
@@ -134,14 +135,12 @@ handleChange = (event) => {
             <MuiThemeProvider MuiTheme={getMuiTheme}>
             <LoginRequired />
             </MuiThemeProvider>
-        <form className={classes.form}  onSubmit={this.getUser.bind(this)} noValidate>
+        <form className={classes.form}  onSubmit={this.getUser} noValidate>
           <FormControl margin="normal" required fullWidth>
-            {/* <InputLabel htmlFor="email">Email Address</InputLabel> */}
-            <input id="email" name="email" type="text" autoComplete="email" autoFocus required/>
+            <input id="email" name="email" type="email" autoComplete="email" autoFocus onChange={this.handleInputChange} className="email"/>
           </FormControl>
           <FormControl margin="normal" required fullWidth>
-            {/* <InputLabel htmlFor="password">Password</InputLabel> */}
-            <input name="password" type="password" id="password" autoComplete="current-password" />
+            <input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleInputChange}/>
           </FormControl>
           <Button
             type="submit"
@@ -155,8 +154,6 @@ handleChange = (event) => {
         </form> 
       </Paper>
     </main>
-
-
       </div>
     )
   }

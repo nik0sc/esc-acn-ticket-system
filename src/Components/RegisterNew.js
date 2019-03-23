@@ -76,6 +76,9 @@ class RegisterNew extends React.Component{
         })
         .then((res) => {
           console.log(res.data)
+          this.setState({
+            redirect: true,
+          })
         }
         )
     }
