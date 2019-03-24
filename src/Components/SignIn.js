@@ -14,9 +14,11 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {Redirect, NavLink, Route} from 'react-router-dom'
 import axios from 'axios'
-import LoginRequired, {openSnackbar} from './LoginRequired';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'universal-cookie';
 
 const styles = theme => ({
   main: {
@@ -85,16 +87,19 @@ handleInputChange = (e) => {
         }
       })
       .then((res) => {
-        var session_token = res.data.sessionToken;
         // keep token so that can pass to backend
-        if (typeof session_token === 'undefined') {
-          // Die
-          return;
-        }
+        // if (typeof session_token === 'undefined') {
+        //   // Die
+        //   return;
+        // }
+
 
 
 
         if(res.request.status === 200){
+          const cookies = new Cookies();
+          var session_token = res.data.sessionToken;
+          cookies.set('sessionToken', session_token, {path: '/'});
           console.log(res)
           this.setState({
             redirect: true,
@@ -103,11 +108,15 @@ handleInputChange = (e) => {
       }
     )
     .catch(error => {      
-      openSnackbar({ message: 'Login failed. Wrong email/password.' });
+      toast.error('Login failed. Wrong email/password.',{
+        position: "bottom-center"
+      })
     });
     }
     else if(!email || !password){
-      openSnackbar({message: 'Empty fields detected. Please fill in your email and password'})
+      toast.error('Empty fields detected. Please fill in your email and password',{
+        position: "bottom-center"
+      })
     }
 
   }
@@ -122,6 +131,7 @@ handleInputChange = (e) => {
     return(
       
       <div>
+        
       <main className={classes.main}>
       <CssBaseline />
       <Paper className={classes.paper}>
@@ -132,15 +142,14 @@ handleInputChange = (e) => {
                 <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
                 <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink> 
             </div>
-            <MuiThemeProvider MuiTheme={getMuiTheme}>
-            <LoginRequired />
-            </MuiThemeProvider>
-        <form className={classes.form}  onSubmit={this.getUser} noValidate>
+        <form className={classes.form}  onSubmit={this.getUser.bind(this)} noValidate>
           <FormControl margin="normal" required fullWidth>
-            <input id="email" name="email" type="email" autoComplete="email" autoFocus onChange={this.handleInputChange} className="email"/>
+          <InputLabel htmlFor="email">Email</InputLabel>
+          <Input id="email" name="email" type="email" autoComplete="email" autoFocus onChange={this.handleInputChange} />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
-            <input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleInputChange}/>
+          <InputLabel>Password</InputLabel>
+            <Input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleInputChange}/>
           </FormControl>
           <Button
             type="submit"

@@ -4,6 +4,7 @@ import ButtonAppBar from './ButtonAppBar';
 import TicketTable from './TicketTable';
 import EnhancedTable from './EnhancedTable';
 import Test from './Test';
+import Example from './Example';
 
 
 class Tickets extends React.Component{
@@ -15,7 +16,9 @@ class Tickets extends React.Component{
                 <ButtonAppBar />
                 {/* <TicketTable /> */}
                 {/* <EnhancedTable /> */}
+                
                 <Test />
+                {/* <Example /> */}
             </div>
 
         )

@@ -27,6 +27,7 @@ class ButtonAppBar extends React.Component{
     }
 
     handleClick = (e) => {
+      
         this.setState({
             redirect: true
         })

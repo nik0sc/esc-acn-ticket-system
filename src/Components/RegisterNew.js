@@ -14,7 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {Redirect, NavLink} from 'react-router-dom'
 import axios from 'axios'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const styles = theme => ({
@@ -55,7 +56,8 @@ class RegisterNew extends React.Component{
     redirect: false
   }
 
-  getUser = async(e) => {
+
+  getUser = (e) => {
     e.preventDefault();
     const username = e.target.elements.username.value;
     const password = e.target.elements.password.value;
@@ -75,12 +77,24 @@ class RegisterNew extends React.Component{
           }
         })
         .then((res) => {
-          console.log(res.data)
-          this.setState({
-            redirect: true,
-          })
+          if(res.request.status === 201){
+            console.log(res.data)
+            this.setState({
+              redirect: true,
+            })
+          }
+          
         }
         )
+        .catch(error => { 
+          toast.error('Invalid email or username/email is already registered',{
+            position: "bottom-center"
+          })
+        });
+    }else{
+      toast.error('Empty fields detected', {
+        position: "bottom-center"
+        });
     }
   }
 
@@ -94,7 +108,18 @@ class RegisterNew extends React.Component{
 
     
     return(
+      
       <div>
+          <ToastContainer 
+          position="bottom-center"
+          autoClose={2000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnVisibilityChange
+          draggable
+          pauseOnHover={false}/>
           <main className={classes.main}>
       <CssBaseline />
       <Paper className={classes.paper}>
@@ -105,7 +130,7 @@ class RegisterNew extends React.Component{
                 <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
                 <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink> 
             </div>
-        <form className={classes.form}  onSubmit={this.getUser.bind(this)}>
+        <form className={classes.form}  onSubmit={this.getUser.bind(this)} noValidate>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="username">Username</InputLabel>
             <Input id="username" name="username" autoFocus />
@@ -116,16 +141,12 @@ class RegisterNew extends React.Component{
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
-            <Input name="password" type="password" id="password" autoComplete="current-password" />
+            <Input name="password" type="password" id="password" autoComplete="current-password"  />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="phone">Phone</InputLabel>
-            <Input name="phone" id="phone" autoComplete="phone" />
+            <Input name="phone" id="phone" autoComplete="phone"/>
           </FormControl>
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          /> */}
           <Button
             type="submit"
             fullWidth

@@ -17,7 +17,7 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   formControl: {
-    margin: 20,
+    margin: theme.spacing.unit,
     minWidth: 120,
     maxWidth: 300,
   },
@@ -25,21 +25,36 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap',
   },
-  
+  chip: {
+    margin: theme.spacing.unit / 4,
+  },
+  noLabel: {
+    marginTop: theme.spacing.unit * 3,
+  },
 });
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 const names = [
-  'API DevOps',
-  'Chart as a Service',
-  'Recruitment Platform',
-  'Aesop',
-  'Travel Marketplace',
-  'Banking Lifestyle App',
-  'AR Car Visualizer',
-  'AR Car Manual',
-  'AR Gamification',
-  'AR Theatre',
+  'Oliver Hansen',
+  'Van Henry',
+  'April Tucker',
+  'Ralph Hubbard',
+  'Omar Alexander',
+  'Carlos Abbott',
+  'Miriam Wagner',
+  'Bradley Wilkerson',
+  'Virginia Andrews',
+  'Kelly Snyder',
 ];
 
 function getStyles(name, that) {
@@ -55,12 +70,23 @@ class MultipleSelect extends React.Component {
   state = {
     name: [],
   };
-  
 
   handleChange = event => {
-    this.setState({ name: event.target.value });     // push is 1 step slow
+    this.setState({ name: event.target.value });
   };
 
+  handleChangeMultiple = event => {
+    const { options } = event.target;
+    const value = [];
+    for (let i = 0, l = options.length; i < l; i += 1) {
+      if (options[i].selected) {
+        value.push(options[i].value);
+      }
+    }
+    this.setState({
+      name: value,
+    });
+  };
 
   render() {
     const { classes } = this.props;
@@ -68,20 +94,17 @@ class MultipleSelect extends React.Component {
     return (
       <div className={classes.root}>
         <FormControl className={classes.formControl}>
-        <h6> Topics</h6>
-          <InputLabel htmlFor="select-multiple-checkbox"></InputLabel>
+          <InputLabel htmlFor="select-multiple">Name</InputLabel>
           <Select
             multiple
             value={this.state.name}
             onChange={this.handleChange}
-            input={<Input id="select-multiple-checkbox" />}
-            renderValue={selected => selected.join(', ')}
-            //MenuProps={MenuProps}
+            input={<Input id="select-multiple" />}
+            MenuProps={MenuProps}
           >
             {names.map(name => (
-              <MenuItem key={name} value={name}>
-                <Checkbox checked={this.state.name.indexOf(name) > -1} />
-                <ListItemText primary={name} />
+              <MenuItem key={name} value={name} style={getStyles(name, this)}>
+                {name}
               </MenuItem>
             ))}
           </Select>

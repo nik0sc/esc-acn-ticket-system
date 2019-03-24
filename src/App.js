@@ -7,6 +7,7 @@ import Dashboard from './Components/Dashboard';
 import ButtonAppBar from './Components/ButtonAppBar';
 import SignIn from './Components/SignIn'
 import RegisterNew from './Components/RegisterNew';
+import { ToastContainer, toast } from 'react-toastify';
 
 class App extends Component {
   
@@ -17,6 +18,16 @@ class App extends Component {
       //   <div className="container"> 
       //     <div className="row" >
       <div>
+        <ToastContainer 
+          position="bottom-center"
+          autoClose={2000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnVisibilityChange
+          draggable
+          pauseOnHover={false}/>
           
           <Router>
 
