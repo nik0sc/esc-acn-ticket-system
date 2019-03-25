@@ -161,6 +161,9 @@ handleInputChange = (e) => {
             Sign in
           </Button>
         </form> 
+        <Typography>
+          Forget password? <a href="reset"> Click here.</a>
+        </Typography>
       </Paper>
     </main>
       </div>

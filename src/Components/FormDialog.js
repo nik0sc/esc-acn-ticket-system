@@ -18,6 +18,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import PropTypes from 'prop-types';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios'
 
 
 const styles = theme => ({
@@ -92,7 +93,24 @@ class FormDialog extends React.Component {
     if(this.state.message !== '' && this.state.title !== '' && this.state.topics !== ''){
       toast.success('Your query has been submitted.', {
         position: "bottom-center"
-        });
+      });
+      axios.post(`https://esc-ticket-service.lepak.sg/ticket`, {
+          title: this.state.title,
+          message: this.state.message,
+          priority: 0,
+          severity: 0,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce',
+        }
+      })
+      .then((res) => {
+        if(res.request.status === 200){
+          console.log('success send ticket')
+        }
+      })
+
       this.setState({ open: false, topics: []});
 
     }
@@ -110,16 +128,6 @@ class FormDialog extends React.Component {
     return (
       <div>
         <Add className="icon" onClick={this.handleClickOpen('paper')}/>
-        {/* <ToastContainer 
-          position="bottom-center"
-          autoClose={2000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnVisibilityChange
-          draggable
-          pauseOnHover={false}/> */}
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
