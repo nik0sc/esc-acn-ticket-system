@@ -20,6 +20,18 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'universal-cookie';
 
+const AuthService = {
+  isAuthenticated: false,
+  authenticate(cb) {
+    this.isAuthenticated = true
+    setTimeout(cb, 100)
+  },
+  logout(cb) {
+    this.isAuthenticated = false
+    setTimeout(cb, 100)
+  }
+}
+
 const styles = theme => ({
   main: {
     width: 'auto',
@@ -128,6 +140,8 @@ handleInputChange = (e) => {
       return <Redirect to="/dashboard" />
     }
 
+    
+
     return(
       
       <div>
@@ -161,9 +175,6 @@ handleInputChange = (e) => {
             Sign in
           </Button>
         </form> 
-        <Typography>
-          Forget password? <a href="reset"> Click here.</a>
-        </Typography>
       </Paper>
     </main>
       </div>

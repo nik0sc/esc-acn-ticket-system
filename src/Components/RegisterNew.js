@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -16,6 +15,9 @@ import {Redirect, NavLink} from 'react-router-dom'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Recaptcha from './Recaptcha';
+import Cookies from 'universal-cookie';
+import { Divider } from '@material-ui/core';
 
 
 const styles = theme => ({
@@ -44,10 +46,15 @@ const styles = theme => ({
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing.unit,
+    alignItems: 'center',
+
   },
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  recap: {
+    padding: 50,
+  }
 });
 
 class RegisterNew extends React.Component{
@@ -63,8 +70,11 @@ class RegisterNew extends React.Component{
     const password = e.target.elements.password.value;
     const email = e.target.elements.email.value;
     const phone = e.target.elements.phone.value;
+    const cookies = new Cookies();
+    const recaptchaTok = cookies.get('recaptchaToken');
 
-    if(username && password && email && phone){
+
+    if(username && password && email && phone && recaptchaTok){
         axios.post(`https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users`, {
           username: username,
           email: email,
@@ -91,8 +101,34 @@ class RegisterNew extends React.Component{
             position: "bottom-center"
           })
         });
-    }else{
-      toast.error('Empty fields detected', {
+    }
+    if(!username && !email && !password && !phone && !recaptchaTok){
+      toast.error('All fields empty', {
+        position: "bottom-center"
+      });
+    }
+    else if(!username){
+      toast.error('Username not entered', {
+        position: "bottom-center"
+        });
+    }
+    else if(!email){
+      toast.error('Email not entered', {
+        position: "bottom-center"
+        });
+    }
+    else if(!password){
+      toast.error('Password not entered', {
+        position: "bottom-center"
+        });
+    }
+    else if(!phone){
+      toast.error('Phone not entered', {
+        position: "bottom-center"
+        });
+    }
+    else if(!recaptchaTok){
+      toast.error('Please tick captcha', {
         position: "bottom-center"
         });
     }
@@ -147,6 +183,7 @@ class RegisterNew extends React.Component{
             <InputLabel htmlFor="phone">Phone</InputLabel>
             <Input name="phone" id="phone" autoComplete="phone"/>
           </FormControl>
+          <Recaptcha className={classes.recap}/>
           <Button
             type="submit"
             fullWidth

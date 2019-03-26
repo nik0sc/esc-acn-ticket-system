@@ -19,6 +19,9 @@ const styles = {
     marginLeft: -12,
     marginRight: 20,
   },
+  but: {
+    marginLeft: 'auto',
+  }
 };
 class ButtonAppBar extends React.Component{
 
@@ -48,6 +51,7 @@ class ButtonAppBar extends React.Component{
             <Typography variant="h6" color="inherit" className={classes.grow}>
             Support Ticket System
           </Typography>
+          <Button className={classes.but}> Live Chat</Button>
           <Button onClick={this.handleClick.bind(this)} color="inherit">Log Out</Button>
         </Toolbar>
       </AppBar>

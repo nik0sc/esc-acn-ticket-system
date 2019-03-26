@@ -8,8 +8,14 @@ import ButtonAppBar from './Components/ButtonAppBar';
 import SignIn from './Components/SignIn'
 import RegisterNew from './Components/RegisterNew';
 import { ToastContainer, toast } from 'react-toastify';
-import PasswordReset from './Components/PasswordReset'
+import { loadReCaptcha } from 'react-recaptcha-google'
+
+
 class App extends Component {
+
+  componentDidMount() {
+    loadReCaptcha();
+  }
   
   render() {
     return (
@@ -45,23 +51,10 @@ class App extends Component {
               </Route>
               <Route path="/tickets" component={Tickets}>
               </Route>
-              <Route path = "/reset" component={PasswordReset}>
-              </Route>
-
-            
               </div>
-          
           </div>
-
         </Router>
-
-  
           </div>
-
-      // </div>
-      //   </div>       
-      // </div>
-
     );
   }
 }
