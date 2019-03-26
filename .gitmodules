@@ -1,0 +1,3 @@
+[submodule "esc-ticket-service"]
+	path = esc-ticket-service
+	url = https://github.com/nik0sc/esc-ticket-service.git
