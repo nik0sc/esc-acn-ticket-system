@@ -9,21 +9,50 @@ import SignIn from './Components/SignIn'
 import RegisterNew from './Components/RegisterNew';
 import { ToastContainer, toast } from 'react-toastify';
 import { loadReCaptcha } from 'react-recaptcha-google'
+import {Link,Redirect, Switch} from 'react-router-dom';
+import Cookies from 'universal-cookie';
+import { Button } from '@material-ui/core';
+import NotFound from './Components/NotFound';
+const cookies = new Cookies();
+
+
+const SecretRoute = ({ component: Comp, loggedIn, path, ...rest }) => {
+  return (
+    <Route
+      path={path}
+      {...rest}
+      render={(props) => {
+        return (cookies.get('auth') === 'y') ? (
+          <Comp {...props} />
+        ) : (
+          <Redirect to='/' />
+        );
+      }}
+    />
+  );
+};
+
 
 
 class App extends Component {
-
+  
   componentDidMount() {
     loadReCaptcha();
   }
+
+  token = () => {
+    console.log(cookies.get('auth'))
+  }
   
   render() {
-    return (
+    
+    return (      
       // <div className="wrapper">
       //   <div className="main"> 
       //   <div className="container"> 
       //     <div className="row" >
       <div>
+        {/* <Button onClick={this.token}> help </Button> */}
         <ToastContainer 
           position="bottom-center"
           autoClose={2000}
@@ -36,24 +65,28 @@ class App extends Component {
           pauseOnHover={false}/>
           
           <Router>
-
-            
           <div className="App">
           <div className="App_Aside"></div>
           <div className="App_Form" >
-              <Route path="/register" component={RegisterNew}>
+          <Switch>
+          <Route path="/register" component={RegisterNew}>
               </Route>
               <Route exact path="/" component={SignIn}  >
               </Route>
               <Route path="/admin" component={Admin} >
               </Route>
-              <Route path="/dashboard" component={Dashboard} >
-              </Route>
+              <SecretRoute path="/dashboard" component={Dashboard} >
+              </SecretRoute>
+              {/* <Route path="/dashboard" component={Dashboard} >
+              </Route> */}
               <Route path="/tickets" component={Tickets}>
               </Route>
+              <Route path="*" exact={true} component={NotFound} />
+              </Switch>
               </div>
           </div>
         </Router>
+            
           </div>
     );
   }

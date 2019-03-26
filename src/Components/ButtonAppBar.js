@@ -6,6 +6,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import {Redirect} from 'react-router-dom'
+import Cookies from 'universal-cookie';
+
+
+const cookies = new Cookies();
 
 
 const styles = {
@@ -24,16 +28,17 @@ const styles = {
   }
 };
 class ButtonAppBar extends React.Component{
-
     state = {
         redirect: false
     }
 
     handleClick = (e) => {
-      
+        cookies.remove('auth');
         this.setState({
             redirect: true
         })
+
+
     }
     
     render() {

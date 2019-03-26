@@ -12,25 +12,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {Redirect, NavLink, Route} from 'react-router-dom'
+import {Redirect, NavLink, Route, Switch} from 'react-router-dom'
 import axios from 'axios'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'universal-cookie';
-
-const AuthService = {
-  isAuthenticated: false,
-  authenticate(cb) {
-    this.isAuthenticated = true
-    setTimeout(cb, 100)
-  },
-  logout(cb) {
-    this.isAuthenticated = false
-    setTimeout(cb, 100)
-  }
-}
 
 const styles = theme => ({
   main: {
@@ -86,8 +74,6 @@ handleInputChange = (e) => {
   })
 }
 
-
-
   getUser = async(e) => {
     e.preventDefault();
     const email = e.target.elements.email.value;
@@ -109,13 +95,18 @@ handleInputChange = (e) => {
 
 
         if(res.request.status === 200){
+          this.props.history.push('/');
           const cookies = new Cookies();
           var session_token = res.data.sessionToken;
           cookies.set('sessionToken', session_token, {path: '/'});
+          cookies.set('auth', 'y', {path: '/'});
           console.log(res)
           this.setState({
             redirect: true,
           })
+          
+          
+          
         }
       }
     )
@@ -136,13 +127,16 @@ handleInputChange = (e) => {
     
     const { classes } = this.props;
   
+
     if(this.state.redirect){
       return <Redirect to="/dashboard" />
     }
 
-    
-
+ 
+  
     return(
+
+      
       
       <div>
         
