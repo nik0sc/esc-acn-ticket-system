@@ -103,7 +103,7 @@ handleInputChange = (e) => {
           console.log(res)
           this.setState({
             redirect: true,
-          })
+          });
           
           
           

@@ -14,6 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import { ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import FormDialog from "./FormDialog";
+import axios from 'axios'
 
 
 const styles = {
@@ -54,6 +55,44 @@ rows:{
 
 class SimpleCard extends React.Component{
 
+  state= {
+    id: [],
+    status: [],
+  };
+
+  componentDidMount(){
+    axios.get(`https://esc-ticket-service.lepak.sg/ticket/byUser`,{
+      headers: {
+        'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce'
+      }
+    })
+    .then((res) => {
+      if(res.request.status === 200){
+        //console.log(res.data);
+        this.setState({id: res.data.map((data => {return([data.id, data.priority])}))})
+        //this.setState({status: res.data.map((data => {return(data.priority)}))})
+        console.log(this.state);
+      }
+    })
+    .catch(error => {
+      console.log('failed')
+    })
+  }
+
+  _renderItems(){
+    return this.state.id.map(el => 
+    // <ListItem button>{el}</ListItem>
+        <ListItem button>
+          <ListItemText primary={el[0]} secondary={el[1]}>
+          </ListItemText>
+        </ListItem>
+      )
+}
+
+
+
+
+
   render(){
     const { classes } = this.props;
 
@@ -76,10 +115,20 @@ class SimpleCard extends React.Component{
             </ListItemSecondaryAction>
             </ListItem>
             <Divider />
-          <ListItem button>
+            </List>
+
+            {/* <ListItem>
+            {this.state.id.map((item, i) => (
+              // <ListItemText key={item} primary={this.state.id} secondary="hi" ></ListItemText>
+              <li key={item}> {item} </li>
+            ))}
+            </ListItem> */}
+          {/* <ListItem >
             <ListItemText primary="Ticket #32814" secondary="In Progress"></ListItemText>
-          </ListItem>
-        </List>
+          </ListItem> */}
+          <div>
+                {this._renderItems()}
+            </div> 
       </CardContent>
     </Card>
         </Grid>

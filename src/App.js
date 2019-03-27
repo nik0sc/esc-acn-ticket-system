@@ -16,7 +16,7 @@ import NotFound from './Components/NotFound';
 const cookies = new Cookies();
 
 
-const SecretRoute = ({ component: Comp, loggedIn, path, ...rest }) => {
+const SecretRoute = ({ component: Comp, path, ...rest }) => {
   return (
     <Route
       path={path}

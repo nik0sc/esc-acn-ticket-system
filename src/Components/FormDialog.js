@@ -102,12 +102,13 @@ class FormDialog extends React.Component {
       }, {
         headers: {
           'Content-Type': 'application/json',
-          'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce',
+          'X-Parse-Session-Token': 'r:3cbcc7cab116e0f8032b33f94435593d',
         }
       })
       .then((res) => {
         if(res.request.status === 200){
           console.log('success send ticket')
+          console.log(this.state);
         }
       })
 
