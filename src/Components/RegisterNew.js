@@ -18,6 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Recaptcha from './Recaptcha';
 import Cookies from 'universal-cookie';
 import { Divider } from '@material-ui/core';
+import { Dialog } from 'material-ui';
 
 
 const styles = theme => ({
@@ -52,8 +53,8 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
-  recap: {
-    padding: 50,
+  first:{
+    marginRight: theme.spacing.unit,
   }
 });
 
@@ -70,11 +71,18 @@ class RegisterNew extends React.Component{
     const password = e.target.elements.password.value;
     const email = e.target.elements.email.value;
     const phone = e.target.elements.phone.value;
+    const confirmpassword = e.target.elements.confirmpassword.value;
     const cookies = new Cookies();
     const recaptchaTok = cookies.get('recaptchaToken');
-
-
-    if(username && password && email && phone && recaptchaTok){
+    var validator = require("email-validator");
+    if(!validator.validate(email)){
+        toast.error('Invalid email')
+    }
+    else if(password !== confirmpassword){
+      toast.error('Passwords do not match')
+    }
+    else{
+      if(username && password && email && phone && recaptchaTok){
         axios.post(`https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users`, {
           username: username,
           email: email,
@@ -97,50 +105,34 @@ class RegisterNew extends React.Component{
         }
         )
         .catch(error => { 
-          toast.error('Invalid email or username/email is already registered',{
+          toast.error('Username/Email is already registered',{
             position: "bottom-center"
           })
         });
     }
-    if(!username && !email && !password && !phone && !recaptchaTok){
-      toast.error('All fields empty', {
+    if(!username || !email || !password || !phone || !recaptchaTok){
+      toast.error('Empty fields detected', {
         position: "bottom-center"
       });
     }
-    else if(!username){
-      toast.error('Username not entered', {
-        position: "bottom-center"
-        });
     }
-    else if(!email){
-      toast.error('Email not entered', {
-        position: "bottom-center"
-        });
-    }
-    else if(!password){
-      toast.error('Password not entered', {
-        position: "bottom-center"
-        });
-    }
-    else if(!phone){
-      toast.error('Phone not entered', {
-        position: "bottom-center"
-        });
-    }
-    else if(!recaptchaTok){
-      toast.error('Please tick captcha', {
-        position: "bottom-center"
-        });
-    }
+    
   }
+
+  // renderCode(){
+  //   if(this.state.redirect)
+  //   return (<Dialog>
+  //     open={true}
+  //   </Dialog>)
+  // }
 
 
   render(){
     const { classes } = this.props;
 
-    if(this.state.redirect){
-      return <Redirect to="/dashboard" />
-    }
+    // if(this.state.redirect){
+    //   return <Redirect to="/dashboard" />
+    // }
 
     
     return(
@@ -157,6 +149,7 @@ class RegisterNew extends React.Component{
           draggable
           pauseOnHover={false}/>
           <main className={classes.main}>
+          {/* {this.renderCode()} */}
       <CssBaseline />
       <Paper className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -176,13 +169,18 @@ class RegisterNew extends React.Component{
             <Input name="email" id="email" autoComplete="email" />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="phone">Phone</InputLabel>
+            <Input name="phone" id="phone" autoComplete="phone"/>
+          </FormControl> 
+          <FormControl margin="normal" required className={classes.first}>
             <InputLabel htmlFor="password">Password</InputLabel>
             <Input name="password" type="password" id="password" autoComplete="current-password"  />
           </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="phone">Phone</InputLabel>
-            <Input name="phone" id="phone" autoComplete="phone"/>
+          <FormControl margin="normal" required >
+            <InputLabel htmlFor="confirmpassword">Repeat Password</InputLabel>
+            <Input name="confirmpassword" type="password" id="confirmpassword" />
           </FormControl>
+        
           <Recaptcha className={classes.recap}/>
           <Button
             type="submit"

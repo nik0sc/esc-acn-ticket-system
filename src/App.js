@@ -13,6 +13,10 @@ import {Link,Redirect, Switch} from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { Button } from '@material-ui/core';
 import NotFound from './Components/NotFound';
+import { loadProgressBar } from 'axios-progress-bar'
+import 'axios-progress-bar/dist/nprogress.css'
+
+
 const cookies = new Cookies();
 
 
@@ -32,6 +36,7 @@ const SecretRoute = ({ component: Comp, path, ...rest }) => {
   );
 };
 
+loadProgressBar();
 
 
 class App extends Component {

@@ -30,6 +30,34 @@
   border-bottom-right-radius: 25px;
 } */
 
-.Login-Button:focus {
-  outline: 0 !important;
+
+.appbar{
+  position: fixed;
+}
+
+.flex {
+  position: absolute;
+}
+
+.button{
+  position: absolute;
+  left: 1150px;
+}
+
+.space {
+  margin-top: 90px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.space1 {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+
+.guttertop {
+  padding-top: 10px;
+  padding-bottom: 5px;
 }

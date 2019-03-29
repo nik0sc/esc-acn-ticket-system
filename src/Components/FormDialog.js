@@ -109,6 +109,7 @@ class FormDialog extends React.Component {
         if(res.request.status === 200){
           console.log('success send ticket')
           console.log(this.state);
+          
         }
       })
 

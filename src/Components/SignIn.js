@@ -19,6 +19,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'universal-cookie';
+import {withRouter} from 'react-router-dom'
+import compose from 'recompose/compose';
 
 const styles = theme => ({
   main: {
@@ -51,6 +53,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
   },
 });
+
 
 class SignIn extends React.Component{
 
@@ -91,11 +94,7 @@ handleInputChange = (e) => {
         //   return;
         // }
 
-
-
-
         if(res.request.status === 200){
-          this.props.history.push('/');
           const cookies = new Cookies();
           var session_token = res.data.sessionToken;
           cookies.set('sessionToken', session_token, {path: '/'});
@@ -129,7 +128,8 @@ handleInputChange = (e) => {
   
 
     if(this.state.redirect){
-      return <Redirect to="/dashboard" />
+      this.props.history.push('/dashboard')
+      // return <Redirect to="/dashboard" />
     }
 
  
@@ -170,6 +170,8 @@ handleInputChange = (e) => {
           </Button>
         </form> 
       </Paper>
+
+
     </main>
       </div>
     )
@@ -177,4 +179,7 @@ handleInputChange = (e) => {
 }
 
 
-export default withStyles(styles)(SignIn);
+export default compose(
+  withRouter,
+  withStyles(styles),
+)(SignIn);
