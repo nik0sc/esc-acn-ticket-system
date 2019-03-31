@@ -130,9 +130,9 @@ class RegisterNew extends React.Component{
   render(){
     const { classes } = this.props;
 
-    // if(this.state.redirect){
-    //   return <Redirect to="/dashboard" />
-    // }
+    if(this.state.redirect){
+      return <Redirect to="/dashboard" />
+    }
 
     
     return(

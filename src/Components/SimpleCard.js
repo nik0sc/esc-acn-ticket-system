@@ -16,9 +16,8 @@ import { ListItemSecondaryAction, IconButton, Dialog, DialogTitle, DialogContent
 import FormDialog from "./FormDialog";
 import axios from 'axios'
 import { TextField, Paper } from 'material-ui';
-
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import TestWillDelete from './TestWillDelete';
+import CommentExampleReplyFormOuter from './CommentExampleReplyFormOuter';
 
 
 const styles = {
@@ -167,14 +166,7 @@ class SimpleCard extends React.Component{
         <Typography >
           Assigned Team: {this.state.assigned_team}
         </Typography>
-        <Typography >
-          {/* Your query: {this.state.message} */}
-        </Typography>
       </CardContent>
-      {/* <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
-       */}
     </Card>
     <Card className="space1">
 <CardContent>
@@ -184,8 +176,8 @@ class SimpleCard extends React.Component{
         {this.state.message}
   </Typography>
 </CardContent>
-
     </Card>
+
           </MuiThemeProvider>
           
        </Dialog>);
@@ -241,14 +233,7 @@ class SimpleCard extends React.Component{
             <Divider />
             </CardContent>
         </Card>
-        
-
-    
-        
         </Grid>
-        
-
-
       </Grid>
 
     )

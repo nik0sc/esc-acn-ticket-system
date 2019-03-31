@@ -15,7 +15,7 @@ import { Button } from '@material-ui/core';
 import NotFound from './Components/NotFound';
 import { loadProgressBar } from 'axios-progress-bar'
 import 'axios-progress-bar/dist/nprogress.css'
-
+import CommentExampleReplyFormOuter from './Components/CommentExampleReplyFormOuter';
 
 const cookies = new Cookies();
 
@@ -85,6 +85,8 @@ class App extends Component {
               {/* <Route path="/dashboard" component={Dashboard} >
               </Route> */}
               <Route path="/tickets" component={Tickets}>
+              </Route>
+              <Route path="/talk" component={CommentExampleReplyFormOuter}>
               </Route>
               <Route path="*" exact={true} component={NotFound} />
               </Switch>

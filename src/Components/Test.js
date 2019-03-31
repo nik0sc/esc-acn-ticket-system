@@ -2,8 +2,12 @@ import MUIDataTable from "mui-datatables";
 import React from 'react';
 import FormDialog from './FormDialog'
 import classnames from 'classnames';
-import {createMuiTheme, MuiThemeProvider, withStyles} from '@material-ui/core/styles';
+import {createMuiTheme, withStyles} from '@material-ui/core/styles';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 import axios from 'axios'
+import { Dialog, Toolbar, IconButton, Divider } from 'material-ui';
+import { AppBar, Button, Typography, List, ListItem, ListItemText, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 
 const customStyles = {
     PriorityCell:{
@@ -95,7 +99,8 @@ const customStyles = {
 class Test extends React.Component{
 
   state = {
-
+    redirect: false,
+    open: true,
   }
 
   componentDidMount(){
@@ -110,23 +115,17 @@ class Test extends React.Component{
         this.setState({allTickets: res.data.map((data => {return({id: data.id, title: data.title, 
           message: data.message, open_time: data.open_time, close_time: data.close_time, 
         assigned_team: data.assigned_team, username: data.username})}))})
-        console.log(this.state.allTickets[0].assigned_team);
+        //console.log(this.state.allTickets[0].assigned_team);  // null
         const allT = this.state.allTickets;
-        console.log(this.state.allTickets.size);
-        // for(const i =0; i < allT.length;i++){
-        //   if(this.state.allT[i].assigned_team === null){
-        //     this.setState({
-        //       assigned_team: "None"
-        //     })
-        //   }
-        
-        // }
-        // for(var i =0;i<allT.length;i++){
-        //   if(allT[i].assigned_team === null){
-        //     allT[i].assigned_team = "None";
-        //   }
-        // }
-       
+        for(var i =0;i<allT.length;i++){
+          if(allT[i].assigned_team === null){
+            allT[i].assigned_team = "None";
+          }
+        }
+        this.setState({
+          allTickets: allT,
+        })
+
       }
     })
     .catch(error => {
@@ -134,23 +133,57 @@ class Test extends React.Component{
     })
   }
 
-    getMuiTheme = () => createMuiTheme({
-        overrides: {
-          MUIDataTable: {
-            root: {
-              backgroundColor: "#FF000",
-            },
-            paper: {
-              boxShadow: "none",
-            }
-          },
-          MUIDataTableBodyCell: {
-            root: {
-              backgroundColor: "#FFF"
-            }
-          }
-        }
-      });
+  renderElement(){
+    if(this.state.redirect)
+       return (
+        <Dialog
+          fullScreen
+          open={this.state.open}
+          onClose={this.handleClose}
+        >
+          <AppBar>
+            <Toolbar>
+              <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
+                CLOSE
+              </IconButton>
+              <Typography variant="h6" color="inherit" >
+                Sound
+              </Typography>
+              <Button color="inherit" onClick={this.handleClose}>
+                save
+              </Button>
+            </Toolbar>
+          </AppBar>
+          </Dialog>
+
+);
+ }
+
+ handleClose = () => {
+  this.setState({ 
+    redirect: false,
+  });
+   
+};
+
+
+    // getMuiTheme = () => createMuiTheme({
+    //     overrides: {
+    //       MUIDataTable: {
+    //         root: {
+    //           backgroundColor: "#FF000",
+    //         },
+    //         paper: {
+    //           boxShadow: "none",
+    //         }
+    //       },
+    //       MUIDataTableBodyCell: {
+    //         root: {
+    //           backgroundColor: "#FFF"
+    //         }
+    //       }
+    //     }
+    //   });
     
     render(){
 
@@ -197,7 +230,7 @@ class Test extends React.Component{
             },
             {
               name: "assigned_team",
-              label: "Priority",
+              label: "Assigned Team",
               options: {
                filter: true,
                sort: true,
@@ -206,7 +239,7 @@ class Test extends React.Component{
                        className: classnames ({
                            [this.props.classes.PriorityCell]: value === "Medium"
                        })
-                   };
+                   }; 
                }
               }
              },
@@ -218,8 +251,8 @@ class Test extends React.Component{
                 sort: true,
                }},
                {
-                   name: "time",
-                   label: "Last Modified (Hours)",
+                   name: "open_time",
+                   label: "Date Opened",
                    options:{
                        filter: false,
                        sort: true
@@ -240,21 +273,31 @@ class Test extends React.Component{
 const options = {
     filterType: 'dropdown',
     onRowClick: rowData => {
-        const id = rowData[0];
-        console.log(id)
-    }
+        // const id = rowData[0];
+        // console.log(id)
+        this.setState({
+          redirect: true,
+        })
+      }
   };
         return(
-            <MuiThemeProvider theme={this.getMuiTheme()}>
+          <div>            
+            {/* theme={this.getMuiTheme()} */}
+
+            <MuiThemeProvider>
             <MUIDataTable
   title={"Tickets"}
   data={data}
   columns={columns}
   options={options}
 />
+{this.renderElement()}
+
 </MuiThemeProvider>
+          </div>            
         )
     }
 }
 
-export default withStyles(customStyles, {name: "Test"})(Test);
+
+export default withStyles({name: "Test"})(Test);
