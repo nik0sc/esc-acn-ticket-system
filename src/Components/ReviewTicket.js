@@ -117,14 +117,8 @@ class ReviewTicket extends React.Component {
               <Typography>Ticket ID: {this.props.currentT[0]}</Typography>
               <Typography>Categories: </Typography>
               <Typography>Date Opened by User: {this.state.dateOpened}</Typography>
-              <Typography>Time Opened by User: {this.state.timeOpened}</Typography>
-
-
-
-
-            
+              <Typography>Time Opened by User: {this.state.timeOpened}</Typography>       
             </CardContent>
-
             </Card>
           </Grid>
         </Grid>
