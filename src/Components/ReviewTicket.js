@@ -13,7 +13,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-import { Card, CardContent, Grid } from '@material-ui/core';
+import { Card, CardContent, Grid, FormControl, InputLabel, Select, OutlinedInput, MenuItem } from '@material-ui/core';
+import { CardActions } from 'material-ui';
 
 const styles = theme => ({
   appBar: {
@@ -30,6 +31,9 @@ const styles = theme => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
+  formControl:{
+    minWidth: 150,
+  }
   
 });
 
@@ -42,6 +46,8 @@ class ReviewTicket extends React.Component {
     open: true,
     dateOpened: '',
     timeOpened: '',
+    status: "30",
+
   };
 
   
@@ -63,7 +69,12 @@ class ReviewTicket extends React.Component {
       })
     }
     
-  }
+  };
+
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
 
   render() {
     const { classes } = this.props;
@@ -97,11 +108,29 @@ class ReviewTicket extends React.Component {
               <Typography inline style={{color: 'red'}}>
                 HIGH
               </Typography>
-              {/* <p className="bg"> HIGH </p> */}
-              <h4>{this.props.currentT[2]}</h4>
+              <h4>{this.props.currentT[2]}</h4> 
               <Typography>
               <h6>{this.props.currentT[3]}</h6>
               </Typography>
+              
+
+          <FormControl className={classes.formControl}>
+          <Select
+            value={this.state.status}
+            onChange={this.handleChange}
+            inputProps={{
+              name: 'status',
+              id: 'age-simple',
+            }}
+          >
+            <MenuItem value={10}>Closed</MenuItem>
+            <MenuItem value={20}>In Progress</MenuItem>
+            <MenuItem value={30}>New</MenuItem>
+
+          </Select>
+        </FormControl>
+
+              
             </CardContent>
             </Card>
           </Grid>

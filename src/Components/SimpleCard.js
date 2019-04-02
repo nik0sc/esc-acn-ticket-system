@@ -156,27 +156,6 @@ class SimpleCard extends React.Component{
             </Toolbar>
           </AppBar>
           <MuiThemeProvider>
-          {/* <Card className="space">
-      <CardContent>
-        <h4 gutterBottom>Ticket Information</h4>
-        <Divider/>
-        <Typography className="guttertop">
-          Date Opened: {this.state.open_time}
-        </Typography>
-        <Typography >
-          Assigned Team: {this.state.assigned_team}
-        </Typography>
-      </CardContent>
-    </Card>
-    <Card className="space1">
-<CardContent>
-  <h4>Your Query</h4>
-  <Divider />
-  <Typography className="guttertop">
-        {this.state.message}
-  </Typography>
-</CardContent>
-    </Card> */}
     <Grid container>
           <Grid item xs={8}>
             <Card className="reviewTicketCard">
@@ -199,15 +178,6 @@ class SimpleCard extends React.Component{
               <Typography >
                 Assigned Team: {this.state.assigned_team}
                 </Typography>
-
-              {/* <Typography>Submitted by: {this.props.currentT[4]}</Typography>
-              <Typography>Email: </Typography>
-              <Typography>Phone Number: </Typography>
-              <h5>Ticket Information</h5>
-              <Typography>Ticket ID: {this.props.currentT[0]}</Typography>
-              <Typography>Categories: </Typography>
-              <Typography>Date Opened by User: {this.state.dateOpened}</Typography>
-              <Typography>Time Opened by User: {this.state.timeOpened}</Typography>        */}
             </CardContent>
             </Card>
           </Grid>
@@ -233,22 +203,17 @@ class SimpleCard extends React.Component{
               <h3>Tickets</h3>
             </ListItemText>
             <ListItemSecondaryAction>
-              <IconButton
-              style = {{backgroundColor: 'transparent'}}
-              >
-                <FormDialog />
+              <IconButton style = {{backgroundColor: 'transparent'}}>
+              <FormDialog />
               </IconButton>
             </ListItemSecondaryAction>
             <Divider />
           </ListSubheader>
-          {/* <ListItem>  
-            
-            </ListItem> */}
           <div>
-                {this._renderItems()}
-            </div> 
-</List>
-
+          {this._renderItems()}
+          </div> 
+          </List>
+        
       </CardContent>
     </Card>
         </Grid>

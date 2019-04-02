@@ -26,7 +26,7 @@ const SecretRoute = ({ component: Comp, path, ...rest }) => {
       path={path}
       {...rest}
       render={(props) => {
-        return (cookies.get('auth') === 'y') ? (
+        return (cookies.get('sessionToken')) ? (
           <Comp {...props} />
         ) : (
           <Redirect to='/' />
@@ -37,7 +37,7 @@ const SecretRoute = ({ component: Comp, path, ...rest }) => {
 };
 
 loadProgressBar();
-
+// show progress bar when axios is too slow 
 
 class App extends Component {
   

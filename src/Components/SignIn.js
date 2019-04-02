@@ -90,24 +90,15 @@ handleInputChange = (e) => {
         }
       })
       .then((res) => {
-        // keep token so that can pass to backend
-        // if (typeof session_token === 'undefined') {
-        //   // Die
-        //   return;
-        // }
-
         if(res.request.status === 200){
+          // success
           const cookies = new Cookies();
           var session_token = res.data.sessionToken;
           cookies.set('sessionToken', session_token, {path: '/'});
-          cookies.set('auth', 'y', {path: '/'});
           console.log(res)
           this.setState({
             redirect: true,
           });
-          
-          
-          
         }
       }
     )
@@ -130,18 +121,14 @@ handleInputChange = (e) => {
   
 
     if(this.state.redirect){
-      this.props.history.push('/dashboard')
+      this.props.history.push('/dashboard');
       // return <Redirect to="/dashboard" />
     }
 
  
   
     return(
-
-      
-      
-      <div>
-        
+    <div>
       <main className={classes.main}>
       <CssBaseline />
       <Paper className={classes.paper}>
@@ -149,9 +136,9 @@ handleInputChange = (e) => {
           <LockOutlinedIcon />
         </Avatar>
         <div className="PageSwitcher">
-                <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
-                <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink> 
-            </div>
+        <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
+        <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink> 
+        </div>
         <form className={classes.form}  onSubmit={this.getUser.bind(this)} noValidate>
           <FormControl margin="normal" required fullWidth>
           <InputLabel htmlFor="email">Email</InputLabel>
@@ -172,8 +159,6 @@ handleInputChange = (e) => {
           </Button>
         </form> 
       </Paper>
-
-
     </main>
       </div>
     )

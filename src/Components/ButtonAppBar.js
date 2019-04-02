@@ -56,38 +56,15 @@ class ButtonAppBar extends React.Component{
             <Typography variant="h6" color="inherit" className={classes.grow}>
             Support Ticket System
           </Typography>
-          <Button className={classes.but}> Live Chat</Button>
+          {/* <Button className={classes.but}> Live Chat</Button> */}
           <Button onClick={this.handleClick.bind(this)} color="inherit">Log Out</Button>
         </Toolbar>
       </AppBar>
     </div>
-
         )
     }
-
-
 }
 
-
-// function ButtonAppBar(props) {
-
-
-//   const { classes } = props;
-
-
-//   return (
-//     <div className={classes.root}>
-//       <AppBar position="static">
-//         <Toolbar>
-//             <Typography variant="h6" color="inherit" className={classes.grow}>
-//             Support Ticket System
-//           </Typography>
-//           <Button onClick={this.change} color="inherit">Log Out</Button>
-//         </Toolbar>
-//       </AppBar>
-//     </div>
-//   );
-//}
 
 ButtonAppBar.propTypes = {
   classes: PropTypes.object.isRequired,

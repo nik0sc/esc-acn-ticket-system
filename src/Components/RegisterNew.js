@@ -19,6 +19,8 @@ import Recaptcha from './Recaptcha';
 import Cookies from 'universal-cookie';
 import { Divider } from '@material-ui/core';
 import { Dialog } from 'material-ui';
+import {withRouter} from 'react-router-dom'
+import compose from 'recompose/compose';
 
 
 const styles = theme => ({
@@ -67,6 +69,7 @@ class RegisterNew extends React.Component{
 
   getUser = (e) => {
     e.preventDefault();
+    const fullname = e.target.elements.fullname.value;
     const username = e.target.elements.username.value;
     const password = e.target.elements.password.value;
     const email = e.target.elements.email.value;
@@ -82,7 +85,7 @@ class RegisterNew extends React.Component{
       toast.error('Passwords do not match')
     }
     else{
-      if(username && password && email && phone && recaptchaTok){
+      if(username && password && email && phone && recaptchaTok && fullname){
         axios.post(`https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users`, {
           username: username,
           email: email,
@@ -110,11 +113,11 @@ class RegisterNew extends React.Component{
           })
         });
     }
-    if(!username || !email || !password || !phone || !recaptchaTok){
+    if(!username || !email || !password || !phone || !recaptchaTok || !fullname){
       toast.error('Empty fields detected', {
         position: "bottom-center"
       });
-    }
+    } 
     }
     
   }
@@ -131,7 +134,8 @@ class RegisterNew extends React.Component{
     const { classes } = this.props;
 
     if(this.state.redirect){
-      return <Redirect to="/dashboard" />
+      this.props.history.push('/');
+      toast.success("You can sign in with your new account now.")
     }
 
     
@@ -160,7 +164,11 @@ class RegisterNew extends React.Component{
                 <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink> 
             </div>
         <form className={classes.form}  onSubmit={this.getUser.bind(this)} noValidate>
-          <FormControl margin="normal" required fullWidth>
+        <FormControl margin="normal" required className={classes.first}>
+            <InputLabel htmlFor="fullname">Full Name</InputLabel>
+            <Input id="fullname" name="fullname" autoFocus />
+          </FormControl>
+          <FormControl margin="normal" required>
             <InputLabel htmlFor="username">Username</InputLabel>
             <Input id="username" name="username" autoFocus />
           </FormControl>
@@ -203,4 +211,5 @@ class RegisterNew extends React.Component{
 
 
 
-export default withStyles(styles)(RegisterNew);
+
+export default compose(withRouter, withStyles(styles))(RegisterNew);
