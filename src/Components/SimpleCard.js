@@ -60,6 +60,7 @@ class SimpleCard extends React.Component{
   state= {
     id: [],
     status: [],
+    numOfTicketsOpened: '',
     redirect: false,
     open: false,
     title: '',
@@ -79,8 +80,10 @@ class SimpleCard extends React.Component{
     .then((res) => {
       if(res.request.status === 200){
         //console.log(res.data);
-        this.setState({id: res.data.map((data => {return([data.id, data.priority, data.title])}))})
-        console.log(this.state);
+        this.setState({
+          id: res.data.map((data => {return([data.id, data.priority, data.title])})),
+          numOfTicketsOpened: this.state.id.length,
+        })
       }
     })
     .catch(error => {
@@ -95,7 +98,15 @@ class SimpleCard extends React.Component{
           </ListItemText>
         </ListItem>
       )
+      
     }
+
+  // componentDidUpdate(prevProps ,prevState){
+  //   const {numOfTicketsOpened} = this.state.numOfTicketsOpened;
+  //   if(numOfTicketsOpened !== prevState.numOfTicketsOpened){
+  //     console.log("UPDATED COMPOENENT")
+  //   }
+  // }
 
     handleClick = (id, e) => {
       this.setState({
@@ -182,7 +193,6 @@ class SimpleCard extends React.Component{
             </Card>
           </Grid>
         </Grid>
-
           </MuiThemeProvider>
           
        </Dialog>);

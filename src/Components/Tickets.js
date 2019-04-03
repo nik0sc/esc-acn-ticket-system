@@ -1,9 +1,6 @@
 import React from 'react'
 import axios from 'axios'
 import ButtonAppBar from './ButtonAppBar';
-import TicketTable from './TicketTable';
-import EnhancedTable from './EnhancedTable';
-import Test from './Test';
 import MUIDataTable from "mui-datatables";
 import FormDialog from './FormDialog'
 import {createMuiTheme, withStyles} from '@material-ui/core/styles';
@@ -33,7 +30,7 @@ class Tickets extends React.Component{
           if(res.request.status === 200){
             // this.setState({id: res.data.map((data => {return([data.id, data.priority, data.title])}))})
             this.setState({allTickets: res.data.map((data => {return({id: data.id, title: data.title, 
-              message: data.message, open_time: data.open_time, close_time: data.close_time, 
+            message: data.message, open_time: data.open_time, close_time: data.close_time, 
             assigned_team: data.assigned_team, username: data.username})}))})
             //console.log(this.state.allTickets[0].assigned_team);  // null
             const allT = this.state.allTickets;

@@ -34,16 +34,11 @@ const styles = theme => ({
 });
 
 const topics = [
-  'AR City',
-  'What',
-  'On',
-  'Earth',
-  'Is',
-  'This',
-  'Bull',
-  'Shat',
-  'Send',
-  'Help',
+  'API DevOps',
+  'AR Menu',
+  'Smart Lock',
+  'Iot Led Wall',
+  'Others',
 ];
 
 function getStyles(topic, that) {
@@ -102,17 +97,16 @@ class FormDialog extends React.Component {
       }, {
         headers: {
           'Content-Type': 'application/json',
-          'X-Parse-Session-Token': 'r:3cbcc7cab116e0f8032b33f94435593d',
+          'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce',
+
+          // rememeber to change session token!!!!!
         }
       })
       .then((res) => {
         if(res.request.status === 200){
-          console.log('success send ticket')
-          console.log(this.state);
-          
+          console.log('success send ticket')          
         }
       })
-
       this.setState({ open: false, topics: []});
 
     }
