@@ -89,6 +89,7 @@ class SimpleCard extends React.Component{
     .catch(error => {
       console.log('failed')
     })
+
   }
 
   _renderItems(){
@@ -125,6 +126,9 @@ class SimpleCard extends React.Component{
           open_time: res.data.open_time,
           assigned_team: res.data.assigned_team,
           message: res.data.message,
+
+           // TODO: add progress 
+
         })
         
         if(this.state.assigned_team === null){

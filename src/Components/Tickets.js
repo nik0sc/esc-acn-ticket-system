@@ -9,8 +9,19 @@ import { Dialog, Toolbar, IconButton, Divider } from 'material-ui';
 import { AppBar, Typography, List, ListItem, ListItemText, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import TestWillDelete from './ReviewTicket';
 import classnames from 'classnames';
-import { Button, Modal } from 'semantic-ui-react'
 
+
+const customStyles = {
+  HighCell: {
+    color: "#F2852B",
+  },
+  UrgentCell:{
+    color: '#F23913',
+  },
+  CriticalCell: {
+    color: '#F23913',
+  }
+};
 
 class Tickets extends React.Component{
   
@@ -31,12 +42,42 @@ class Tickets extends React.Component{
             // this.setState({id: res.data.map((data => {return([data.id, data.priority, data.title])}))})
             this.setState({allTickets: res.data.map((data => {return({id: data.id, title: data.title, 
             message: data.message, open_time: data.open_time, close_time: data.close_time, 
-            assigned_team: data.assigned_team, username: data.username})}))})
+            assigned_team: data.assigned_team, username: data.username, fullname: data.long_name, 
+            priority: data.priority, severity: data.severity})}))})
             //console.log(this.state.allTickets[0].assigned_team);  // null
             const allT = this.state.allTickets;
             for(var i =0;i<allT.length;i++){
               if(allT[i].assigned_team === null){
                 allT[i].assigned_team = "None";
+              }
+              if(allT[i].open_time){
+                
+                allT[i].open_time = allT[i].open_time.substring(0 ,16).replace("T", " | ");
+                
+              }
+              if(allT[i].priority === 1){
+                allT[i].priority = "Low";
+              }
+              if(allT[i].priority ===2){
+                allT[i].priority = "Normal";
+              }
+              if(allT[i].priority ===3){
+                allT[i].priority = "High";
+              }
+              if(allT[i].priority === 4){
+                allT[i].priority = "Urgent";
+              }
+              if(allT[i].severity === 1){
+                allT[i].severity = "Low";
+              }
+              if(allT[i].severity ===2){
+                allT[i].severity = "Normal";
+              }
+              if(allT[i].severity ===3){
+                allT[i].severity = "High";
+              }
+              if(allT[i].severity === 4){
+                allT[i].severity = "Critical";
               }
             }
             this.setState({
@@ -117,21 +158,46 @@ class Tickets extends React.Component{
                  display: false,
                 }
                },
+               {
+                name: "fullname",
+                label: "Full Name",
+                options: {
+                 filter: false,
+                 sort: false,
+                 display: false,
+                }
+               },
             {
              name: "priority",
              label: "Priority",
              options: {
               filter: true,
               sort: true,
-            //   setCellProps: (value) =>{
-            //       return{
-            //           className: classnames ({
-            //               [this.props.classes.PriorityCell]: value === "Medium"
-            //           })
-            //       };
-            //   }
+              setCellProps: (value) => {
+                  return{
+                      className: classnames ({
+                          [this.props.classes.HighCell]: value === "High",
+                          [this.props.classes.UrgentCell]: value === "Urgent",
+                      })
+                  };
+              }
              }
             },
+            {
+              name: "severity",
+              label: "Severity",
+              options: {
+               filter: true,
+               sort: true,
+               setCellProps: (value) =>{
+                   return{
+                       className: classnames ({
+                           [this.props.classes.CriticalCell]: value === "Critical",
+                       })
+                   };
+               }
+              }
+             },
             {
               name: "assigned_team",
               label: "Assigned Team",
@@ -161,8 +227,7 @@ class Tickets extends React.Component{
                        filter: false,
                        sort: true
                    }
-               },
-               
+               }, 
            ];
            
           //  const data = [
@@ -185,13 +250,14 @@ const options = {
           currentTicket: rowData
         })
       }
+      
   };
 
       
         return(
             <div>
                 <ButtonAppBar />
-                <MuiThemeProvider>
+                <MuiThemeProvider theme={this.getMui}>
                     <MUIDataTable
                     title={"Tickets"}
                 data={data}
@@ -210,4 +276,4 @@ const options = {
     }
 }
 
-export default Tickets;
+export default withStyles(customStyles, {name: "Tickets"})(Tickets);
