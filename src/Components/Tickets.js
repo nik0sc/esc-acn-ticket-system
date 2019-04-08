@@ -91,7 +91,7 @@ class Tickets extends React.Component{
         })
       }
 
-      onClose = () => {
+      onClose = () => { 
         this.setState({ 
           redirect: false,
           open: false,

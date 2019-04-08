@@ -33,7 +33,7 @@ class ButtonAppBar extends React.Component{
     }
 
     handleClick = (e) => {
-        cookies.remove('auth');
+        cookies.remove('sessionToken');
         this.setState({
             redirect: true
         })

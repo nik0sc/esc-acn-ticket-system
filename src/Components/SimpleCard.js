@@ -57,15 +57,21 @@ number:{
 
 class SimpleCard extends React.Component{
 
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     numOfTicketsOpened: '',
+  //   };
+  //   this.handleChange = this.handleChange.bind(this);
+  // }
+
   state= {
     id: [],
     status: [],
-    numOfTicketsOpened: '',
     redirect: false,
     open: false,
     title: '',
     ticketid: '',
-    open_time:'',
     assigned_team: '',
     message: '',
 
@@ -82,8 +88,12 @@ class SimpleCard extends React.Component{
         //console.log(res.data);
         this.setState({
           id: res.data.map((data => {return([data.id, data.priority, data.title])})),
-          numOfTicketsOpened: this.state.id.length,
         })
+        this.setState({
+          numOfTicketsOpened: this.state.id.length }, function(){
+        });
+        console.log(this.state.numOfTicketsOpened);
+
       }
     })
     .catch(error => {
@@ -108,6 +118,14 @@ class SimpleCard extends React.Component{
   //     console.log("UPDATED COMPOENENT")
   //   }
   // }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   if(nextProps.numOfTicketsOpened !== prevState.numOfTicketsOpened) {
+  //     return { numOfTicketsOpened: nextProps.numOfTicketsOpened }
+  //   } else return null;
+  // }
+  // shouldComponentUpdate(nextProps, nextState){
+  //   return this.state.numOfTicketsOpened !== 
+  // }
 
     handleClick = (id, e) => {
       this.setState({
@@ -126,7 +144,7 @@ class SimpleCard extends React.Component{
           open_time: res.data.open_time,
           assigned_team: res.data.assigned_team,
           message: res.data.message,
-
+          
            // TODO: add progress 
 
         })
@@ -137,9 +155,11 @@ class SimpleCard extends React.Component{
           })
         }
         var date = this.state.open_time;
-        var newDatee = date.substring(0, 16).replace("T", " @ ");
+        var openDate = date.substring(0, 10);
+        var openTime = date.substring(11, 16);
         this.setState({
-          open_time: newDatee,
+          open_date: openDate,
+          open_time: openTime,
         })
       }))
     }
@@ -188,10 +208,16 @@ class SimpleCard extends React.Component{
               <h5>Ticket Information</h5>
               <Divider/>
               <Typography className="guttertop">
-              Date Opened: {this.state.open_time}
+              Date Opened: {this.state.open_date}
+              </Typography>
+              <Typography>
+              Time Opened: {this.state.open_time}
               </Typography>
               <Typography >
                 Assigned Team: {this.state.assigned_team}
+                </Typography>
+                <Typography >
+                Progress: NOT DONE YET
                 </Typography>
             </CardContent>
             </Card>

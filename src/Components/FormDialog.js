@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Add from '@material-ui/icons/AddCircle';
-import { TextField, InputLabel, Select } from '@material-ui/core';
+import { TextField, InputLabel, Select, OutlinedInput } from '@material-ui/core';
 import 'filepond/dist/filepond.min.css';
 import * as FilePond from 'filepond';
 import FileAttach from './FileAttach';
@@ -110,10 +110,10 @@ class FormDialog extends React.Component {
         headers: {
           'Content-Type': 'application/json',
           // legit token
-          // 'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce',
+          'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce',
 
           // not legit token
-          'X-Parse-Session-Token': 'r:ef8dfea3cadc3b75e8606ecbdd49a19e',
+          // 'X-Parse-Session-Token': 'r:ef8dfea3cadc3b75e8606ecbdd49a19e',
 
 
           // rememeber to change session token!!!!!
@@ -123,15 +123,17 @@ class FormDialog extends React.Component {
         if(res.request.status === 200){
           console.log('success send ticket') 
         }
+        
       })
       this.setState({ open: false, topics: []});
-      
+
     }
   };
 
 
   handleChange = event => {
-    this.setState({ topics: event.target.value }, function(){
+    this.setState({ 
+      topics: event.target.value }, function(){
     });
     console.log(this.state.priority);
   };
@@ -174,12 +176,18 @@ class FormDialog extends React.Component {
               onChange={this.setTitle}
             />
             <div className={classes.root}>
-            <FormControl className={classes.formControl}>
+            <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel htmlFor="select-multiple">Topics</InputLabel>
           <Select
             multiple
             value={this.state.topics}
-            input={<Input id="select-multiple" />}
+            input = {
+              <OutlinedInput
+              labelWidth={50}
+              name="topics"
+              id="outlined-topics-simple"
+            />
+            }
             onChange = {this.handleChange}
           >
             {topics.map(topic => (
@@ -192,7 +200,7 @@ class FormDialog extends React.Component {
         
         {/* priority for ticket system  */}
 
-        <FormControl className={classes.formControl}>
+        {/* <FormControl className={classes.formControl}>
           <InputLabel htmlFor="priority">Priority</InputLabel>
           <Select
             value={this.state.priority}
@@ -210,11 +218,36 @@ class FormDialog extends React.Component {
             <MenuItem value={3}>High</MenuItem>
             <MenuItem value={4}>Urgent</MenuItem>
           </Select>
+        </FormControl> */}
+        
+        <FormControl variant="outlined" className={classes.formControl}>
+          <InputLabel htmlFor="outlined-priority-simple" >
+            Priority
+          </InputLabel>
+          <Select
+            value={this.state.priority}
+            onChange={this.handleChangePriority}
+            input={
+              <OutlinedInput
+                labelWidth={50}
+                name="priority"
+                id="outlined-priority-simple"
+              />
+            }
+          >
+          <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={1}>Low</MenuItem>
+            <MenuItem value={2}>Normal</MenuItem>
+            <MenuItem value={3}>High</MenuItem>
+            <MenuItem value={4}>Urgent</MenuItem>
+          </Select>
         </FormControl>
       
         {/* severity for ticket system  */}
 
-        <FormControl className={classes.formControl}>
+        {/* <FormControl className={classes.formControl}>
           <InputLabel htmlFor="severity">Severity</InputLabel>
           <Select
             value={this.state.severity}
@@ -225,6 +258,31 @@ class FormDialog extends React.Component {
             }}
           >
             <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={1}>Low</MenuItem>
+            <MenuItem value={2}>Normal</MenuItem>
+            <MenuItem value={3}>High</MenuItem>
+            <MenuItem value={4}>Critical</MenuItem>
+          </Select>
+        </FormControl> */}
+        
+        <FormControl variant="outlined" className={classes.formControl}>
+          <InputLabel htmlFor="outlined-severity-simple" >
+            Severity
+          </InputLabel>
+          <Select
+            value={this.state.severity}
+            onChange={this.handleChangeSeverity}
+            input={
+              <OutlinedInput
+                labelWidth={50}
+                name="severity"
+                id="outlined-severity-simple"
+              />
+            }
+          >
+          <MenuItem value="">
               <em>None</em>
             </MenuItem>
             <MenuItem value={1}>Low</MenuItem>

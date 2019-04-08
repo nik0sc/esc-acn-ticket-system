@@ -69,7 +69,8 @@ class RegisterNew extends React.Component{
 
   getUser = (e) => {
     e.preventDefault();
-    const fullname = e.target.elements.fullname.value;
+    const firstName = e.target.elements.firstName.value;
+    const lastName = e.target.elements.lastName.value;
     const username = e.target.elements.username.value;
     const password = e.target.elements.password.value;
     const email = e.target.elements.email.value;
@@ -85,12 +86,15 @@ class RegisterNew extends React.Component{
       toast.error('Passwords do not match')
     }
     else{
-      if(username && password && email && phone && recaptchaTok && fullname){
+      if(username && password && email && phone && recaptchaTok && firstName && lastName){
         axios.post(`https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users`, {
           username: username,
           email: email,
           password: password,
           phone: phone,
+
+
+          // not added first and last name 
         }, {
           headers: {
             'Server-Token': `${process.env.REACT_APP_API_KEY}`,
@@ -113,7 +117,7 @@ class RegisterNew extends React.Component{
           })
         });
     }
-    if(!username || !email || !password || !phone || !recaptchaTok || !fullname){
+    if(!username || !email || !password || !phone || !recaptchaTok || !firstName || !lastName){
       toast.error('Empty fields detected', {
         position: "bottom-center"
       });
@@ -165,10 +169,14 @@ class RegisterNew extends React.Component{
             </div>
         <form className={classes.form}  onSubmit={this.getUser.bind(this)} noValidate>
         <FormControl margin="normal" required className={classes.first}>
-            <InputLabel htmlFor="fullname">Full Name</InputLabel>
-            <Input id="fullname" name="fullname" autoFocus />
+            <InputLabel htmlFor="firstName">First Name</InputLabel>
+            <Input id="firstName" name="firstName" autoFocus />
           </FormControl>
           <FormControl margin="normal" required>
+            <InputLabel htmlFor="lastName">Last Name</InputLabel>
+            <Input id="lastName" name="lastName" autoFocus />
+          </FormControl>
+          <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="username">Username</InputLabel>
             <Input id="username" name="username" autoFocus />
           </FormControl>
