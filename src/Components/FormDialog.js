@@ -58,6 +58,9 @@ function getStyles(topic, that) {
 }
 
 class FormDialog extends React.Component {
+
+
+
   state = {
     open: false,
     scroll: 'paper',
@@ -123,9 +126,12 @@ class FormDialog extends React.Component {
         if(res.request.status === 200){
           console.log('success send ticket') 
         }
-        
+        this.setState({
+          addTicket: true,
+        })
+
       })
-      this.setState({ open: false, topics: []});
+      this.setState({ open: false, topics: [], priority: '', severity: '', addTicket: false});
 
     }
   };
@@ -158,6 +164,7 @@ class FormDialog extends React.Component {
           open={this.state.open}
           onClose={this.handleClose}
           scroll={this.state.scroll}
+          disableBackdropClick = {true}
           aria-labelledby="scroll-dialog-title"
         >
           <DialogTitle id="scroll-dialog-title">Open a Ticket</DialogTitle>

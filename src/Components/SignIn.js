@@ -21,6 +21,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'universal-cookie';
 import {withRouter} from 'react-router-dom'
 import compose from 'recompose/compose';
+import { loadProgressBar } from 'axios-progress-bar'
+import 'axios-progress-bar/dist/nprogress.css'
 
 const styles = theme => ({
   main: {
@@ -53,6 +55,9 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
   },
 });
+
+//loadProgressBar();
+
 
 
 

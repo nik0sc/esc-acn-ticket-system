@@ -82,13 +82,28 @@ function Transition(props) {
 }
 
 class ReviewTicket extends React.Component {
-  state = {
-    open: true,
-    dateOpened: '',
-    timeOpened: '',
-    status: "0",
-    team: "0",
-  };
+
+  constructor() {
+    super();
+      this.state = {
+        currentT: '',
+        open: true,
+        dateOpened: '',
+        timeOpened: '',
+        status: "0",
+        team: "0",
+      }
+    };
+ 
+  // state = {
+  //   open: true,
+  //   dateOpened: '',
+  //   timeOpened: '',
+  //   status: "0",
+  //   team: "0",
+  //   currentT: '',
+    
+  // };
 
   
   handleClose = () => {
@@ -101,20 +116,47 @@ class ReviewTicket extends React.Component {
   componentDidMount(){
     
     console.log("CHILD" + this.props.currentT);
+
     
+  
     // edit the open time given in the getTicket to get open_date and open_time
     if(this.props.currentT[this.props.currentT.length-1]){
       this.setState({
         dateOpened:this.props.currentT[this.props.currentT.length-1].substring(0,10),
         timeOpened: this.props.currentT[this.props.currentT.length-1].substring(12,18),
       })
+      
     }
+
+    this.setState({
+      currentT: this.props.currentT,
+    })
     
   };
 
   handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ [event.target.name]: event.target.value }, function() {
+      console.log("CHANGES: " + this.state.currentT);
+    });
   };
+
+  handleChangeTeam = event => {
+    const newC = this.state.currentT.slice();
+
+    //temp, should be 8, will change
+    newC[7] = event.target.value;
+    this.setState({
+      [event.target.name]: event.target.value,
+      currentT: newC 
+    }, function(){
+      console.log("CHANGES: " + this.state.currentT);
+    })
+
+   
+  };
+
+
+
 
 
   render() {
@@ -132,11 +174,11 @@ class ReviewTicket extends React.Component {
               <Typography variant="h6" color="inherit">
                 {"Review Ticket"}
               </Typography>
-              <Button color="inherit" onClick={this.props.onClose} className="button2">
+              <Button color="inherit" onClick={this.props.onClose(this.state.currentT)} className="button2">
                 save
               </Button>
             </Toolbar>
-          </AppBar>
+          </AppBar> 
         <div className={classes.root}>
         <Grid container>
           <Grid item xs={8}>
@@ -145,10 +187,10 @@ class ReviewTicket extends React.Component {
               <Typography inline>
                 {"Ticket #" + this.props.currentT[0]} 
               </Typography>
+              {/* title */}
               <h4>{this.props.currentT[2]}</h4> 
-              <Typography>
+              {/* message */}
               <h6>{this.props.currentT[3]}</h6>
-              </Typography>             
             </CardContent>
             </Card>
 
@@ -198,7 +240,7 @@ class ReviewTicket extends React.Component {
             </InputLabel>
             <Select
               value={this.state.team}
-              onChange={this.handleChange}
+              onChange={this.handleChangeTeam}
               input={
               <OutlinedInput
                 labelWidth={110}
@@ -214,9 +256,6 @@ class ReviewTicket extends React.Component {
           </Select>
         </FormControl>
           </div> 
-                       
-
-  
             </CardContent>
             </Card>
           </Grid>

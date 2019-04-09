@@ -7,7 +7,7 @@ import {createMuiTheme, withStyles} from '@material-ui/core/styles';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Dialog, Toolbar, IconButton, Divider } from 'material-ui';
 import { AppBar, Typography, List, ListItem, ListItemText, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
-import TestWillDelete from './ReviewTicket';
+import ReviewTicket from './ReviewTicket';
 import classnames from 'classnames';
 
 
@@ -24,15 +24,24 @@ const customStyles = {
 };
 
 class Tickets extends React.Component{
-  
-    state = {
-        redirect: false,
-        open: true,
-        currentTicket: [],
-      }
 
-      componentDidMount(){
-        axios.get(`https://esc-ticket-service.lepak.sg/ticket/byUser`,{
+  constructor(props){
+    super(props);
+    this.state= {
+      UpdatedNewTicket: '',
+      redirect: false,
+      open: true,
+    }
+  }
+
+  
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  axiosFunc = () => {
+
+    axios.get(`https://esc-ticket-service.lepak.sg/ticket/byUser`,{
           headers: {
             'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce'
           }
@@ -90,21 +99,34 @@ class Tickets extends React.Component{
           console.log('failed')
         })
       }
+    
+  componentDidMount(){
+    this.axiosFunc();
+    //this.interval = setInterval(this.axiosFunc, 10000);
+    
 
-      onClose = () => { 
-        this.setState({ 
-          redirect: false,
-          open: false,
-        });
-         
-      };
+    // how much is too much? 
+  }
+
+
+      onClose(value){
+        return() => {
+          this.setState({
+            UpdatedNewTicket: value,
+            redirect: false,
+            open: false,
+          }, function() {
+            console.log("AFTER CHANGE: " + this.state.UpdatedNewTicket);
+          })
+        }
+      }
 
       renderElement(){
         if(this.state.redirect)
            return (
             <div>
-            <TestWillDelete currentT = {this.state.currentTicket} onClose={this.onClose.bind(this)} /> 
-
+              
+            <ReviewTicket currentT = {this.state.currentTicket} onClose={this.onClose.bind(this)}  /> 
           </div>
           );
         }
@@ -122,15 +144,15 @@ class Tickets extends React.Component{
               sort: true,
              }
             },
-            {
-             name: "topics",
-             label: "Topics",
-             options: {
-              filter: true,
-              filterOptions: ['AR City', 'DevOps', 'Smart City'],
-              sort: false,
-             }
-            },
+            // {
+            //  name: "topics",
+            //  label: "Topics",
+            //  options: {
+            //   filter: true,
+            //   filterOptions: ['AR City', 'DevOps', 'Smart City'],
+            //   sort: false,
+            //  }
+            // },
             {
              name: "title",
              label: "Subject Title",
@@ -204,23 +226,16 @@ class Tickets extends React.Component{
               options: {
                filter: true,
                sort: true,
-            //    setCellProps: (value) =>{
-            //        return{
-            //            className: classnames ({
-            //                [this.props.classes.PriorityCell]: value === "Medium"
-            //            })
-            //        }; 
-            //    }
               }
              },
-            {
-               name: "progress",
-               label: "Progress",
-               options: {
-                filter: true,
-                sort: true,
-               }},
-               {
+            // {
+            //    name: "progress",
+            //    label: "Progress",
+            //    options: {
+            //     filter: true,
+            //     sort: true,
+            //    }},
+                {
                    name: "open_time",
                    label: "Date Opened",
                    options:{
@@ -242,9 +257,9 @@ class Tickets extends React.Component{
 const options = {
     filterType: 'dropdown',
     onRowClick: rowData => {
-        // const id = rowData[0];
+        //const id = rowData[0];
         // console.log(id)
-        console.log(rowData);
+        console.log("ROWDATA " + rowData);
         this.setState({
           redirect: true,
           currentTicket: rowData

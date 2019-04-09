@@ -77,7 +77,24 @@ class SimpleCard extends React.Component{
 
   };
 
-  componentDidMount(){
+  axiosFunc = () => {
+
+    axios.get(`https://esc-ticket-service.lepak.sg/user/me`, {
+      headers: {
+        'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce'
+      }
+    })
+    .then((res) => {
+      if(res.request.status === 200){
+        this.setState({
+          fullName: res.data.long_name,
+        })
+      }
+    })
+    
+
+
+    // get ticket
     axios.get(`https://esc-ticket-service.lepak.sg/ticket/byUser`,{
       headers: {
         'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce'
@@ -89,10 +106,27 @@ class SimpleCard extends React.Component{
         this.setState({
           id: res.data.map((data => {return([data.id, data.priority, data.title])})),
         })
+        let editData = [...this.state.id];
+
+        for(var i=0; i < editData.length; i++){
+          if(editData[i][1] === 0){
+            editData[i][1] = "New";
+          }
+          if(editData[i][1] === 1){
+            editData[i][1] = "In Progress";
+          }
+          if(editData[i][1] === 2){
+            editData[i][1] = "Closed";
+          }
+        }
         this.setState({
-          numOfTicketsOpened: this.state.id.length }, function(){
+          id: editData,
         });
-        console.log(this.state.numOfTicketsOpened);
+
+        // this.setState({
+        //   numOfTicketsOpened: this.state.id.length }, function(){
+        // });
+        // console.log(this.state.numOfTicketsOpened);
 
       }
     })
@@ -101,6 +135,20 @@ class SimpleCard extends React.Component{
     })
 
   }
+
+  componentDidMount(){
+    this.axiosFunc();
+   
+    //this.interval = setInterval(this.axiosFunc, 10000);
+
+    //this.interval = setInterval(this.axiosFunc, 5000);
+
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
 
   _renderItems(){
     return this.state.id.map((el, i) => 
@@ -261,7 +309,8 @@ class SimpleCard extends React.Component{
         <Card className={classes.menu}>
             <CardContent>
               <Typography variant="h5">
-              Welcome to Accenture's ticket system
+              {/* Welcome to Accenture's ticket system */}
+              Welcome Back, {this.state.fullName}
               </Typography>
             </CardContent>
         </Card> 

@@ -16,6 +16,7 @@ import NotFound from './Components/NotFound';
 import { loadProgressBar } from 'axios-progress-bar'
 import 'axios-progress-bar/dist/nprogress.css'
 import CommentExampleReplyFormOuter from './Components/CommentExampleReplyFormOuter';
+import NewRoute from './Components/NewRoute';
 
 const cookies = new Cookies();
 
@@ -45,9 +46,6 @@ class App extends Component {
     loadReCaptcha();
   }
 
-  token = () => {
-    console.log(cookies.get('auth'))
-  }
   
   render() {
     
@@ -84,8 +82,9 @@ class App extends Component {
               </SecretRoute>
               {/* <Route path="/dashboard" component={Dashboard} >
               </Route> */}
-              <Route path="/tickets" component={Tickets}>
+              <Route exact path="/tickets" component={Tickets}>
               </Route>
+              <Route path="/tickets/:ticketID" component={NewRoute} ></Route>
               <Route path="/talk" component={CommentExampleReplyFormOuter}>
               </Route>
               <Route path="*" exact={true} component={NotFound} />
