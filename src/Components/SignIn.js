@@ -12,11 +12,17 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {Redirect, NavLink, Route} from 'react-router-dom'
+import {Redirect, NavLink, Route, Switch} from 'react-router-dom'
 import axios from 'axios'
-import LoginRequired, {openSnackbar} from './LoginRequired';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'universal-cookie';
+import {withRouter} from 'react-router-dom'
+import compose from 'recompose/compose';
+import { loadProgressBar } from 'axios-progress-bar'
+import 'axios-progress-bar/dist/nprogress.css'
 
 const styles = theme => ({
   main: {
@@ -50,7 +56,13 @@ const styles = theme => ({
   },
 });
 
+//loadProgressBar();
+
+
+
+
 class SignIn extends React.Component{
+
 
   state= {
     redirect: false,
@@ -72,8 +84,6 @@ handleInputChange = (e) => {
   })
 }
 
-
-
   getUser = async(e) => {
     e.preventDefault();
     const email = e.target.elements.email.value;
@@ -81,33 +91,34 @@ handleInputChange = (e) => {
     if(email && password){
       axios.get(`https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/login?email=${email}&password=${password}`, {
         headers: {
+          //'Server-Token': `${process.env.REACT_APP_API_KEY}`,
           'Server-Token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlF6Y3hRVEl5UkRVeU1qYzNSakEzTnpKQ01qVTROVVJFUlVZelF6VTRPRUV6T0RreE1UVTVPQSJ9.eyJpc3MiOiJodHRwczovL2FjbmFwaS1wcm9kLmF1dGgwLmNvbS8iLCJzdWIiOiJnWVppRDZzbzJLcXNMT1hmVUt5TjZpdHVXUXhaQnkyN0BjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9wbGFjZWhvbGRlci5jb20vcGxhY2UiLCJpYXQiOjE1NDk5NTI2NDksImV4cCI6MTU1MjU0NDY0OSwiYXpwIjoiZ1laaUQ2c28yS3FzTE9YZlVLeU42aXR1V1F4WkJ5MjciLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.uSISsVSh1REzY3UuMWm_QTEd4xs10cqoWtQpHj3xz9HhKx1_N0s4Wj7A-rQRsQJzQ12IiB5A05lQ17DdkaQkfi_4zeNTGQTo3MvE9Glf1wfcWCMe2WAPr78GSL0RQKuyKZpwrlFuxNghN_-sEVrG4gI7VZyWEc6S_m2076TXVPigTF29u9dA6NgzQkVRaqssulgO_SaZtG9mFwAJ19CaQluqrx10GHsd6OKN2YXPzvSBFa2ouUHlncePbgtKsOl660MQFnyTGtLTzYZPJRX7mpTHSSb4RWoY45lwtt5vfV0HwSC84nKyZvfkK6frFZkpltfSjiWRo6R62lzt5r1dcw'
+
         }
       })
       .then((res) => {
-        var session_token = res.data.sessionToken;
-        // keep token so that can pass to backend
-        if (typeof session_token === 'undefined') {
-          // Die
-          return;
-        }
-
-
-
         if(res.request.status === 200){
+          // success
+          const cookies = new Cookies();
+          var session_token = res.data.sessionToken;
+          cookies.set('sessionToken', session_token, {path: '/'});
           console.log(res)
           this.setState({
             redirect: true,
-          })
+          });
         }
       }
     )
     .catch(error => {      
-      openSnackbar({ message: 'Login failed. Wrong email/password.' });
+      toast.error('Login failed. Wrong email/password.',{
+        position: "bottom-center"
+      })
     });
     }
     else if(!email || !password){
-      openSnackbar({message: 'Empty fields detected. Please fill in your email and password'})
+      toast.error('Empty fields detected. Please fill in your email and password',{
+        position: "bottom-center"
+      })
     }
 
   }
@@ -115,13 +126,16 @@ handleInputChange = (e) => {
     
     const { classes } = this.props;
   
+
     if(this.state.redirect){
-      return <Redirect to="/dashboard" />
+      this.props.history.push('/dashboard');
+      // return <Redirect to="/dashboard" />
     }
 
+ 
+  
     return(
-      
-      <div>
+    <div>
       <main className={classes.main}>
       <CssBaseline />
       <Paper className={classes.paper}>
@@ -129,18 +143,17 @@ handleInputChange = (e) => {
           <LockOutlinedIcon />
         </Avatar>
         <div className="PageSwitcher">
-                <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
-                <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink> 
-            </div>
-            <MuiThemeProvider MuiTheme={getMuiTheme}>
-            <LoginRequired />
-            </MuiThemeProvider>
-        <form className={classes.form}  onSubmit={this.getUser} noValidate>
+        <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
+        <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink> 
+        </div>
+        <form className={classes.form}  onSubmit={this.getUser.bind(this)} noValidate>
           <FormControl margin="normal" required fullWidth>
-            <input id="email" name="email" type="email" autoComplete="email" autoFocus onChange={this.handleInputChange} className="email"/>
+          <InputLabel htmlFor="email">Email</InputLabel>
+          <Input id="email" name="email" type="email" autoComplete="email" autoFocus onChange={this.handleInputChange} />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
-            <input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleInputChange}/>
+          <InputLabel>Password</InputLabel>
+            <Input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleInputChange}/>
           </FormControl>
           <Button
             type="submit"
@@ -160,4 +173,7 @@ handleInputChange = (e) => {
 }
 
 
-export default withStyles(styles)(SignIn);
+export default compose(
+  withRouter,
+  withStyles(styles),
+)(SignIn);
