@@ -265,7 +265,7 @@ class SimpleCard extends React.Component{
                 Assigned Team: {this.state.assigned_team}
                 </Typography>
                 <Typography >
-                Progress: NOT DONE YET
+                Progress: New
                 </Typography>
             </CardContent>
             </Card>

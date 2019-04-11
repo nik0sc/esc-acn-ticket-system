@@ -152,6 +152,8 @@ class ReviewTicket extends React.Component {
       console.log("CHANGES: " + this.state.currentT);
     })
 
+    
+
    
   };
 

@@ -21,7 +21,12 @@ import { Divider } from '@material-ui/core';
 import { Dialog } from 'material-ui';
 import {withRouter} from 'react-router-dom'
 import compose from 'recompose/compose';
+import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts';
+// unique code for every account, based on time
 
+// const verificationCode= Math.round( (new Date()).valueOf()/100000)%10000;
+// console.log(verificationCode);
+const message=null;
 
 const styles = theme => ({
   main: {
@@ -63,7 +68,58 @@ const styles = theme => ({
 class RegisterNew extends React.Component{
 
   state= {
-    redirect: false
+    redirect: false,
+    username: '',
+    email: '',
+    verifyCode: '',
+
+  }
+
+  componentDidMount(){
+    this.setState({
+      verifyCode: Math.round( (new Date()).valueOf()/100000)%10000,
+    }, function() {
+      console.log(this.state.verifyCode);
+    })
+  }
+
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    })
+
+    //console.log("trying: " + this.state.email + " " + this.state.username);
+    
+  }
+
+
+  handleVerify = (e) => {
+    var validator = require("email-validator");
+    if(this.state.username === '' || this.state.email === ''){
+      ToastsStore.error('Need username and email for verification');
+    }
+    else if(!validator.validate(this.state.email)){
+      ToastsStore.error('Invalid email. Unable to send verification code')
+    }else{
+      axios({
+        method: "POST",
+        url: "https://varificationbackend.herokuapp.com/send",
+        data: {
+          name: this.state.username,
+          email: this.state.email,
+          message: this.state.verifyCode,
+        }
+      }).then((res) => {
+        if(res.data.msg === "success"){
+          console.log("email code sent successfully")
+          alert("Verification code sent. Please fill in your code in the form.");
+        }
+        else if(res.data.msg === "fail"){
+          console.log("email code not sent")
+          alert("Verification code not sent. Please refresh browser and try again.")
+        }
+      })
+    }
   }
 
 
@@ -71,60 +127,94 @@ class RegisterNew extends React.Component{
     e.preventDefault();
     const firstName = e.target.elements.firstName.value;
     const lastName = e.target.elements.lastName.value;
+    const fullName = firstName + " " + lastName;
     const username = e.target.elements.username.value;
     const password = e.target.elements.password.value;
     const email = e.target.elements.email.value;
-    const phone = e.target.elements.phone.value;
+    var phone = e.target.elements.phone.value;
     const confirmpassword = e.target.elements.confirmpassword.value;
+    const code = e.target.elements.vecode.value;
     const cookies = new Cookies();
     const recaptchaTok = cookies.get('recaptchaToken');
-    var validator = require("email-validator");
-    if(!validator.validate(email)){
-        toast.error('Invalid email')
+    if(phone.length !== 8){
+      ToastsStore.error('Please enter a valid phone number.')
     }
-    else if(password !== confirmpassword){
-      toast.error('Passwords do not match')
+    if(password !== confirmpassword){
+      ToastsStore.error('Passwords do not match.')
     }
+    else if(code != this.state.verifyCode){
+      ToastsStore.error('Your verification code is not correct');
+    }
+
     else{
-      if(username && password && email && phone && recaptchaTok && firstName && lastName){
-        axios.post(`https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users`, {
+      if(username && password && email && phone && recaptchaTok && firstName && lastName && code){
+        // axios.post(`https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/users`, {
+        //   username: username,
+        //   email: email,
+        //   password: password,
+        //   phone: phone,
+        //   // not added first and last name 
+        // }, {
+        //   headers: {
+        //     'Server-Token': `${process.env.REACT_APP_API_KEY}`,
+        //     'Content-Type':'application/json',
+        //   }
+        // })
+        // .then((res) => {
+        //   if(res.request.status === 201){
+        //     console.log(res.data)
+        //     this.setState({
+        //       redirect: true,
+        //     })
+        //   }
+          
+        // }
+        // )
+        // .catch(error => { 
+        //   toast.error('Username/Email is already registered',{
+        //     position: "bottom-center"
+        //   })
+        // });
+        axios({
+          method: "POST",
+          url: "https://emailserver1.herokuapp.com/send",
+          data: {
+            name: username,
+            email: email,
+            message: message,
+          }
+        })
+
+        axios.post(`https://esc-ticket-service.lepak.sg/user`, {
           username: username,
-          email: email,
           password: password,
           phone: phone,
-
-
-          // not added first and last name 
+          email: email,
+          long_name: fullName,
         }, {
           headers: {
-            'Server-Token': `${process.env.REACT_APP_API_KEY}`,
             'Content-Type':'application/json',
           }
         })
         .then((res) => {
-          if(res.request.status === 201){
-            console.log(res.data)
+          if(res.request.status === 200){
+            console.log("Register succeeded: " + res.data);
             this.setState({
               redirect: true,
             })
           }
-          
-        }
-        )
-        .catch(error => { 
-          toast.error('Username/Email is already registered',{
-            position: "bottom-center"
-          })
-        });
+        })
+        .catch(error => {
+          ToastsStore.error('Username/Email is already registered.')
+        })
+       
     }
-    if(!username || !email || !password || !phone || !recaptchaTok || !firstName || !lastName){
-      toast.error('Empty fields detected', {
-        position: "bottom-center"
-      });
+    if(!username || !email || !password || !phone || !recaptchaTok || !firstName || !lastName || !code){
+      ToastsStore.error('Empty fields detected. Please fill all the fields.')
     } 
-    }
+  }}
     
-  }
+  
 
   // renderCode(){
   //   if(this.state.redirect)
@@ -140,23 +230,14 @@ class RegisterNew extends React.Component{
     if(this.state.redirect){
       this.props.history.push('/');
       toast.success("You can sign in with your new account now.")
+      ToastsStore.success('You can log in with your new registered account now.')
     }
-
     
     return(
       
       <div>
-          <ToastContainer 
-          position="bottom-center"
-          autoClose={2000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnVisibilityChange
-          draggable
-          pauseOnHover={false}/>
-          <main className={classes.main}>
+          <ToastsContainer store={ToastsStore} position={ToastsContainerPosition.BOTTOM_LEFT} lightBackground/>
+          <main className={classes.main}> 
           {/* {this.renderCode()} */}
       <CssBaseline />
       <Paper className={classes.paper}>
@@ -178,11 +259,26 @@ class RegisterNew extends React.Component{
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="username">Username</InputLabel>
-            <Input id="username" name="username" autoFocus />
+            <Input id="username" name="username" onChange={this.handleChange} autoFocus />
+          </FormControl>
+          <FormControl margin="normal" required className={classes.first}>
+            <InputLabel htmlFor="email">Email </InputLabel>
+            <Input name="email" id="email" autoComplete="email" onChange={this.handleChange}/>
+          </FormControl>
+          <FormControl>
+          <Button
+            fullWidth
+            variant="contained"
+            color = "primary"
+            className= {classes.submit}
+            onClick={this.handleVerify}
+            >
+            Verify
+          </Button>
           </FormControl>
           <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="email">Email</InputLabel>
-            <Input name="email" id="email" autoComplete="email" />
+            <InputLabel htmlFor="vecode">Verification Code</InputLabel>
+            <Input id="vecode" name="vecode"/>
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="phone">Phone</InputLabel>
@@ -207,6 +303,7 @@ class RegisterNew extends React.Component{
           >
             Register
           </Button>
+          
         </form>
       </Paper>
     </main>

@@ -46,6 +46,7 @@
     "react-scripts": "^2.1.8",
     "react-test-renderer": "^16.8.4",
     "react-toastify": "^4.5.2",
+    "react-toasts": "^3.0.3",
     "recompose": "^0.30.0",
     "redux": "^4.0.1",
     "semantic-ui-react": "^0.85.0",

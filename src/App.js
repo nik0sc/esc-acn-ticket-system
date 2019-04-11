@@ -17,6 +17,9 @@ import { loadProgressBar } from 'axios-progress-bar'
 import 'axios-progress-bar/dist/nprogress.css'
 import CommentExampleReplyFormOuter from './Components/CommentExampleReplyFormOuter';
 import NewRoute from './Components/NewRoute';
+import ReviewTicketAgain from './Components/ReviewTicketAgain';
+import ReviewTicket from './Components/ReviewTicket';
+import {ToastsContainer, ToastsStore} from 'react-toasts';
 
 const cookies = new Cookies();
 
@@ -84,7 +87,7 @@ class App extends Component {
               </Route> */}
               <Route exact path="/tickets" component={Tickets}>
               </Route>
-              <Route path="/tickets/:ticketID" component={NewRoute} ></Route>
+              <Route path="/ticketInfo" component={ReviewTicketAgain} ></Route>
               <Route path="/talk" component={CommentExampleReplyFormOuter}>
               </Route>
               <Route path="*" exact={true} component={NotFound} />

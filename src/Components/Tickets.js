@@ -28,7 +28,7 @@ class Tickets extends React.Component{
   constructor(props){
     super(props);
     this.state= {
-      UpdatedNewTicket: '',
+      NewcurrentTicket: '',
       redirect: false,
       open: true,
     }
@@ -101,22 +101,40 @@ class Tickets extends React.Component{
       }
     
   componentDidMount(){
+    console.log('component mounted');
     this.axiosFunc();
     //this.interval = setInterval(this.axiosFunc, 10000);
-    
 
     // how much is too much? 
   }
 
+  // componentDidUpdate(prevProps, prevState){
+  //   if(this.props.NewcurrentTicket !== this.state.NewcurrentTicket){
+  //     this.setState({
+  //       currentTicket: this.state.NewcurrentTicket,
+  //     })
+  //     console.log("UPDATEEEEEEEEINGGGNG")
+  //   }
+  // }
+
+  // shouldComponentUpdate(nextProps,nextState){
+  //   if(this.state.NewcurrentTicket === nextState.NewcurrentTicket){
+  //     console.log('please update')
+  //       return false;
+  //   }
+  //   return true;
+  // }
+
 
       onClose(value){
         return() => {
+         // window.location.reload();
           this.setState({
-            UpdatedNewTicket: value,
+            currentTicket: value,
             redirect: false,
             open: false,
           }, function() {
-            console.log("AFTER CHANGE: " + this.state.UpdatedNewTicket);
+            console.log("AFTER CHANGE: " + this.state.currentTicket);
           })
         }
       }

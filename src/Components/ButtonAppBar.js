@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import {Redirect} from 'react-router-dom'
 import Cookies from 'universal-cookie';
+import {withRouter} from 'react-router-dom'
+import compose from 'recompose/compose';
 
 
 const cookies = new Cookies();
@@ -29,7 +31,8 @@ const styles = {
 };
 class ButtonAppBar extends React.Component{
     state = {
-        redirect: false
+        redirect: false,
+        try: false,
     }
 
     handleClick = (e) => {
@@ -45,9 +48,10 @@ class ButtonAppBar extends React.Component{
 
         const { classes } = this.props;
         if(this.state.redirect){
-            return <Redirect to="/" />
+          this.props.history.goBack();
         }
 
+    
         return(
 
             <div className={classes.root}>
@@ -72,4 +76,4 @@ ButtonAppBar.propTypes = {
 
 
 
-export default withStyles(styles)(ButtonAppBar);
+export default compose(withRouter, withStyles(styles),)(ButtonAppBar);
