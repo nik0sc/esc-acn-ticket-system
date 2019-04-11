@@ -229,14 +229,12 @@ class RegisterNew extends React.Component{
 
     if(this.state.redirect){
       this.props.history.push('/');
-      toast.success("You can sign in with your new account now.")
-      ToastsStore.success('You can log in with your new registered account now.')
+      ToastsStore.success('You can now login with your registered account .')
     }
     
     return(
       
       <div>
-          <ToastsContainer store={ToastsStore} position={ToastsContainerPosition.BOTTOM_LEFT} lightBackground/>
           <main className={classes.main}> 
           {/* {this.renderCode()} */}
       <CssBaseline />

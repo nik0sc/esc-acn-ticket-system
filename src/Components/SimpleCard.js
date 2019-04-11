@@ -26,6 +26,9 @@ const styles = {
     backgroundColor: '#FFFFFF',
 
   },
+  gap: {
+    marginTop: 10,
+  },
   card: {   
     minWidth: 275,
     margin: 20,
@@ -81,7 +84,7 @@ class SimpleCard extends React.Component{
 
     axios.get(`https://esc-ticket-service.lepak.sg/user/me`, {
       headers: {
-        'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce'
+        'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b'
       }
     })
     .then((res) => {
@@ -97,7 +100,7 @@ class SimpleCard extends React.Component{
     // get ticket
     axios.get(`https://esc-ticket-service.lepak.sg/ticket/byUser`,{
       headers: {
-        'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce'
+        'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b'
       }
     })
     .then((res) => {
@@ -117,6 +120,11 @@ class SimpleCard extends React.Component{
           }
           if(editData[i][1] === 2){
             editData[i][1] = "Closed";
+          }
+
+          //this is temp, pls remove after since no status in API call 
+          if(editData[i][1] === 3){
+            editData[i][1] = "New";
           }
         }
         this.setState({
@@ -182,7 +190,7 @@ class SimpleCard extends React.Component{
       })
       axios.get(`https://esc-ticket-service.lepak.sg/ticket/${id}`,{
         headers:{
-          'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce'
+          'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b'
         }
       })
       .then((res => {
@@ -287,15 +295,17 @@ class SimpleCard extends React.Component{
       <CardContent>
         <List style={{maxHeight: 500, overflow: 'auto', margin:0, padding: 0,}}>
         <ListSubheader className={classes.root}> 
-          <ListItemText>
-              <h3>Tickets</h3>
+          <ListItemText className="test">
+              <h3 className="same-line">Tickets</h3>
             </ListItemText>
             <ListItemSecondaryAction>
-              <IconButton style = {{backgroundColor: 'transparent'}}>
+            {/* style = {{backgroundColor: 'transparent'}}  */}
+              {/* <IconButton style={styles.button}>
               <FormDialog />
-              </IconButton>
+              </IconButton> */}
+              <FormDialog className="add-ticket"/>
             </ListItemSecondaryAction>
-            <Divider />
+            <Divider className={classes.gap}/>
           </ListSubheader>
           <div>
           {this._renderItems()}

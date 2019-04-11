@@ -96,3 +96,15 @@
 .admin-title {
   padding-top: 30px;
 }
+
+.same-line {
+    display: inline-block;
+    /* position: absolute; */
+    /* padding-right: 300px; */
+}
+
+.icon {
+  margin-right: 25px;
+}
+
+

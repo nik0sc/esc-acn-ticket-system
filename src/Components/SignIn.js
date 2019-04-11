@@ -23,6 +23,7 @@ import {withRouter} from 'react-router-dom'
 import compose from 'recompose/compose';
 import { loadProgressBar } from 'axios-progress-bar'
 import 'axios-progress-bar/dist/nprogress.css'
+import { ToastsStore } from 'react-toasts';
 
 const styles = theme => ({
   main: {
@@ -111,14 +112,12 @@ handleInputChange = (e) => {
       }
     )
     .catch(error => {      
-      toast.error('Login failed. Wrong email/password.',{
-      })
+      ToastsStore.error('Wrong email/password.')
     });
     
   }
     else if(!email || !password){
-      toast.error('Empty fields detected. Please fill in your email and password',{
-      })
+      ToastsStore.error('Empty fields detected.')
     }
 
   // axios.get('https://esc-ticket-service.lepak.sg/user/login', {

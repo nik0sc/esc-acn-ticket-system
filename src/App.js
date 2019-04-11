@@ -19,7 +19,7 @@ import CommentExampleReplyFormOuter from './Components/CommentExampleReplyFormOu
 import NewRoute from './Components/NewRoute';
 import ReviewTicketAgain from './Components/ReviewTicketAgain';
 import ReviewTicket from './Components/ReviewTicket';
-import {ToastsContainer, ToastsStore} from 'react-toasts';
+import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts';
 
 const cookies = new Cookies();
 
@@ -53,12 +53,14 @@ class App extends Component {
   render() {
     
     return (      
+
       // <div className="wrapper">
       //   <div className="main"> 
       //   <div className="container"> 
       //     <div className="row" >
       <div>
         {/* <Button onClick={this.token}> help </Button> */}
+        <ToastsContainer store={ToastsStore} position={ToastsContainerPosition.BOTTOM_LEFT} lightBackground/>
         <ToastContainer 
           position="bottom-center"
           autoClose={2000}

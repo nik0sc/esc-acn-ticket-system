@@ -43,7 +43,7 @@ class Tickets extends React.Component{
 
     axios.get(`https://esc-ticket-service.lepak.sg/ticket/byUser`,{
           headers: {
-            'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce'
+            'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b'
           }
         })
         .then((res) => {
@@ -51,7 +51,8 @@ class Tickets extends React.Component{
             // this.setState({id: res.data.map((data => {return([data.id, data.priority, data.title])}))})
             this.setState({allTickets: res.data.map((data => {return({id: data.id, title: data.title, 
             message: data.message, open_time: data.open_time, close_time: data.close_time, 
-            assigned_team: data.assigned_team, username: data.username, fullname: data.long_name, 
+            assigned_team: data.assigned_team, username: data.username, fullname: data.long_name,
+            email: data.email, phone: data.phone,
             priority: data.priority, severity: data.severity})}))})
             //console.log(this.state.allTickets[0].assigned_team);  // null
             const allT = this.state.allTickets;

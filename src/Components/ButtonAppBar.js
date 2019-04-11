@@ -48,7 +48,7 @@ class ButtonAppBar extends React.Component{
 
         const { classes } = this.props;
         if(this.state.redirect){
-          this.props.history.goBack();
+          return <Redirect to='/'/>
         }
 
     

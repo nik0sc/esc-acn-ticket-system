@@ -15,6 +15,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { Card, CardContent, Grid, FormControl, Select, InputLabel, OutlinedInput, MenuItem } from '@material-ui/core';
 import { CardActions, TextField, Paper } from 'material-ui';
+import axios from 'axios'
 
 
 const styles = theme => ({
@@ -117,6 +118,22 @@ class ReviewTicket extends React.Component {
     
     console.log("CHILD" + this.props.currentT);
 
+    axios.get(`https://esc-ticket-service.lepak.sg/user/me`, {
+      headers: {
+        'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b'
+      }
+    })
+    .then((res) => {
+      if(res.request.status === 200){
+        this.setState({
+          fullName: res.data.long_name,
+          email: res.data.email,
+          phone: res.data.phone,
+          username: res.data.username,
+        })
+      }
+    })
+
     
   
     // edit the open time given in the getTicket to get open_date and open_time
@@ -190,9 +207,9 @@ class ReviewTicket extends React.Component {
                 {"Ticket #" + this.props.currentT[0]} 
               </Typography>
               {/* title */}
-              <h4>{this.props.currentT[2]}</h4> 
+              <h4>{this.props.currentT[1]}</h4> 
               {/* message */}
-              <h6>{this.props.currentT[3]}</h6>
+              <p>{this.props.currentT[2]}</p>
             </CardContent>
             </Card>
 
@@ -202,15 +219,15 @@ class ReviewTicket extends React.Component {
             <CardContent>
               <h5>Contact Information</h5>
               <Divider/>
-              <Typography>Full Name: {this.props.currentT[5]}</Typography>
-              <Typography>Username: {this.props.currentT[4]}</Typography>
-              <Typography>Email: </Typography>
-              <Typography>Phone Number: </Typography>
+              <Typography>Full Name: {this.state.fullName}</Typography>
+              <Typography>Username: {this.state.username}</Typography>
+              <Typography>Email: {this.state.email}</Typography>
+              <Typography>Phone Number: {this.state.phone}</Typography>
               <h5>Ticket Information</h5>
               <Typography>Ticket ID: {this.props.currentT[0]}</Typography>
-              <Typography>Priority: {this.props.currentT[6]}</Typography>   
-              <Typography>Priority: {this.props.currentT[7]}</Typography>         
-              <Typography>Categories: </Typography>
+              <Typography>Priority: {this.props.currentT[5]}</Typography>   
+              <Typography>Severity: {this.props.currentT[6]}</Typography>         
+              {/* <Typography>Categories: </Typography> */}
               <Typography>Date Opened by User: {this.state.dateOpened}</Typography>
               <Typography>Time Opened by User: {this.state.timeOpened}</Typography> 
               <h5>Admin Actions</h5>
