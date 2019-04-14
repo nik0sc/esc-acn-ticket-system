@@ -18,6 +18,7 @@ import axios from 'axios'
 import { TextField, Paper } from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import CommentExampleReplyFormOuter from './CommentExampleReplyFormOuter';
+import Cookies from 'universal-cookie';
 
 
 const styles = {
@@ -55,6 +56,10 @@ number:{
   display: 'flex',
   margin: 20,
 },
+welcome: {
+  fontWeight: 'bold',
+  
+}
 
 };
 
@@ -81,11 +86,14 @@ class SimpleCard extends React.Component{
   };
 
   axiosFunc = () => {
+    const cookies = new Cookies();
+    const CurrentSessionToken = cookies.get('sessionToken');
+    console.log('current session token ' + CurrentSessionToken);
 
     //get user
-    axios.get(`https://esc-ticket-service.lepak.sg/user/me`, {
+    axios.get(`https://user-service.ticket.lepak.sg/user/me`, {
       headers: {
-        'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b'
+        'X-Parse-Session-Token': 'r:f0943a0aa9e4a2100355353d233ccab0',
       }
     })
     .then((res) => {
@@ -102,12 +110,15 @@ class SimpleCard extends React.Component{
     // get ticket
     axios.get(`https://esc-ticket-service.lepak.sg/ticket/byUser`,{
       headers: {
-        'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b'
+        'X-Parse-Session-Token': 'r:f0943a0aa9e4a2100355353d233ccab0'
       }
     })
     .then((res) => {
       if(res.request.status === 200){
-        //console.log(res.data);
+        console.log("get tickets" + res.data);
+
+
+        //todo: check if there are tickets and show no tickets are created 
         this.setState({
           id: res.data.map((data => {return([data.id, data.priority, data.title])})),
         })
@@ -147,6 +158,7 @@ class SimpleCard extends React.Component{
   }
 
   componentDidMount(){
+
     this.axiosFunc();
    
     //this.interval = setInterval(this.axiosFunc, 10000);
@@ -182,7 +194,7 @@ class SimpleCard extends React.Component{
       })
       axios.get(`https://esc-ticket-service.lepak.sg/ticket/${id}`,{
         headers:{
-          'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b'
+          'X-Parse-Session-Token': 'r:f0943a0aa9e4a2100355353d233ccab0'
         }
       })
       .then((res => {
@@ -228,7 +240,7 @@ class SimpleCard extends React.Component{
          onClose={this.handleClose}
          aria-labelledby="form-dialog-title"
        >
-       <AppBar className="appbar">
+       <AppBar position="static" style={{backgroundColor: '#000000'}}>
             <Toolbar >
               <Typography variant="h6" color="inherit" className="flex">
               {'Ticket #' + this.state.ticketid + " - " + this.state.title}
@@ -291,7 +303,7 @@ class SimpleCard extends React.Component{
               <h3 className="same-line">Tickets</h3>
             </ListItemText>
             <ListItemSecondaryAction>
-              <FormDialog className="add-ticket"/>
+              <FormDialog/>
             </ListItemSecondaryAction>
             <Divider className={classes.gap}/>
           </ListSubheader>
@@ -306,7 +318,7 @@ class SimpleCard extends React.Component{
         <Grid item xs = {12} sm = {6}>
         <Card className={classes.menu}>
             <CardContent>
-              <Typography variant="h5">
+              <Typography variant="h5" className={classes.welcome}>
               {/* Welcome to Accenture's ticket system */}
               Welcome Back, {this.state.fullName}
               </Typography>

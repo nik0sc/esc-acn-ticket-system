@@ -5,8 +5,8 @@
 }
 
 .PageSwitcher__Item {
-  background-color: rgb(80, 97, 191);
-  color: #9DA6B1;
+  background-color: #3F51B5;
+  color: rgb(255, 255, 255);
   padding: 10px 25px;
   cursor: pointer;
   font-size: .9em;
@@ -14,7 +14,9 @@
   outline: none;
   display: inline-block;
   text-decoration: none;
+  
 }
+
 
 .PageSwitcher__Item--Active {
   background-color: #3F51B5;
@@ -99,18 +101,13 @@
 
 .same-line {
     display: inline-block;
+    font-weight: bold;
     /* position: absolute; 
     padding-right: 300px; */
 }
 
 .icon {
   margin-right: 25px;
-}
-
-
-.photo {
-  opacity: 0.5;
-  position: relative;
 }
 
 .box{
@@ -125,8 +122,7 @@
   position: fixed;
   opacity: 0.4;
   filter: brightness(80%) contrast(120%);
-  
-  
+  height: auto;
 }
 
 .text1 {
@@ -155,5 +151,17 @@
   color: #F9C03E;
 }
 
+.background {
+  background-color: rgb(160, 34, 34) !important;
+}
+
+.recap {
+  position: absolute;
+  text-align: center;
+  padding-left:150px;
+}
 
 
+.dialog-title {
+  font-size: 60px;
+}

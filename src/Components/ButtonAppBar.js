@@ -9,6 +9,7 @@ import {Redirect} from 'react-router-dom'
 import Cookies from 'universal-cookie';
 import {withRouter} from 'react-router-dom'
 import compose from 'recompose/compose';
+import logo from '../img/acnapi_logo.png';
 
 
 const cookies = new Cookies();
@@ -20,6 +21,8 @@ const styles = {
   },
   grow: {
     flexGrow: 1,
+    marginLeft: 20,
+    fontWeight: 'bold',
   },
   menuButton: {
     marginLeft: -12,
@@ -27,6 +30,13 @@ const styles = {
   },
   but: {
     marginLeft: 'auto',
+  },
+  logout:{
+    fontWeight: 'bold',
+    color:'#F9C03E',
+    outline: 'none',
+    textTransform: 'none',
+    fontSize: 18,
   }
 };
 class ButtonAppBar extends React.Component{
@@ -55,13 +65,14 @@ class ButtonAppBar extends React.Component{
         return(
 
             <div className={classes.root}>
-            <AppBar position="static">
+            <AppBar position="static" style={{backgroundColor: '#000000'}}>
             <Toolbar>
+              <img src={logo} width="100px" height="40px" alt="acn_logo"/>
             <Typography variant="h6" color="inherit" className={classes.grow}>
             Support Ticket System
           </Typography>
           {/* <Button className={classes.but}> Live Chat</Button> */}
-          <Button onClick={this.handleClick.bind(this)} color="inherit">Log Out</Button>
+          <Button onClick={this.handleClick.bind(this)} color="inherit" className={classes.logout}>Log Out</Button>
         </Toolbar>
       </AppBar>
     </div>

@@ -78,9 +78,10 @@ class App extends Component {
           <div className="App_Aside"></div>
           <div className="App_Form" >
           <Switch>
-          <Route path="/register" component={RegisterNew}>
-              </Route>
+         
               <Route exact path="/" component={SignIn}  >
+              </Route>
+              <Route path="/register" component={RegisterNew}>
               </Route>
               <Route path="/landing" component={LandingPage}>
               </Route>

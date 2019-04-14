@@ -26,6 +26,7 @@ const styles = theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
+  
   },
   formControl: {
     margin: theme.spacing.unit,
@@ -56,8 +57,6 @@ function getStyles(topic, that) {
 }
 
 class FormDialog extends React.Component {
-
-
 
   state = {
     open: false,
@@ -104,7 +103,7 @@ class FormDialog extends React.Component {
         headers: {
           'Content-Type': 'application/json',
           // legit token
-          'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b',
+          'X-Parse-Session-Token': 'r:f0943a0aa9e4a2100355353d233ccab0',
 
 
 
@@ -163,10 +162,10 @@ class FormDialog extends React.Component {
           disableBackdropClick = {true}
           aria-labelledby="scroll-dialog-title"
         >
-          <DialogTitle id="scroll-dialog-title">Open a Ticket</DialogTitle>
+          <DialogTitle id="scroll-dialog-title" style={{fontSize:90,}}>Contact</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Contact us and ask your questions.
+              Reach out to us for all your requests/queries, both technical and sales related.
             </DialogContentText>
             <TextField
               autoFocus
