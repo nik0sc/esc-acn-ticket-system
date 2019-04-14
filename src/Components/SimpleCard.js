@@ -82,6 +82,7 @@ class SimpleCard extends React.Component{
 
   axiosFunc = () => {
 
+    //get user
     axios.get(`https://esc-ticket-service.lepak.sg/user/me`, {
       headers: {
         'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b'
@@ -91,6 +92,7 @@ class SimpleCard extends React.Component{
       if(res.request.status === 200){
         this.setState({
           fullName: res.data.long_name,
+          username: res.data.username,
         })
       }
     })
@@ -148,9 +150,6 @@ class SimpleCard extends React.Component{
     this.axiosFunc();
    
     //this.interval = setInterval(this.axiosFunc, 10000);
-
-    //this.interval = setInterval(this.axiosFunc, 5000);
-
   }
 
   componentWillUnmount() {
@@ -174,14 +173,7 @@ class SimpleCard extends React.Component{
   //     console.log("UPDATED COMPOENENT")
   //   }
   // }
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   if(nextProps.numOfTicketsOpened !== prevState.numOfTicketsOpened) {
-  //     return { numOfTicketsOpened: nextProps.numOfTicketsOpened }
-  //   } else return null;
-  // }
-  // shouldComponentUpdate(nextProps, nextState){
-  //   return this.state.numOfTicketsOpened !== 
-  // }
+
 
     handleClick = (id, e) => {
       this.setState({
@@ -201,7 +193,7 @@ class SimpleCard extends React.Component{
           assigned_team: res.data.assigned_team,
           message: res.data.message,
           
-           // TODO: add progress 
+           // TODO: add status, flag 
 
         })
         
@@ -295,14 +287,10 @@ class SimpleCard extends React.Component{
       <CardContent>
         <List style={{maxHeight: 500, overflow: 'auto', margin:0, padding: 0,}}>
         <ListSubheader className={classes.root}> 
-          <ListItemText className="test">
+          <ListItemText>
               <h3 className="same-line">Tickets</h3>
             </ListItemText>
             <ListItemSecondaryAction>
-            {/* style = {{backgroundColor: 'transparent'}}  */}
-              {/* <IconButton style={styles.button}>
-              <FormDialog />
-              </IconButton> */}
               <FormDialog className="add-ticket"/>
             </ListItemSecondaryAction>
             <Divider className={classes.gap}/>

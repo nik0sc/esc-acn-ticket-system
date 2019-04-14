@@ -87,49 +87,50 @@ handleInputChange = (e) => {
 
   getUser = (e) => {
     e.preventDefault();
-    const email = e.target.elements.email.value;
-    //const username = e.target.elements.username.value;
+    //const email = e.target.elements.email.value;
+    const username = e.target.elements.username.value;
     const password = e.target.elements.password.value;
     //console.log("username: " + username);
     console.log("password: " + password);
-    if(email && password){
-      axios.get(`https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/login?email=${email}&password=${password}`, {
-        headers: {
-          'Server-Token': `${process.env.REACT_APP_API_KEY}`,
-        }
-      })
-      .then((res) => {
-        if(res.request.status === 200){
-          // success
-          const cookies = new Cookies();
-          var session_token = res.data.sessionToken;
-          cookies.set('sessionToken', session_token, {path: '/'});
-          console.log(res)
-          this.setState({
-            redirect: true,
-          });
-        }
-      }
-    )
-    .catch(error => {      
-      ToastsStore.error('Wrong email/password.')
-    });
+    if(username && password){
+    //   axios.get(`https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/login?email=${email}&password=${password}`, {
+    //     headers: {
+    //       'Server-Token': `${process.env.REACT_APP_API_KEY}`,
+    //     }
+    //   })
+    //   .then((res) => {
+    //     if(res.request.status === 200){
+    //       // success
+    //       const cookies = new Cookies();
+    //       var session_token = res.data.sessionToken;
+    //       cookies.set('sessionToken', session_token, {path: '/'});
+    //       console.log(res)
+    //       this.setState({
+    //         redirect: true,
+    //       });
+    //     }
+    //   }
+    // )
+    // .catch(error => {      
+    //   ToastsStore.error('Wrong email/password.')
+    // });
+
+    axios.post('https://esc-ticket-service.lepak.sg/user/login', {
+      username: username,
+      password: password,
+  })
+  .then((res => {
+    console.log('success');
+  })).catch(error => {
+    console.log('failed')
+  })
     
   }
-    else if(!email || !password){
+    else if(!username || !password){
       ToastsStore.error('Empty fields detected.')
     }
 
-  // axios.get('https://esc-ticket-service.lepak.sg/user/login', {
-  //   data: {
-  //     username: username,
-  //     password: password,
-  //   }
-  // }).then((res => {
-  //   console.log('success');
-  // })).catch(error => {
-  //   console.log('failed')
-  // })
+  
   }
   render(){
     
@@ -156,14 +157,14 @@ handleInputChange = (e) => {
         <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink> 
         </div>
         <form className={classes.form}  onSubmit={this.getUser.bind(this)} >
-          <FormControl margin="normal" required fullWidth>
+          {/* <FormControl margin="normal" required fullWidth>
           <InputLabel htmlFor="email">Email</InputLabel>
           <Input id="email" name="email" type="email" autoComplete="email" autoFocus onChange={this.handleInputChange} />
-          </FormControl>
-          {/* <FormControl margin="normal" required fullWidth>
+          </FormControl> */}
+          <FormControl margin="normal" required fullWidth>
           <InputLabel htmlFor="username">Username</InputLabel>
           <Input id="username" name="username" autoComplete="username" autoFocus onChange={this.handleInputChange} />
-          </FormControl> */}
+          </FormControl>
           <FormControl margin="normal" required fullWidth>
           <InputLabel>Password</InputLabel>
             <Input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleInputChange}/>

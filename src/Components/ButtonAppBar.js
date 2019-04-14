@@ -55,8 +55,8 @@ class ButtonAppBar extends React.Component{
         return(
 
             <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
+            <AppBar position="static">
+            <Toolbar>
             <Typography variant="h6" color="inherit" className={classes.grow}>
             Support Ticket System
           </Typography>

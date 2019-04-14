@@ -99,12 +99,61 @@
 
 .same-line {
     display: inline-block;
-    /* position: absolute; */
-    /* padding-right: 300px; */
+    /* position: absolute; 
+    padding-right: 300px; */
 }
 
 .icon {
   margin-right: 25px;
 }
+
+
+.photo {
+  opacity: 0.5;
+  position: relative;
+}
+
+.box{
+  padding-bottom: 30px;
+}
+
+.container {
+  position: relative;
+}
+
+.test {
+  position: fixed;
+  opacity: 0.4;
+  filter: brightness(80%) contrast(120%);
+  
+  
+}
+
+.text1 {
+  position: relative;
+  padding-left: 150px;
+  padding-top: 100px;
+  color: rgb(0, 0, 0);
+  display: inline-block;
+  font-size: 70px;
+  letter-spacing: 1.5px;
+
+}
+
+.text3 {
+  position: relative;
+  color: rgb(0, 0, 0);
+  padding-left: 150px;
+  letter-spacing: 1.5px;
+  line-height: 30px;
+  padding-bottom: 25px;
+  font-size: 70px;
+  
+}
+
+.separator {
+  color: #F9C03E;
+}
+
 
 

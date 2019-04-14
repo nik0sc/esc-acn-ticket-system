@@ -20,6 +20,7 @@ import NewRoute from './Components/NewRoute';
 import ReviewTicketAgain from './Components/ReviewTicketAgain';
 import ReviewTicket from './Components/ReviewTicket';
 import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts';
+import LandingPage from './Components/LandingPage';
 
 const cookies = new Cookies();
 
@@ -80,6 +81,8 @@ class App extends Component {
           <Route path="/register" component={RegisterNew}>
               </Route>
               <Route exact path="/" component={SignIn}  >
+              </Route>
+              <Route path="/landing" component={LandingPage}>
               </Route>
               <Route path="/admin" component={Admin} >
               </Route>
