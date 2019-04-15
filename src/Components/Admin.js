@@ -88,7 +88,7 @@ class Admin extends React.Component{
            <Paper className={classes.paper}>
              <Avatar className={classes.avatar}>
                {/* <LockOutlinedIcon /> */}
-               <img src={logo} />
+               <img src={logo} alt="acn_logo"/>
              </Avatar>
              {/* <div className="PageSwitcher">
              <NavLink exact to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item" 

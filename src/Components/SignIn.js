@@ -27,7 +27,6 @@ import { ToastsStore } from 'react-toasts';
 import { createMuiTheme } from '@material-ui/core/styles';
 import logo from '../img/acn_icon.png';
 
-
 const styles = theme => ({
   main: {
     width: 'auto',
@@ -136,11 +135,12 @@ handleInputChange = (e) => {
       // return <Redirect to="/dashboard" />
     }  
     return(
-    <div>
+    <div className="backgroundSignIn">
      <main className={classes.main}>
       <CssBaseline />
+
       <Paper className={classes.paper}>
-        
+      
         <img src={logo} width='40' height='40' alt="acn_logo" />
           {/* <LockOutlinedIcon /> */}
           
