@@ -93,7 +93,7 @@ class SimpleCard extends React.Component{
     //get user
     axios.get(`https://user-service.ticket.lepak.sg/user/me`, {
       headers: {
-        'X-Parse-Session-Token': 'r:f0943a0aa9e4a2100355353d233ccab0',
+        'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc',
       }
     })
     .then((res) => {
@@ -110,7 +110,7 @@ class SimpleCard extends React.Component{
     // get ticket
     axios.get(`https://esc-ticket-service.lepak.sg/ticket/byUser`,{
       headers: {
-        'X-Parse-Session-Token': 'r:f0943a0aa9e4a2100355353d233ccab0'
+        'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc'
       }
     })
     .then((res) => {
@@ -194,7 +194,7 @@ class SimpleCard extends React.Component{
       })
       axios.get(`https://esc-ticket-service.lepak.sg/ticket/${id}`,{
         headers:{
-          'X-Parse-Session-Token': 'r:f0943a0aa9e4a2100355353d233ccab0'
+          'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc'
         }
       })
       .then((res => {

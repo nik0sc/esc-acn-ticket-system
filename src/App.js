@@ -93,7 +93,7 @@ class App extends Component {
               </Route> */}
               <Route exact path="/tickets" component={Tickets}>
               </Route>
-              <Route path="/ticketInfo" component={ReviewTicketAgain} ></Route>
+              <Route path="/reviewTicket" component={ReviewTicketAgain} ></Route>
               <Route path="/talk" component={CommentExampleReplyFormOuter}>
               </Route>
               <Route path="*" exact={true} component={NotFound} />

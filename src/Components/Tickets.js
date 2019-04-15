@@ -9,6 +9,8 @@ import { Dialog, Toolbar, IconButton, Divider } from 'material-ui';
 import { AppBar, Typography, List, ListItem, ListItemText, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
 import ReviewTicket from './ReviewTicket';
 import classnames from 'classnames';
+import AdminAppBar from './AdminAppBar';
+import {Redirect, NavLink, Route, Switch, Link} from 'react-router-dom'
 
 
 const customStyles = {
@@ -144,8 +146,11 @@ class Tickets extends React.Component{
         if(this.state.redirect)
            return (
             <div>
-              
             <ReviewTicket currentT = {this.state.currentTicket} onClose={this.onClose.bind(this)}  /> 
+            {/* <Redirect to={{
+              pathname: '/reviewTicket',
+              state: {idTicket : this.state.currentTicket, onClose: this.onClose.bind(this)}
+              }}/>  */}
           </div>
           );
         }
@@ -264,13 +269,13 @@ class Tickets extends React.Component{
                }, 
            ];
            
-          //  const data = [
-          //   { tickets: "1", topics: ["Smart City", "DevOps"], subject:"Help!", progress: "In Progress", priority: "Low", time: 5  },
-          //   { tickets: "2", topics: "AR City", subject:"Please save me!", progress: "Open", priority: "Medium", time: 2},
-          //   { tickets: "3", topics: "Business Pls", subject:"What is life?", progress: "Closed", priority: "High", time: 1 },
-          //   { tickets: "4", topics: "Driveby", subject:"Can't do this", progress: "Open", priority: "Medium", time: 10 },
-          //  ];
-          const data = this.state.allTickets;
+           const data = [
+            { id: "1", topics: ["Smart City", "DevOps"], title:"Help!", message:'help me plzzzzzz',progress: "In Progress", priority: "Low", time: 5  },
+            { id: "2", topics: "AR City", title:"Please save me!", message: 'why dont you sing me a song', progress: "Open", priority: "Medium", time: 2},
+            { id: "3", topics: "Business Pls", title:"What is life?", message: 'what is this and how to help', progress: "Closed", priority: "High", time: 1 },
+            { id: "4", topics: "Driveby", title:"Can't do this", message: 'aahhhhh', progress: "Open", priority: "Medium", time: 10 },
+           ];
+          // const data = this.state.allTickets;
            
 
 const options = {
@@ -290,7 +295,7 @@ const options = {
       
         return(
             <div>
-                <ButtonAppBar />
+                <AdminAppBar />
                 <MuiThemeProvider theme={this.getMui}>
                     <MUIDataTable
                     title={"Tickets"}
