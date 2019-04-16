@@ -15,7 +15,7 @@ class ChatSelector extends React.Component {
         return(
             <li>
                 <div>
-                    <button onClick={this.props.onSelect}>{r}</button>
+                    <button onClick={() => this.props.onSelect(r)}>{r}</button>
                 </div>
             </li>
         )

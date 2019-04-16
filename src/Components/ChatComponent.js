@@ -44,7 +44,7 @@ class ChatComponent extends React.Component {
                 room: this.state.Username,
                 user: this.state.Username,
                 isadmin: true
-            })); //Expect a receipt JSON from server if admin is assigned a room.
+            })); //Expect receipt JSONs from server whenever admin is added to a room on new client connect.
         }
     };
 
@@ -77,10 +77,12 @@ class ChatComponent extends React.Component {
         this.websocket.send(JSON.stringify({type:"msg",room: this.state.current_room , user: this.state.Username, msg:txt}))
     };
 
-    onChatRoomSelect = (rm) => { //Pre-condition: rm must be in this.state.active_rooms
+    //Pre-condition: rm must be in this.state.active_rooms
+    //Post-condition: current_room is set to rm, the admin's chat display will render the selected room since the state has changed.
+    onChatRoomSelect = (rm) => {
         this.setState(
-            {cur_room_idx: this.state.cur_room_idx + 1,
-                current_room: this.state.active_rooms[this.state.cur_room_idx +1]
+            {//cur_room_idx: this.state.cur_room_idx + 1,
+                current_room: rm
             });
     };
 
