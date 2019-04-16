@@ -8,7 +8,7 @@ class ChatSelector extends React.Component {
 
     constructor(props){
         super(props);
-        this.state.clientusers = ["aaee","ah","ff","winnie the pooh"]//props.activerooms;
+        this.state.clientusers = [];//props.activerooms;
     }
 
     renderClientuser = (r) => {
@@ -31,7 +31,6 @@ class ChatSelector extends React.Component {
             </div>
         );
     }
-
 }
 
 export default ChatSelector;

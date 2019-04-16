@@ -8,6 +8,11 @@ var clientqueue = []; //Queue of unserviced clients
 
 var xorshiftstate = 343112;
 
+class Room {
+    Messages = [];
+    participants = [];
+}
+
 
 wss.on('connection', function (ws) { //ws is a WebSocket object representing the new connection. Different ws objects can have same
     console.log('Connection established.');
@@ -91,6 +96,14 @@ wss.on('connection', function (ws) { //ws is a WebSocket object representing the
 
     });
 });
+
+function registerClient(ws){
+
+}
+
+function registerAdmin(ws){
+
+}
 
 function xrsrng(bound){
     xorshiftstate ^= xorshiftstate <<13;

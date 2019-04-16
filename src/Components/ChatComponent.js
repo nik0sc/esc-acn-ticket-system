@@ -10,11 +10,10 @@ class ChatComponent extends React.Component {
     state = {
         Username: "",
         isAdmin: false,
-        active_rooms: [], //(Array| String)
-        current_room: "",
+        active_rooms: [], //(Array| (int) roomId)
+        current_room: -1,
         cur_room_idx: 0,
-        messagesByRoom: new Map(), //(String) room --> (Array| JSON) Messages
-        websocket: null
+        messagesByRoom: new Map(), //(int) roomId --> (Array| JSON) Messages
     };
 
     constructor(props){ //Properties should include at minimum Username and isAdmin
@@ -23,21 +22,19 @@ class ChatComponent extends React.Component {
         this.state.isAdmin = (props.isAdmin === "true");
         this.websocket.onmessage = this.onWSMessage;
         this.websocket.onopen = this.onWSOpen;
-        //if(this.state.isAdmin){
+        if(this.state.isAdmin){
             this.render = this.renderAdmin;
-        //}
+        }
     }
 
     onWSOpen = () => {
         if(!this.state.isAdmin){ //Not admin -> gets their own room. Set current room as well
                 this.websocket.send(JSON.stringify({
                 type: "register",
-                room: this.state.Username,
+                //room: this.state.Username,
                 user: this.state.Username,
                 isadmin: false
             })); //Expect a receipt JSON from server.
-            this.state.messagesByRoom.set(this.state.Username,[]);
-            this.setState({current_room: this.state.Username});
         }else{
             this.websocket.send(JSON.stringify({
                 type: "register",
@@ -49,6 +46,7 @@ class ChatComponent extends React.Component {
     };
 
     onWSMessage = (ev) => {
+
         var msg = JSON.parse(ev.data);// {type:<register,smsg,msg,receipt,reload>, room:, user:, msg:}
         switch (msg.type) {
             case "smsg":
@@ -56,6 +54,7 @@ class ChatComponent extends React.Component {
                 var room = msg.room;
                 var messages_By_Room = this.state.messagesByRoom;
                 var room_messages = messages_By_Room.get(room);
+                if (room_messages === undefined) room_messages = [];
                 room_messages.push(msg);
                 messages_By_Room.set(room,room_messages);
                 this.setState({messagesByRoom: messages_By_Room});
@@ -65,7 +64,10 @@ class ChatComponent extends React.Component {
                 var activerooms = this.state.active_rooms;
                 var newroom = msg.room;
                 activerooms.push(newroom);
-                this.setState({active_rooms:activerooms});
+                this.setState({active_rooms:activerooms}); //Add the room on receipt to active_rooms (both admins and non-admins)
+                if(!this.state.isAdmin){
+                    this.setState({current_room: newroom}); //Non-admins only: set room as current room. Admins will have to use the selector
+                }
             }
         }
     };
@@ -74,7 +76,7 @@ class ChatComponent extends React.Component {
         if(this.state === null){
             return;
         }
-        this.websocket.send(JSON.stringify({type:"msg",room: this.state.current_room , user: this.state.Username, msg:txt}))
+        this.websocket.send(JSON.stringify({type:"msg",room: this.state.current_room , user: this.state.Username, msg:txt}));
     };
 
     //Pre-condition: rm must be in this.state.active_rooms
