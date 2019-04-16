@@ -23,7 +23,9 @@ class ChatComponent extends React.Component {
         this.state.isAdmin = (props.isAdmin === "true");
         this.websocket.onmessage = this.onWSMessage;
         this.websocket.onopen = this.onWSOpen;
-        this.render = this.renderAdmin;
+        //if(this.state.isAdmin){
+            this.render = this.renderAdmin;
+        //}
     }
 
     onWSOpen = () => {
@@ -88,14 +90,17 @@ class ChatComponent extends React.Component {
             messages = [];
         }
         return(
-            <Grid>
-                <div>
-                <ChatSelector activerooms = {this.state.active_rooms} onSelect = {this.onChatRoomSelect}/>
-                <ChatMessageDisplay messages = {messages}/>
-                </div>
-                <ChatInput onSend = {this.WSSendChat}/>
+            <Grid container spacing={0}>
+                <Grid item>
+                    <ChatSelector activerooms = {this.state.active_rooms} onSelect = {this.onChatRoomSelect}/>
+                </Grid>
+                <Grid item>
+                    <ChatMessageDisplay messages = {messages}/>
+                    <ChatInput onSend = {this.WSSendChat}/>
+                </Grid>
             </Grid>
-        );}
+        );
+    };
 
     render(){
         var messages = this.state.messagesByRoom.get(this.state.current_room); //Get all messages stored.
@@ -108,7 +113,7 @@ class ChatComponent extends React.Component {
                 <ChatInput onSend = {this.WSSendChat}/>
             </div>
         )
-    }
+    };
 
 }
 
