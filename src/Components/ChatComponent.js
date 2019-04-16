@@ -1,6 +1,8 @@
 import React from 'react';
 import ChatInput from './ChatInput';
 import ChatMessageDisplay from './ChatMessageDisplay';
+import ChatSelector from './ChatSelector';
+import Grid from '@material-ui/core/Grid';
 
 class ChatComponent extends React.Component {
 
@@ -21,6 +23,7 @@ class ChatComponent extends React.Component {
         this.state.isAdmin = (props.isAdmin === "true");
         this.websocket.onmessage = this.onWSMessage;
         this.websocket.onopen = this.onWSOpen;
+        this.render = this.renderAdmin;
     }
 
     onWSOpen = () => {
@@ -72,19 +75,34 @@ class ChatComponent extends React.Component {
         this.websocket.send(JSON.stringify({type:"msg",room: this.state.current_room , user: this.state.Username, msg:txt}))
     };
 
-    onCycleRoom = () => {
+    onChatRoomSelect = (rm) => { //Pre-condition: rm must be in this.state.active_rooms
         this.setState(
             {cur_room_idx: this.state.cur_room_idx + 1,
                 current_room: this.state.active_rooms[this.state.cur_room_idx +1]
             });
     };
 
-    render(){
+    renderAdmin = () => {
         var messages = this.state.messagesByRoom.get(this.state.current_room);
         if(messages === undefined || messages == null){
             messages = [];
         }
         return(
+            <Grid>
+                <div>
+                <ChatSelector activerooms = {this.state.active_rooms} onSelect = {this.onChatRoomSelect}/>
+                <ChatMessageDisplay messages = {messages}/>
+                </div>
+                <ChatInput onSend = {this.WSSendChat}/>
+            </Grid>
+        );}
+
+    render(){
+        var messages = this.state.messagesByRoom.get(this.state.current_room); //Get all messages stored.
+        if(messages === undefined || messages == null){
+            messages = [];
+        }
+        return( //ChatMessageDisplay will print everything
             <div>
                 <ChatMessageDisplay messages = {messages}/>
                 <ChatInput onSend = {this.WSSendChat}/>

@@ -5,23 +5,22 @@ class ChatMessageDisplay extends React.Component {
     renderMessage = (m) => {
         const {user, msg} = m;
         return(
-        <li>
-            <div>
+            <li>
                 <div>
-                    {user}
+                    <b>{user}:</b>{" " + msg}<br></br>
                 </div>
-                <div>{msg}</div>
-            </div>
-        </li>
+            </li>
         );
-    }
+    };
 
     render(){
         const arrm = this.props.messages;
         return(
-            <ul>
-                {arrm.map(m => this.renderMessage(m))}
-            </ul>
+            <div style={"height: 280px; position: static; bottom: 0; overflow: scroll;"}>
+                <ul style={"list-style-type: none;"}>
+                    {arrm.map(m => this.renderMessage(m))}
+                </ul>
+            </div>
         );
     }
 }
