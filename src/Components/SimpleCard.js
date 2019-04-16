@@ -19,6 +19,7 @@ import { TextField, Paper } from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import CommentExampleReplyFormOuter from './CommentExampleReplyFormOuter';
 import Cookies from 'universal-cookie';
+import AdminReplyTextField from './AdminReplyTextField';
 
 
 const styles = {
@@ -82,6 +83,9 @@ class SimpleCard extends React.Component{
     ticketid: '',
     assigned_team: '',
     message: '',
+    disabledGood: false,
+    disabledBad: false,
+    redirectConfirm: false,
 
   };
 
@@ -108,7 +112,7 @@ class SimpleCard extends React.Component{
 
 
     // get ticket
-    axios.get(`https://esc-ticket-service.lepak.sg/ticket/byUser`,{
+    axios.get(`https://ticket-service.ticket.lepak.sg/ticket/byUser`,{
       headers: {
         'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc'
       }
@@ -144,11 +148,6 @@ class SimpleCard extends React.Component{
           id: editData,
         });
 
-        // this.setState({
-        //   numOfTicketsOpened: this.state.id.length }, function(){
-        // });
-        // console.log(this.state.numOfTicketsOpened);
-
       }
     })
     .catch(error => {
@@ -166,6 +165,12 @@ class SimpleCard extends React.Component{
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+  
+  onChange = e => {
+    this.setState({
+      response: e.target.value,
+    })
   }
 
 
@@ -188,32 +193,36 @@ class SimpleCard extends React.Component{
 
 
     handleClick = (id, e) => {
+      console.log('current id selected: ' + id);
       this.setState({
         redirect: true,
         open: true,
       })
-      axios.get(`https://esc-ticket-service.lepak.sg/ticket/${id}`,{
+      axios.get(`https://ticket-service.ticket.lepak.sg/ticket/${id}`,{
         headers:{
-          'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc'
+          'X-Parse-Session-Token': 'r:5ab3041d2ff2484950e68251589ec347'
         }
       })
       .then((res => {
-        this.setState({
-          title: res.data.title,
-          ticketid: res.data.id,
-          open_time: res.data.open_time,
-          assigned_team: res.data.assigned_team,
-          message: res.data.message,
-          
-           // TODO: add status, flag 
-
-        })
-        
-        if(this.state.assigned_team === null){
+        if(res.request.status === 200){
           this.setState({
-            assigned_team: "Currently not assigned",
+            title: res.data.title,
+            ticketid: res.data.id,
+            open_time: res.data.open_time,
+            assigned_team: res.data.assigned_team,
+            message: res.data.message,
+            priority: res.data.priority,
+            severity: res.data.severity,
+  
+            
+             // TODO: add status, flag 
+  
           })
-        }
+
+          if(this.state.assigned_team === null){
+            this.setState({
+              assigned_team: "Currently not assigned",
+            })
         var date = this.state.open_time;
         var openDate = date.substring(0, 10);
         var openTime = date.substring(11, 16);
@@ -221,6 +230,9 @@ class SimpleCard extends React.Component{
           open_date: openDate,
           open_time: openTime,
         })
+      }
+        }
+         
       }))
     }
 
@@ -229,7 +241,23 @@ class SimpleCard extends React.Component{
     };
   
     handleClose = () => {
-      this.setState({ open: false });
+      this.setState({ open: false 
+      });
+      window.location.reload();
+    };
+
+    handleHelpfulClick = (e) => {
+      this.setState({
+        disabledGood: true, 
+        disabledBad: false,
+      })
+    };
+    
+    handleNotHelpfulClick = (e) => {
+      this.setState({
+        disabledGood: false, 
+        disabledBad: true,
+      })
     };
 
     renderElement(){
@@ -253,7 +281,7 @@ class SimpleCard extends React.Component{
           <MuiThemeProvider>
     <Grid container>
           <Grid item xs={8}>
-            <Card className="reviewTicketCard">
+            <Card className="reviewTicketCardClient">
             <CardContent> 
                 <h5>{this.state.title}</h5>
               <Typography >
@@ -261,24 +289,37 @@ class SimpleCard extends React.Component{
               </Typography>
             </CardContent>
             </Card>
+            <AdminReplyTextField onChange={this.onChange.bind(this)}/>
+            <Button size="medium" variant="contained" disabled={this.state.disabledGood}
+            style={{backgroundColor: '#81DF44', marginLeft: 30, outline: 'none',
+          borderRadius: 10, fontWeight: 'bold', textTransform: 'none', boxShadow:'none',}}
+            onClick={this.handleHelpfulClick}>Helpful</Button>
+            <Button variant="contained" size="medium" disabled={this.state.disabledBad} 
+            style={{backgroundColor: '#E34D4C', marginLeft: 10, outline:'none', 
+            borderRadius: 10, fontWeight: 'bold', textTransform:'none', 
+            boxShadow:'none',}} onClick={this.handleNotHelpfulClick}
+            > Not Helpful</Button>
+            
           </Grid>
+
+
           <Grid item xs={4}>
-            <Card className="reviewTicketInfo">
+            <Card className="reviewTicketInfoClient">
             <CardContent>
-              <h5>Ticket Information</h5>
+              <h5 className="infoTitle">Ticket Information</h5>
               <Divider/>
               <Typography className="guttertop">
-              Date Opened: {this.state.open_date}
-              </Typography>
+              Date Opened: {this.state.open_date} </Typography>
               <Typography>
-              Time Opened: {this.state.open_time}
-              </Typography>
-              <Typography >
-                Assigned Team: {this.state.assigned_team}
-                </Typography>
-                <Typography >
-                Progress: New
-                </Typography>
+              Time Opened: {this.state.open_time} </Typography>
+              <Typography> Assigned Team: {this.state.assigned_team} </Typography>
+              <Typography> Priority: waitin' for API</Typography>
+              <Typography> Severity: waitin' for API</Typography>      
+                <Typography> Progress: New </Typography>
+                <br/>
+                {/* <h5 className="infoTitle">Your Actions</h5>
+                <Divider /> */}
+                  
             </CardContent>
             </Card>
           </Grid>

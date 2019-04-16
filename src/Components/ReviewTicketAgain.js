@@ -17,50 +17,18 @@ import { Card, CardContent, Grid, FormControl, Select, InputLabel, OutlinedInput
 import { CardActions, TextField, Paper } from 'material-ui';
 import axios from 'axios';
 import logo from '../img/acnapi_logo.png';
+import AdminReplyTextField from './AdminReplyTextField';
+import {Redirect, NavLink, Route, Switch, Link} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
+import compose from 'recompose/compose';
 
-
-const styles = theme => ({
+const styles = (theme) => ({
   appBar: {
     position: 'static',
-    
-  },
-  flex: {
-    flex: 1,
-  },
-  root:{
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
   },
   formControl: {
     margin: theme.spacing.unit,
-    minWidth: 120,
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-  },
-  dense: {
-    marginTop: 16,
-  },
-  menu: {
-    width: 200,
-  },
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  root2: {
-    ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
-    marginTop: 80,
-    marginLeft: 30,
-    width: 800,
-    height: 150,
+    minWidth: 140,
   },
   title: {
     marginLeft: 20,
@@ -74,10 +42,6 @@ const styles = theme => ({
     fontSize: 18,
     marginLeft: 1150,
   },
-  captions:{
-    marginTop: 5,
-  }
-  
 });
 
 const status = [
@@ -99,212 +63,139 @@ function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
-class ReviewTicket extends React.Component {
-
-  constructor() {
-    super();
-      this.state = {
-        currentT: '',
-        open: true,
-        dateOpened: '',
-        timeOpened: '',
-        status: "0",
-        team: "0",
-        replyOpen: false,
-      }
-    };
-
-  
-  handleClose = () => {
-    this.setState({
-      open: false,
-      redirect: false,
-    });
-  };
-
-  componentDidMount(){
-    
-    // receive the id of ticket received
-    console.log("CHILD" + this.props.currentT);
-
-
-    // get user 
-    axios.get(`https://esc-ticket-service.lepak.sg/user/me`, {
-      headers: {
-        'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc'
-      }
-    })
-    .then((res) => {
-      if(res.request.status === 200){
-        this.setState({
-          fullName: res.data.long_name,
-          email: res.data.email,
-          phone: res.data.phone,
-          username: res.data.username,
-        })
-      }
-    })
-
-
-
-    
-  
-    // edit the open time given in the getTicket to get open_date and open_time
-    if(this.props.currentT[this.props.currentT.length-1]){
-      this.setState({
-        dateOpened:this.props.currentT[this.props.currentT.length-1].substring(0,10),
-        timeOpened: this.props.currentT[this.props.currentT.length-1].substring(12,18),
-      })
-      
-    }
-
-    this.setState({
-      currentT: this.props.currentT,
-    })
-    
-  };
+class ReviewTicketAgain extends React.Component {
+  state = {
+    title: '',
+    message: '',
+    response: '',
+    open_time: '',
+    priority: '',
+    severity: '',
+    team: '',
+    flag: '',
+    status: '0',
+    redirect: false,
+  }
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value }, function() {
-      console.log("CHANGES: " + this.state.currentT);
+      console.log("CHANGES: " + this.state.team + " " + this.state.status);
     });
   };
 
-  handleChangeTeam = event => {
-    const newC = this.state.currentT.slice();
-
-    //temp, should be 8, will change
-    newC[7] = event.target.value;
+  handleClose = () => {
     this.setState({
-      [event.target.name]: event.target.value,
-      currentT: newC 
-    }, function(){
-      console.log("CHANGES: " + this.state.currentT);
-    })
-
-  };
-
-  handleClickReply = event => {
-    this.setState({
-      replyOpen: true,
-    })
-  };
-
-  handleReplyClose = e => {
-    this.setState({
-      replyOpen: false,
-      open: true,
-
+      redirect: true,
     })
   }
 
-
-  renderReply(){
-    if(this.state.replyOpen){
-      return (
-        <div>
-          <Dialog
-          onClose={this.handleReplyClose}
-          open={true}>
-          <DialogTitle> hi</DialogTitle>
-          <DialogContent>whatsup</DialogContent>
-          </Dialog>
-        </div>
-      )
-    }
+  onChange = e => {
+    this.setState({
+      response: e.target.value,
+    })
   }
 
-  
+  componentDidMount(){
+    console.log('review ticket recevied ' + this.props.location.state.currentTicketID);
 
+    axios.get(`https://ticket-service.ticket.lepak.sg/ticket/${this.props.location.state.currentTicketID}`,{
+      headers: {
+        'X-Parse-Session-Token':  'r:5ab3041d2ff2484950e68251589ec347', 
+      }
+    })
+    .then((res => {
+      if(res.request.status === 200){
+        console.log('able to receive ticket');
+        this.setState({
+          title: res.data.title,
+          message: res.data.message,
+          response: res.data.response,
+          open_time: res.data.open_time,
+          priority: res.data.priority,
+          severity: res.data.severity,
+          team: res.data.assigned_team,
+          flag: res.data.status_flag,
 
+          // add status(progress)
+          
+        })
 
-
+        if(this.state.flag === 0){
+          this.setState({
+            flag: '-',
+          })
+        }
+        if(this.state.team === null){
+          this.setState({
+            team: 0,
+          });
+        }
+      }
+    }))
+  }
 
   render() {
+
     const { classes } = this.props;
+
+    if(this.state.redirect){
+      this.props.history.push('/tickets');
+    }
 
 
     return (
       <div>
-        
-        <Dialog
-          fullScreen
-          open={this.state.open}
-          onClose={this.props.onClose}
-        >
-          <AppBar className="appbar" style={{backgroundColor: '#000000'}} >
+           <AppBar className="appbar" style={{backgroundColor: '#000000'}} >
             <Toolbar>
-              <img src={logo} width='100px' height='40px' alt="teamwork"/>
+              <img src={logo} width='100px' height='40px' alt="teamwork" />
               <Typography variant="h6" color="inherit" className={classes.title}>
-                {"Admin: Review Ticket"}
+                Review Ticket
               </Typography>
-              <Button color="inherit" onClick={this.props.onClose(this.state.currentT)} className={classes.save}>
+              <Button color="inherit" className={classes.save} onClick={this.handleClose}>
                 Save
               </Button>
             </Toolbar>
-          </AppBar> 
+          </AppBar>
+
         <div className={classes.root}>
         <Grid container>
           <Grid item xs={8}>
           <Card className="reviewTicketCard">
             <CardContent> 
               <Typography inline>
-                {"Ticket #" + this.props.currentT[0]} 
+                {"Ticket #" + this.props.location.state.currentTicketID} 
               </Typography>
               {/* title */}
-              <h4>{this.props.currentT[1]}</h4> 
+              <h4>{this.state.title}</h4> 
               {/* message */} 
-              <p>{this.props.currentT[2]}</p>
+              <p>{this.state.message}</p>
             </CardContent>
             </Card>
-            <Card className="adminReplyCard">
-              <CardContent>
-                <h4 className="adminReplyTitle"> Admin's Reply</h4>
-                <Button variant="contained" 
-                className="adminReplyButton" style={{backgroundColor: '#F9C03E', fontWeight: 'bold', 
-              textTransform: 'none', outline: 'none', boxShadow: 'none',}} onClick={this.handleClickReply}> 
-              Reply</Button>
-                <p className="adminReplyMessage"> Admin has not replied yet. </p>
-                {this.renderReply()}
-                <TextField
-                id="outlined-multiline-flexible"
-                label="Multiline"
-                multiline
-                rowsMax="4"
-                value={this.state.multiline}
-                onChange={this.handleChange}
-                margin="normal"
-                helperText="hello"
-                variant="outlined"
-          />
-              </CardContent>
-
-
-
-            </Card>
-            
-
+            <AdminReplyTextField onChange={this.onChange.bind(this)}/>
           </Grid>
+          
+
+
           <Grid item xs={4}>
             <Card className="reviewTicketInfo">
             <CardContent>
-              <h5 className="infoTitle">Contact Information</h5>
+              <h5 className="infoTitle"> Contact Information</h5>
               <Divider/>
-              <Typography className={classes.captions}>Full Name: {this.state.fullName}</Typography>
-              <Typography>Username: {this.state.username}</Typography>
-              <Typography>Email: {this.state.email}</Typography>
-              <Typography>Phone Number: {this.state.phone}</Typography>
-
+              <Typography className="guttertop">Full Name: fullname</Typography>
+              <Typography>Username: username</Typography>
+              <Typography>Email: email</Typography>
+              <Typography>Phone Number: phone</Typography>
               <br/>
               <h5 className="infoTitle"> Ticket Information</h5>
-              <Divider/>
-              <Typography className={classes.captions}>Ticket ID: {this.props.currentT[0]}</Typography>
-              <Typography>Priority: {this.props.currentT[5]}</Typography>   
-              <Typography>Severity: {this.props.currentT[6]}</Typography>         
+              <Divider />
+              <Typography className="guttertop">Ticket ID: {this.props.location.state.currentTicketID}</Typography>
+              <Typography>Priority: {this.state.priority}</Typography>   
+              <Typography>Severity: {this.state.severity}</Typography>         
               {/* <Typography>Categories: </Typography> */}
-              <Typography>Date Opened by User: {this.state.dateOpened}</Typography>
-              <Typography>Time Opened by User: {this.state.timeOpened}</Typography> 
-              <Typography>Feedback: None</Typography><br />
+              <Typography>Date Opened by User: {this.state.open_time.substring(0, 10)}</Typography>
+              <Typography>Time Opened by User: {this.state.open_time.substring(11, 19)}</Typography> 
+              <Typography>Feedback: {this.state.flag}</Typography>
+              <br />
               <h5 className="infoTitle">Admin Actions</h5>
               <Divider />
               <div className="admin-actions">
@@ -329,12 +220,12 @@ class ReviewTicket extends React.Component {
           </Select>
         </FormControl>
         <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel htmlFor="outlined-team-simple" >
+                <InputLabel htmlFor="outlined-status-simple" >
               Assigned Team
             </InputLabel>
             <Select
               value={this.state.team}
-              onChange={this.handleChangeTeam}
+              onChange={this.handleChange}
               input={
               <OutlinedInput
                 labelWidth={110}
@@ -349,21 +240,30 @@ class ReviewTicket extends React.Component {
             <MenuItem value={3}>General Inquiry</MenuItem>
           </Select>
         </FormControl>
-        
-          </div> 
+        </div>
             </CardContent>
             </Card>
           </Grid>
-        </Grid>
-      </div>
-        </Dialog>
-      </div>
-    );
-  }
-}
 
-ReviewTicket.propTypes = {
+
+
+          
+          </Grid>
+          </div>
+          </div>
+    
+    );
+}}
+
+
+ReviewTicketAgain.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ReviewTicket);
+
+
+
+export default compose(
+  withRouter,
+  withStyles(styles),
+)(ReviewTicketAgain);

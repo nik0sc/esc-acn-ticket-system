@@ -148,6 +148,8 @@ class ReviewTicket extends React.Component {
     
     console.log("CHILD" + this.props.currentT);
 
+    // get the
+
     axios.get(`https://esc-ticket-service.lepak.sg/user/me`, {
       headers: {
         'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b'

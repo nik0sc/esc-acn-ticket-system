@@ -10,7 +10,9 @@ import { AppBar, Typography, List, ListItem, ListItemText, DialogTitle, DialogCo
 import ReviewTicket from './ReviewTicket';
 import classnames from 'classnames';
 import AdminAppBar from './AdminAppBar';
+import Cookies from 'universal-cookie';
 import {Redirect, NavLink, Route, Switch, Link} from 'react-router-dom'
+import compose from 'recompose/compose';
 
 
 const customStyles = {
@@ -30,7 +32,7 @@ class Tickets extends React.Component{
   constructor(props){
     super(props);
     this.state= {
-      NewcurrentTicket: '',
+      currentTicketID: '',
       redirect: false,
       open: true,
     }
@@ -42,11 +44,15 @@ class Tickets extends React.Component{
   }
 
   axiosFunc = () => {
+    const cookies = new Cookies();
+    const LoggedSessionToken = cookies.get('AdminSessionToken');
+    const limit = 10;
+    const offset = 0;
 
-    axios.get(`https://esc-ticket-service.lepak.sg/ticket/byUser`,{
+    axios.get(`https://ticket-service.ticket.lepak.sg/ticket?limit=${limit}&offset=${offset}`,{
           headers: {
-            'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b'
-          }
+            'X-Parse-Session-Token': 'r:5ab3041d2ff2484950e68251589ec347',
+          },
         })
         .then((res) => {
           if(res.request.status === 200){
@@ -55,12 +61,15 @@ class Tickets extends React.Component{
             message: data.message, open_time: data.open_time, close_time: data.close_time, 
             assigned_team: data.assigned_team, username: data.username, fullname: data.long_name,
             email: data.email, phone: data.phone,
-            priority: data.priority, severity: data.severity})}))})
+            priority: data.priority, severity: data.severity, flag: data.status_flag, response: data.response})}))})
             //console.log(this.state.allTickets[0].assigned_team);  // null
             const allT = this.state.allTickets;
             for(var i =0;i<allT.length;i++){
               if(allT[i].assigned_team === null){
-                allT[i].assigned_team = "None";
+                allT[i].assigned_team = "-";
+              }
+              if(allT[i].flag === 0){
+                allT[i].flag = "-";
               }
               if(allT[i].open_time){
                 
@@ -142,18 +151,18 @@ class Tickets extends React.Component{
         }
       }
 
-      renderElement(){
-        if(this.state.redirect)
-           return (
-            <div>
-            <ReviewTicket currentT = {this.state.currentTicket} onClose={this.onClose.bind(this)}  /> 
-            {/* <Redirect to={{
-              pathname: '/reviewTicket',
-              state: {idTicket : this.state.currentTicket, onClose: this.onClose.bind(this)}
-              }}/>  */}
-          </div>
-          );
-        }
+      // renderElement(){
+      //   if(this.state.redirect){
+      //     return (
+      //       {/* <ReviewTicket currentT = {this.state.currentTicket} onClose={this.onClose.bind(this)}  /> 
+      //       <Redirect to={{
+      //         pathname: '/reviewTicket',
+      //         state: {idTicket : this.state.currentTicket, onClose: this.onClose.bind(this)}
+      //         }}/>  */}
+      //         this.props.history.push('/reviewTicket')
+      //     );
+      //   }
+      //   }
 
 
 
@@ -194,25 +203,15 @@ class Tickets extends React.Component{
                  display: false,
                 }
                },
-
-               {
-                name: "username",
-                label: "Username",
-                options: {
-                 filter: false,
-                 sort: false,
-                 display: false,
-                }
-               },
-               {
-                name: "fullname",
-                label: "Full Name",
-                options: {
-                 filter: false,
-                 sort: false,
-                 display: false,
-                }
-               },
+              //  {
+              //   name: "fullname",
+              //   label: "Full Name",
+              //   options: {
+              //    filter: false,
+              //    sort: false,
+              //    display: false,
+              //   }
+              //  },
             {
              name: "priority",
              label: "Priority",
@@ -259,6 +258,14 @@ class Tickets extends React.Component{
             //     filter: true,
             //     sort: true,
             //    }},
+            {
+              name: "flag",
+              label: "Flag",
+              options: {
+                filter: false,
+                sort: false,
+              }
+            },
                 {
                    name: "open_time",
                    label: "Date Opened",
@@ -269,13 +276,13 @@ class Tickets extends React.Component{
                }, 
            ];
            
-           const data = [
-            { id: "1", topics: ["Smart City", "DevOps"], title:"Help!", message:'help me plzzzzzz',progress: "In Progress", priority: "Low", time: 5  },
-            { id: "2", topics: "AR City", title:"Please save me!", message: 'why dont you sing me a song', progress: "Open", priority: "Medium", time: 2},
-            { id: "3", topics: "Business Pls", title:"What is life?", message: 'what is this and how to help', progress: "Closed", priority: "High", time: 1 },
-            { id: "4", topics: "Driveby", title:"Can't do this", message: 'aahhhhh', progress: "Open", priority: "Medium", time: 10 },
-           ];
-          // const data = this.state.allTickets;
+          //  const data = [
+          //   { id: "1", topics: ["Smart City", "DevOps"], title:"Help!", message:'help me plzzzzzz',progress: "In Progress", priority: "Low", time: 5  },
+          //   { id: "2", topics: "AR City", title:"Please save me!", message: 'why dont you sing me a song', progress: "Open", priority: "Medium", time: 2},
+          //   { id: "3", topics: "Business Pls", title:"What is life?", message: 'what is this and how to help', progress: "Closed", priority: "High", time: 1 },
+          //   { id: "4", topics: "Driveby", title:"Can't do this", message: 'aahhhhh', progress: "Open", priority: "Medium", time: 10 },
+          //  ];
+          const data = this.state.allTickets;
            
 
 const options = {
@@ -286,12 +293,22 @@ const options = {
         console.log("ROWDATA " + rowData);
         this.setState({
           redirect: true,
-          currentTicket: rowData
+          currentTicket: rowData,
+          currentTicketID: rowData[0],
         })
       }
       
   };
 
+  if(this.state.redirect){
+    this.props.history.push({
+      pathname:"/reviewTicket",
+      state:{
+          currentTicketID: this.state.currentTicketID,
+       }
+     });
+
+  }
       
         return(
             <div>
@@ -306,7 +323,7 @@ const options = {
 
                 
                 
-                {this.renderElement()}
+                {/* {this.renderElement()} */}
                 
                 </MuiThemeProvider>
             </div>

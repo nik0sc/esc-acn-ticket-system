@@ -103,7 +103,7 @@ class FormDialog extends React.Component {
         headers: {
           'Content-Type': 'application/json',
           // legit token
-          'X-Parse-Session-Token': 'r:f0943a0aa9e4a2100355353d233ccab0',
+          'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc',
 
 
 

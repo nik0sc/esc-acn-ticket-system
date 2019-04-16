@@ -6,6 +6,8 @@ import { CssBaseline, Paper, Avatar, FormControl, InputLabel, Input, Button } fr
 import logo from '../img/acn_icon.png';
 import {withRouter} from 'react-router-dom'
 import compose from 'recompose/compose';
+import Cookies from 'universal-cookie';
+import { ToastsStore } from 'react-toasts';
 
 
 const styles = theme => ({
@@ -63,23 +65,25 @@ class Admin extends React.Component{
       password: password,
     })
     .then((res => {
-   
+      const LoggedSessionToken = res.data.session_token;
+        const cookies = new Cookies();
+        cookies.set('AdminSessionToken', LoggedSessionToken, {path: '/'});
     this.setState({
       redirect: true,
     })
     console.log('success');
   }))
   .catch(error => {
+    ToastsStore.error('Login failed. Please check your username and password.')
     console.log('failed')
   })  
-      }}
+}}
       
     render(){
       const { classes } = this.props;
 
       if(this.state.redirect){
         this.props.history.push('/tickets');
-        // return <Redirect to="/tickets" />
       }
         return(
           <div className="background">
@@ -88,21 +92,9 @@ class Admin extends React.Component{
            <Paper className={classes.paper}>
              <Avatar className={classes.avatar}>
                {/* <LockOutlinedIcon /> */}
-               <img src={logo} alt="acn_logo"/>
+               <img src={logo} alt="acn_logo" width='40' height='40'/>
              </Avatar>
-             {/* <div className="PageSwitcher">
-             <NavLink exact to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item" 
-             >Sign In</NavLink>
-             <NavLink to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item" 
-             >Sign Up</NavLink> 
-             {/* <Button style={{backgroundColor: '#414141', outline: 'none', }}>Sign In</Button>
-             <Button>Sign Up</Button> */}
-             {/* </div>  */}
              <form className={classes.form}  onSubmit={this.getAdmin} >
-               {/* <FormControl margin="normal" required fullWidth>
-               <InputLabel htmlFor="email">Email</InputLabel>
-               <Input id="email" name="email" type="email" autoComplete="email" autoFocus onChange={this.handleInputChange} />
-               </FormControl> */}
                <FormControl margin="normal" required fullWidth>
                <InputLabel htmlFor="username">Username</InputLabel>
                <Input id="username" name="username" autoComplete="username" autoFocus onChange={this.handleInputChange} />
