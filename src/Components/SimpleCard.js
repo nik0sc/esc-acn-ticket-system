@@ -20,7 +20,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import CommentExampleReplyFormOuter from './CommentExampleReplyFormOuter';
 import Cookies from 'universal-cookie';
 import AdminReplyTextField from './AdminReplyTextField';
-
+import ChatComponent from "./ChatComponent";
 
 const styles = {
   root:{
@@ -370,6 +370,7 @@ class SimpleCard extends React.Component{
             <Typography variant="h5"> 
                 Live Chat
             </Typography>
+            <ChatComponent username="username" isAdmin="false"/>
             <Divider />
             </CardContent>
         </Card>
