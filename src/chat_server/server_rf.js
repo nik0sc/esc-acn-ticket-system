@@ -91,6 +91,7 @@ wss.on('connection', function (ws) { //ws is a WebSocket object representing the
             nonAdmins = nonAdmins.filter(function (v) {
                 return v !== departingUser;
             });
+            console.log("A user has left");
         }
 
     });

@@ -88,7 +88,7 @@ class SimpleCard extends React.Component{
     .then((res) => {
       if(res.request.status === 200){
         this.setState({
-          fullName: res.data.long_name,
+          fullName: res.data.long_name, //This is probably the username.
         })
       }
     })
@@ -320,7 +320,7 @@ class SimpleCard extends React.Component{
             <Typography variant="h5"> 
                 Live Chat
             </Typography>
-            <ChatComponent username="gitgudscrub" isAdmin="t"/>
+            <ChatComponent username="ggxgg" isAdmin="t"/>
             <Divider />
             </CardContent>
         </Card>

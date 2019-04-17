@@ -24,7 +24,7 @@ class ChatInput extends React.Component {
                     onChange={e => this.onChange(e)}
                     value={this.state.text}
                     type="text"
-                    autoFocus="true"
+                    autoFocus={true}
                 />
                 <button color="inherit">Send</button>
             </form>
