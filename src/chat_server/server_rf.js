@@ -13,8 +13,11 @@ var roomidMap = new Map(); // (int) roomid -> Room
 var newroomid = 0;
 
 class Room {
-    constructor(){
+    //Pre-condition: svc_client is the username of the non-admin client in this room.
+    //Post-condition: servicedClient stores the username.
+    constructor(svc_client){
         this.roomId = newroomid++; //Overflow is not expected to be an issue
+        this.servicedClient = svc_client;
         this.roomMessages = []; //(Array of JSON messages)
         this.participants = []; //(Array of User)
     }
@@ -96,27 +99,35 @@ wss.on('connection', function (ws) { //ws is a WebSocket object representing the
 function registerClient(ws,message){ //Registering a new client constructs a new room for that client and adds all admins to the room.
     var newUser = new User(ws,message.user,false);
     wsMap.set(ws,newUser);
-    var newRoom = new Room();
+    var newRoom = new Room(newUser);
     roomidMap.set(newRoom.roomId,newRoom);
     newRoom.participants.push(newUser);
     newUser.activeRooms.push(newRoom);
     admins.forEach(function (adminUser) {
         newRoom.participants.push(adminUser);
+        sendReceipt(adminUser,newRoom);
     });
     rooms.push(newRoom);
     nonAdmins.push(newUser);
-    ws.send(JSON.stringify({type: "receipt", room: newRoom.roomId}));
-    console.log("Delivered receipt: %s", JSON.stringify({type: "receipt", room: newRoom.roomId}));
+    //ws.send(JSON.stringify({type: "receipt", room: {newRoom.roomId}));
+    var receipt = sendReceipt(newUser,newRoom);
+    console.log("Delivered receipt: %s", receipt);
 }
 
-function registerAdmin(ws){ //Registering a new admin adds said admin to all currently open rooms.
+function registerAdmin(ws,message){ //Registering a new admin adds said admin to all currently open rooms.
     var newAdminUser = new User(ws,message.user,true);
     wsMap.set(ws,newAdminUser);
     admins.push(newAdminUser);
     rooms.forEach(function (room) {
         room.participants.push(newAdminUser);
-        ws.send(JSON.stringify({type: "receipt", room: room}));
+        sendReceipt(newAdminUser,room);
     });
+}
+
+function sendReceipt(tar_user, r_room ){
+    var receiptJSONstring = JSON.stringify({type: "receipt", room:{roomId: r_room.roomId, name: r_room.servicedClient.username} });
+    tar_user.webSocket.send(receiptJSONstring);
+    return receiptJSONstring;
 }
 
 /*

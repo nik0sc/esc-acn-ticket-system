@@ -10,9 +10,9 @@ class ChatComponent extends React.Component {
     state = {
         Username: "",
         isAdmin: false,
-        active_rooms: [], //(Array| (int) roomId)
+        active_rooms: [], //(Array| {int,String}) {roomId, name}
         current_room: -1,
-        cur_room_idx: 0,
+        //cur_room_idx: 0,
         messagesByRoom: new Map(), //(int) roomId --> (Array| JSON) Messages
     };
 
@@ -66,7 +66,7 @@ class ChatComponent extends React.Component {
                 activerooms.push(newroom);
                 this.setState({active_rooms:activerooms}); //Add the room on receipt to active_rooms (both admins and non-admins)
                 if(!this.state.isAdmin){
-                    this.setState({current_room: newroom}); //Non-admins only: set room as current room. Admins will have to use the selector
+                    this.setState({current_room: newroom.roomId}); //Non-admins only: set room as current room. Admins will have to use the selector
                 }
             }
         }
