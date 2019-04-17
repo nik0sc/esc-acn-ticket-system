@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {Redirect, NavLink, Route, Switch} from 'react-router-dom'
+import {Redirect, NavLink, Route, Switch, Link} from 'react-router-dom'
 import axios from 'axios'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -23,6 +23,9 @@ import {withRouter} from 'react-router-dom'
 import compose from 'recompose/compose';
 import { loadProgressBar } from 'axios-progress-bar'
 import 'axios-progress-bar/dist/nprogress.css'
+import { ToastsStore } from 'react-toasts';
+import { createMuiTheme } from '@material-ui/core/styles';
+import logo from '../img/acn_icon.png';
 
 const styles = theme => ({
   main: {
@@ -30,14 +33,15 @@ const styles = theme => ({
     display: 'block', // Fix IE 11 issue.
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
+
     [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
       width: 400,
       marginLeft: 'auto',
-      marginRight: 'auto',
+      marginRight: '150px',
     },
   },
   paper: {
-    marginTop: theme.spacing.unit * 8,
+    marginTop: '50%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -50,9 +54,16 @@ const styles = theme => ({
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing.unit,
+    
   },
   submit: {
     marginTop: theme.spacing.unit * 3,
+    backgroundColor: '#F9C03E',
+    fontWeight: 'bold',
+    color: 'black',
+    '&:hover': {
+      backgroundColor: '#EBA810',
+    }
   },
 });
 
@@ -84,80 +95,78 @@ handleInputChange = (e) => {
   })
 }
 
-  getUser = async(e) => {
+  getUser = (e) => {
     e.preventDefault();
-    const email = e.target.elements.email.value;
+    //const email = e.target.elements.email.value;
+    const username = e.target.elements.username.value;
     const password = e.target.elements.password.value;
-    if(email && password){
-      axios.get(`https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/login?email=${email}&password=${password}`, {
-        headers: {
-          'Server-Token': `${process.env.REACT_APP_API_KEY}`,
-        }
-      })
-      .then((res) => {
-        if(res.request.status === 200){
-          // success
-          const cookies = new Cookies();
-          var session_token = res.data.sessionToken;
-          cookies.set('sessionToken', session_token, {path: '/'});
-          console.log(res)
-          this.setState({
-            redirect: true,
-          });
-        }
-      }
-    )
-    .catch(error => {      
-      toast.error('Login failed. Wrong email/password.',{
-        position: "bottom-center"
-      })
-    });
-    }
-    else if(!email || !password){
-      toast.error('Empty fields detected. Please fill in your email and password',{
-        position: "bottom-center"
-      })
-    }
-
+    //console.log("username: " + username);
+    console.log("password: " + password);
+    if(username && password){
+    axios.post('https://user-service.ticket.lepak.sg/user/login', {
+      username: username,
+      password: password,
+    })
+    .then((res => {
+    const LoggedSessionToken = res.data.session_token;
+    console.log('current session token: ' + LoggedSessionToken);
+    const cookies = new Cookies();
+    cookies.set('sessionToken', LoggedSessionToken, {path: '/'});
+    console.log(cookies.get('sessionToken'));
+    this.setState({
+      redirect: true,
+    })
+    console.log('success');
+  }))
+  .catch(error => {
+    console.log('failed')
+    ToastsStore.error('Login failed. Username not registered.')
+  })  
   }
+    else if(!username || !password){
+      ToastsStore.error('Empty fields detected.')
+   }
+  }
+
+
   render(){
     
     const { classes } = this.props;
-  
-
     if(this.state.redirect){
       this.props.history.push('/dashboard');
       // return <Redirect to="/dashboard" />
-    }
-
- 
-  
+    }  
     return(
-    <div>
-      <main className={classes.main}>
+    <div className="backgroundSignIn">
+     <main className={classes.main}>
       <CssBaseline />
+
       <Paper className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <div className="PageSwitcher">
-        <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
-        <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink> 
-        </div>
-        <form className={classes.form}  onSubmit={this.getUser.bind(this)} noValidate>
+      
+        <img src={logo} width='40' height='40' alt="acn_logo" />
+          {/* <LockOutlinedIcon /> */}
+          
+        {/* <div className="PageSwitcher">
+        <NavLink exact to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item" 
+        >Sign In</NavLink>
+        <NavLink to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item" 
+        >Sign Up</NavLink> 
+        {/* <Button style={{backgroundColor: '#414141', outline: 'none', }}>Sign In</Button>
+        <Button>Sign Up</Button> */}
+        {/* </div>  */}
+        <form className={classes.form}  onSubmit={this.getUser.bind(this)} >
           <FormControl margin="normal" required fullWidth>
-          <InputLabel htmlFor="email">Email</InputLabel>
-          <Input id="email" name="email" type="email" autoComplete="email" autoFocus onChange={this.handleInputChange} />
+          <InputLabel htmlFor="username">Username</InputLabel>
+          <Input id="username" name="username" autoComplete="username" autoFocus onChange={this.handleInputChange} />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
           <InputLabel>Password</InputLabel>
             <Input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleInputChange}/>
-          </FormControl>
+            </FormControl>
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            color="primary"
             className={classes.submit}
           >
             Sign in
@@ -166,6 +175,7 @@ handleInputChange = (e) => {
       </Paper>
     </main>
       </div>
+      
     )
   }
 }

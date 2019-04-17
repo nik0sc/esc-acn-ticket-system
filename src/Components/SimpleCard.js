@@ -18,6 +18,8 @@ import axios from 'axios'
 import { TextField, Paper } from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import CommentExampleReplyFormOuter from './CommentExampleReplyFormOuter';
+import Cookies from 'universal-cookie';
+import AdminReplyTextField from './AdminReplyTextField';
 
 
 const styles = {
@@ -26,7 +28,10 @@ const styles = {
     backgroundColor: '#FFFFFF',
 
   },
-  card: {
+  gap: {
+    marginTop: 10,
+  },
+  card: {   
     minWidth: 275,
     margin: 20,
     height: 500,
@@ -35,7 +40,7 @@ const styles = {
   title: {
     fontSize: 14,
   },
-
+ 
 menu: {
   margin: 20,
   minWidth: 275,
@@ -52,6 +57,10 @@ number:{
   display: 'flex',
   margin: 20,
 },
+welcome: {
+  fontWeight: 'bold',
+  
+}
 
 };
 
@@ -74,35 +83,46 @@ class SimpleCard extends React.Component{
     ticketid: '',
     assigned_team: '',
     message: '',
+    disabledGood: false,
+    disabledBad: false,
+    redirectConfirm: false,
 
   };
 
   axiosFunc = () => {
+    const cookies = new Cookies();
+    const CurrentSessionToken = cookies.get('sessionToken');
+    console.log('current session token ' + CurrentSessionToken);
 
-    axios.get(`https://esc-ticket-service.lepak.sg/user/me`, {
+    //get user
+    axios.get(`https://user-service.ticket.lepak.sg/user/me`, {
       headers: {
-        'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce'
+        'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc',
       }
     })
     .then((res) => {
       if(res.request.status === 200){
         this.setState({
           fullName: res.data.long_name,
+          username: res.data.username,
         })
       }
     })
-
+    
 
 
     // get ticket
-    axios.get(`https://esc-ticket-service.lepak.sg/ticket/byUser`,{
+    axios.get(`https://ticket-service.ticket.lepak.sg/ticket/byUser`,{
       headers: {
-        'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce'
+        'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc'
       }
     })
     .then((res) => {
       if(res.request.status === 200){
-        //console.log(res.data);
+        console.log("get tickets" + res.data);
+
+
+        //todo: check if there are tickets and show no tickets are created 
         this.setState({
           id: res.data.map((data => {return([data.id, data.priority, data.title])})),
         })
@@ -118,15 +138,15 @@ class SimpleCard extends React.Component{
           if(editData[i][1] === 2){
             editData[i][1] = "Closed";
           }
+
+          //this is temp, pls remove after since no status in API call 
+          if(editData[i][1] === 3){
+            editData[i][1] = "New";
+          }
         }
         this.setState({
           id: editData,
         });
-
-        // this.setState({
-        //   numOfTicketsOpened: this.state.id.length }, function(){
-        // });
-        // console.log(this.state.numOfTicketsOpened);
 
       }
     })
@@ -137,27 +157,31 @@ class SimpleCard extends React.Component{
   }
 
   componentDidMount(){
+
     this.axiosFunc();
-
+   
     //this.interval = setInterval(this.axiosFunc, 10000);
-
-    //this.interval = setInterval(this.axiosFunc, 5000);
-
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
+  
+  onChange = e => {
+    this.setState({
+      response: e.target.value,
+    })
+  }
 
 
   _renderItems(){
-    return this.state.id.map((el, i) =>
+    return this.state.id.map((el, i) => 
         <ListItem button onClick={this.handleClick.bind(this, el[0])} key={i}>
           <ListItemText primary={'Ticket ' + el[0] + ': ' + el[2]} secondary={'Progress: ' + el[1]}>
           </ListItemText>
         </ListItem>
       )
-
+      
     }
 
   // componentDidUpdate(prevProps ,prevState){
@@ -166,42 +190,39 @@ class SimpleCard extends React.Component{
   //     console.log("UPDATED COMPOENENT")
   //   }
   // }
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   if(nextProps.numOfTicketsOpened !== prevState.numOfTicketsOpened) {
-  //     return { numOfTicketsOpened: nextProps.numOfTicketsOpened }
-  //   } else return null;
-  // }
-  // shouldComponentUpdate(nextProps, nextState){
-  //   return this.state.numOfTicketsOpened !==
-  // }
+
 
     handleClick = (id, e) => {
+      console.log('current id selected: ' + id);
       this.setState({
         redirect: true,
         open: true,
       })
-      axios.get(`https://esc-ticket-service.lepak.sg/ticket/${id}`,{
+      axios.get(`https://ticket-service.ticket.lepak.sg/ticket/${id}`,{
         headers:{
-          'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce'
+          'X-Parse-Session-Token': 'r:5ab3041d2ff2484950e68251589ec347'
         }
       })
       .then((res => {
-        this.setState({
-          title: res.data.title,
-          ticketid: res.data.id,
-          open_time: res.data.open_time,
-          assigned_team: res.data.assigned_team,
-          message: res.data.message,
-
-           // TODO: add progress
-
-        })
-
-        if(this.state.assigned_team === null){
+        if(res.request.status === 200){
           this.setState({
-            assigned_team: "Currently not assigned",
+            title: res.data.title,
+            ticketid: res.data.id,
+            open_time: res.data.open_time,
+            assigned_team: res.data.assigned_team,
+            message: res.data.message,
+            priority: res.data.priority,
+            severity: res.data.severity,
+  
+            
+             // TODO: add status, flag 
+  
           })
-        }
+
+          if(this.state.assigned_team === null){
+            this.setState({
+              assigned_team: "Currently not assigned",
+            })
         var date = this.state.open_time;
         var openDate = date.substring(0, 10);
         var openTime = date.substring(11, 16);
@@ -209,15 +230,34 @@ class SimpleCard extends React.Component{
           open_date: openDate,
           open_time: openTime,
         })
+      }
+        }
+         
       }))
     }
 
     handleClickOpen = () => {
       this.setState({ open: true });
     };
-
+  
     handleClose = () => {
-      this.setState({ open: false });
+      this.setState({ open: false 
+      });
+      window.location.reload();
+    };
+
+    handleHelpfulClick = (e) => {
+      this.setState({
+        disabledGood: true, 
+        disabledBad: false,
+      })
+    };
+    
+    handleNotHelpfulClick = (e) => {
+      this.setState({
+        disabledGood: false, 
+        disabledBad: true,
+      })
     };
 
     renderElement(){
@@ -228,7 +268,7 @@ class SimpleCard extends React.Component{
          onClose={this.handleClose}
          aria-labelledby="form-dialog-title"
        >
-       <AppBar className="appbar">
+       <AppBar position="static" style={{backgroundColor: '#000000'}}>
             <Toolbar >
               <Typography variant="h6" color="inherit" className="flex">
               {'Ticket #' + this.state.ticketid + " - " + this.state.title}
@@ -241,38 +281,51 @@ class SimpleCard extends React.Component{
           <MuiThemeProvider>
     <Grid container>
           <Grid item xs={8}>
-            <Card className="reviewTicketCard">
-            <CardContent>
+            <Card className="reviewTicketCardClient">
+            <CardContent> 
                 <h5>{this.state.title}</h5>
               <Typography >
                 {this.state.message}
               </Typography>
             </CardContent>
             </Card>
+            <AdminReplyTextField onChange={this.onChange.bind(this)}/>
+            <Button size="medium" variant="contained" disabled={this.state.disabledGood}
+            style={{backgroundColor: '#81DF44', marginLeft: 30, outline: 'none',
+          borderRadius: 10, fontWeight: 'bold', textTransform: 'none', boxShadow:'none',}}
+            onClick={this.handleHelpfulClick}>Helpful</Button>
+            <Button variant="contained" size="medium" disabled={this.state.disabledBad} 
+            style={{backgroundColor: '#E34D4C', marginLeft: 10, outline:'none', 
+            borderRadius: 10, fontWeight: 'bold', textTransform:'none', 
+            boxShadow:'none',}} onClick={this.handleNotHelpfulClick}
+            > Not Helpful</Button>
+            
           </Grid>
+
+
           <Grid item xs={4}>
-            <Card className="reviewTicketInfo">
+            <Card className="reviewTicketInfoClient">
             <CardContent>
-              <h5>Ticket Information</h5>
+              <h5 className="infoTitle">Ticket Information</h5>
               <Divider/>
               <Typography className="guttertop">
-              Date Opened: {this.state.open_date}
-              </Typography>
+              Date Opened: {this.state.open_date} </Typography>
               <Typography>
-              Time Opened: {this.state.open_time}
-              </Typography>
-              <Typography >
-                Assigned Team: {this.state.assigned_team}
-                </Typography>
-                <Typography >
-                Progress: NOT DONE YET
-                </Typography>
+              Time Opened: {this.state.open_time} </Typography>
+              <Typography> Assigned Team: {this.state.assigned_team} </Typography>
+              <Typography> Priority: waitin' for API</Typography>
+              <Typography> Severity: waitin' for API</Typography>      
+                <Typography> Progress: New </Typography>
+                <br/>
+                {/* <h5 className="infoTitle">Your Actions</h5>
+                <Divider /> */}
+                  
             </CardContent>
             </Card>
           </Grid>
         </Grid>
           </MuiThemeProvider>
-
+          
        </Dialog>);
    }
 
@@ -286,29 +339,27 @@ class SimpleCard extends React.Component{
         <Card className={classes.card}>
       <CardContent>
         <List style={{maxHeight: 500, overflow: 'auto', margin:0, padding: 0,}}>
-        <ListSubheader className={classes.root}>
+        <ListSubheader className={classes.root}> 
           <ListItemText>
-              <h3>Tickets</h3>
+              <h3 className="same-line">Tickets</h3>
             </ListItemText>
             <ListItemSecondaryAction>
-              <IconButton style = {{backgroundColor: 'transparent'}}>
-              <FormDialog />
-              </IconButton>
+              <FormDialog/>
             </ListItemSecondaryAction>
-            <Divider />
+            <Divider className={classes.gap}/>
           </ListSubheader>
           <div>
           {this._renderItems()}
-          </div>
+          </div> 
           </List>
-
+        
       </CardContent>
     </Card>
         </Grid>
         <Grid item xs = {12} sm = {6}>
         <Card className={classes.menu}>
             <CardContent>
-              <Typography variant="h5">
+              <Typography variant="h5" className={classes.welcome}>
               {/* Welcome to Accenture's ticket system */}
               Welcome Back, {this.state.fullName}
               </Typography>
@@ -319,7 +370,6 @@ class SimpleCard extends React.Component{
             <Typography variant="h5"> 
                 Live Chat
             </Typography>
-            <ChatComponent username="ggxgg" isAdmin="t"/>
             <Divider />
             </CardContent>
         </Card>

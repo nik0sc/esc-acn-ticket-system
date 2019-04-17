@@ -17,6 +17,10 @@ import { loadProgressBar } from 'axios-progress-bar'
 import 'axios-progress-bar/dist/nprogress.css'
 import CommentExampleReplyFormOuter from './Components/CommentExampleReplyFormOuter';
 import NewRoute from './Components/NewRoute';
+import ReviewTicketAgain from './Components/ReviewTicketAgain';
+import ReviewTicket from './Components/ReviewTicket';
+import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts';
+import LandingPage from './Components/LandingPage';
 
 const cookies = new Cookies();
 
@@ -50,12 +54,14 @@ class App extends Component {
   render() {
     
     return (      
+
       // <div className="wrapper">
       //   <div className="main"> 
       //   <div className="container"> 
       //     <div className="row" >
       <div>
         {/* <Button onClick={this.token}> help </Button> */}
+        <ToastsContainer store={ToastsStore} position={ToastsContainerPosition.BOTTOM_LEFT} lightBackground/>
         <ToastContainer 
           position="bottom-center"
           autoClose={2000}
@@ -72,9 +78,12 @@ class App extends Component {
           <div className="App_Aside"></div>
           <div className="App_Form" >
           <Switch>
-          <Route path="/register" component={RegisterNew}>
-              </Route>
+         
               <Route exact path="/" component={SignIn}  >
+              </Route>
+              <Route path="/register" component={RegisterNew}>
+              </Route>
+              <Route path="/landing" component={LandingPage}>
               </Route>
               <Route path="/admin" component={Admin} >
               </Route>
@@ -84,7 +93,7 @@ class App extends Component {
               </Route> */}
               <Route exact path="/tickets" component={Tickets}>
               </Route>
-              <Route path="/tickets/:ticketID" component={NewRoute} ></Route>
+              <Route path="/reviewTicket" component={ReviewTicketAgain} ></Route>
               <Route path="/talk" component={CommentExampleReplyFormOuter}>
               </Route>
               <Route path="*" exact={true} component={NotFound} />

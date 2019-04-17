@@ -39,6 +39,7 @@ class Recaptcha extends Component {
             sitekey="6LfYBpoUAAAAAAevnt7ip82_7WHY5yA0yqUC77x6"
             onloadCallback={this.onLoadRecaptcha}
             verifyCallback={this.verifyCallback}
+            // className = "recap"
         />
       </div>
     );

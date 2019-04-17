@@ -39,7 +39,7 @@ const styles = {
     fontSize: 18,
   }
 };
-class ButtonAppBar extends React.Component{
+class AdminAppBar extends React.Component{
     state = {
         redirect: false,
         try: false,
@@ -69,7 +69,7 @@ class ButtonAppBar extends React.Component{
             <Toolbar>
               <img src={logo} width="100px" height="40px" alt="acn_logo"/>
             <Typography variant="h6" color="inherit" className={classes.grow}>
-            Support Ticket System
+            Admin: Ticket System
           </Typography>
           {/* <Button className={classes.but}> Live Chat</Button> */}
           <Button onClick={this.handleClick.bind(this)} color="inherit" className={classes.logout}>Log Out</Button>
@@ -81,10 +81,10 @@ class ButtonAppBar extends React.Component{
 }
 
 
-ButtonAppBar.propTypes = {
+AdminAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
 
 
-export default compose(withRouter, withStyles(styles),)(ButtonAppBar);
+export default compose(withRouter, withStyles(styles),)(AdminAppBar);

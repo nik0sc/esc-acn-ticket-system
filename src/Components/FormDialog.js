@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Add from '@material-ui/icons/AddCircle';
-import { TextField, InputLabel, Select, OutlinedInput } from '@material-ui/core';
+import { TextField, InputLabel, Select, OutlinedInput, Typography } from '@material-ui/core';
 import 'filepond/dist/filepond.min.css';
 import * as FilePond from 'filepond';
 import FileAttach from './FileAttach';
@@ -19,17 +19,22 @@ import PropTypes from 'prop-types';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
+import { ToastsStore } from 'react-toasts';
 
 
 const styles = theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
+  
   },
   formControl: {
     margin: theme.spacing.unit,
     minWidth: 500,
     maxWidth: 500,
+  },
+  button: {
+    margin: theme.spacing.unit,
   },
 });
 
@@ -41,12 +46,6 @@ const topics = [
   'Others',
 ];
 
-const priority = [
-  'Low',
-  'Normal',
-  'High',
-  'Urgent',
-];
 
 function getStyles(topic, that) {
   return {
@@ -58,8 +57,6 @@ function getStyles(topic, that) {
 }
 
 class FormDialog extends React.Component {
-
-
 
   state = {
     open: false,
@@ -92,33 +89,27 @@ class FormDialog extends React.Component {
   handleSubmit = (e) => {
     if(this.state.message  === '' || this.state.title === '' || this.state.topics===[] || this.state.priority === '' || this.state.severity === ''){
       //console.log('not clear')
-      toast.error('Subject title, topics, message and priority/severity required.',{
-        position: "bottom-center"
-      });
-      
+      ToastsStore.error('Empty fields detected.')
     }
     if(this.state.message !== '' && this.state.title !== '' && this.state.topics !== '' && this.state.priority !== '' && this.state.severity !== ''){
-      toast.success('Your query has been submitted.', {
-        position: "bottom-center"
-      });
+      ToastsStore.success('Your query has been submitted!')
+      
       axios.post(`https://esc-ticket-service.lepak.sg/ticket`, {
           title: this.state.title,
           message: this.state.message,
           priority: this.state.priority,
           severity: this.state.severity,
-          // priority: 0,
-          // severity: 0,
-
       }, {
         headers: {
           'Content-Type': 'application/json',
           // legit token
-          'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce',
-
-          // not legit token
-          // 'X-Parse-Session-Token': 'r:ef8dfea3cadc3b75e8606ecbdd49a19e',
+          'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc',
 
 
+
+          //'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce',
+
+          
           // rememeber to change session token!!!!!
         }
       })
@@ -159,7 +150,11 @@ class FormDialog extends React.Component {
 
     return (
       <div>
-        <Add className="icon" onClick={this.handleClickOpen('paper')}/>
+        {/* <Button variant="outlined" color="inherit" className={classes.button} onClick={this.handleClickOpen('paper')}>
+        Create Ticket
+      
+          </Button>  */}
+          <Add className="icon" onClick={this.handleClickOpen('paper')}/>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
@@ -167,10 +162,10 @@ class FormDialog extends React.Component {
           disableBackdropClick = {true}
           aria-labelledby="scroll-dialog-title"
         >
-          <DialogTitle id="scroll-dialog-title">Open a Ticket</DialogTitle>
+          <DialogTitle id="scroll-dialog-title" style={{fontSize:90,}}>Contact</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Contact us and ask your questions.
+              Reach out to us for all your requests/queries, both technical and sales related.
             </DialogContentText>
             <TextField
               autoFocus
@@ -180,6 +175,7 @@ class FormDialog extends React.Component {
               type="subject"
               variant="outlined"
               fullWidth
+              required
               onChange={this.setTitle}
             />
             <div className={classes.root}>
@@ -187,6 +183,7 @@ class FormDialog extends React.Component {
           <InputLabel htmlFor="select-multiple">Topics</InputLabel>
           <Select
             multiple
+            required
             value={this.state.topics}
             input = {
               <OutlinedInput
@@ -206,32 +203,13 @@ class FormDialog extends React.Component {
         </FormControl> 
         
         {/* priority for ticket system  */}
-
-        {/* <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="priority">Priority</InputLabel>
-          <Select
-            value={this.state.priority}
-            onChange={this.handleChangePriority}
-            inputProps={{
-              name: 'priority',
-              id: 'priority-simple',
-            }}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={1}>Low</MenuItem>
-            <MenuItem value={2}>Normal</MenuItem>
-            <MenuItem value={3}>High</MenuItem>
-            <MenuItem value={4}>Urgent</MenuItem>
-          </Select>
-        </FormControl> */}
         
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel htmlFor="outlined-priority-simple" >
             Priority
           </InputLabel>
           <Select
+            required
             value={this.state.priority}
             onChange={this.handleChangePriority}
             input={
@@ -254,31 +232,12 @@ class FormDialog extends React.Component {
       
         {/* severity for ticket system  */}
 
-        {/* <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="severity">Severity</InputLabel>
-          <Select
-            value={this.state.severity}
-            onChange={this.handleChangeSeverity}
-            inputProps={{
-              name: 'severity',
-              id: 'severity-simple',
-            }}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={1}>Low</MenuItem>
-            <MenuItem value={2}>Normal</MenuItem>
-            <MenuItem value={3}>High</MenuItem>
-            <MenuItem value={4}>Critical</MenuItem>
-          </Select>
-        </FormControl> */}
-        
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel htmlFor="outlined-severity-simple" >
             Severity
           </InputLabel>
           <Select
+            required
             value={this.state.severity}
             onChange={this.handleChangeSeverity}
             input={
@@ -309,6 +268,7 @@ class FormDialog extends React.Component {
               variant="outlined"
               fullWidth
               multiline
+              required
               onChange={this.setMessage}
 
             />

@@ -5,8 +5,8 @@
 }
 
 .PageSwitcher__Item {
-  background-color: rgb(80, 97, 191);
-  color: #9DA6B1;
+  background-color: #3F51B5;
+  color: rgb(255, 255, 255);
   padding: 10px 25px;
   cursor: pointer;
   font-size: .9em;
@@ -14,7 +14,9 @@
   outline: none;
   display: inline-block;
   text-decoration: none;
+  
 }
+
 
 .PageSwitcher__Item--Active {
   background-color: #3F51B5;
@@ -45,8 +47,9 @@
 }
 
 .button2{
-  position: absolute;
-  left: 1000px;
+  position: relative;
+  margin-left: 200px;
+  outline: 'none';
 }
 
 .space {
@@ -65,7 +68,7 @@
   margin-top: 80px;
   margin-left: 30px;
   width: 800px;
-  height: 200px;
+  height: 170px;
 }
 
 .reviewTicketInfo {
@@ -73,8 +76,13 @@
   margin-left: 10px;
   margin-right: 30px;
   width: 400px;
-  height: 400px;
+  height: 96%;
+}
 
+.adminReplyCard{
+  margin-left: 30px;
+  margin-top: 10px;
+  margin-right: 23px;
 }
 
 
@@ -95,4 +103,137 @@
 
 .admin-title {
   padding-top: 30px;
+}
+
+.same-line {
+    display: inline-block;
+    font-weight: bold;
+    /* position: absolute; 
+    padding-right: 300px; */
+}
+
+.icon {
+  margin-right: 25px;
+}
+
+.box{
+  padding-bottom: 30px;
+}
+
+.container {
+  position: relative;
+}
+
+.test {
+  position: fixed;
+  opacity: 0.4;
+  filter: brightness(80%) contrast(120%);
+  height: auto;
+}
+
+.text1 {
+  position: relative;
+  padding-left: 150px;
+  padding-top: 100px;
+  color: rgb(0, 0, 0);
+  display: inline-block;
+  font-size: 70px;
+  letter-spacing: 1.5px;
+
+}
+
+.text3 {
+  position: relative;
+  color: rgb(0, 0, 0);
+  padding-left: 150px;
+  letter-spacing: 1.5px;
+  line-height: 30px;
+  padding-bottom: 25px;
+  font-size: 70px;
+  
+}
+
+.separator {
+  color: #F9C03E;
+}
+
+.background {
+  background-color: #F9C03E !important;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  height:100%;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%); 
+}
+
+.recap {
+  position: absolute;
+  text-align: center;
+  padding-left:150px;
+}
+
+
+.dialog-title {
+  font-size: 60px;
+}
+
+.adminReplyTitle{
+  position: absolute;
+  display: inline-block;
+}
+
+.adminReplyButton {
+  position: relative;
+  left: 170px;
+}
+
+.adminReplyMessage {
+  padding-top: 10px;
+}
+
+.infoTitle {
+  font-weight: 700;
+}
+
+.username {
+  font-weight: 500;
+}
+
+.backgroundSignIn {
+  /* background-image: url('../src/img/black.jpg'); */
+  background-image: url('../src/img/login_page.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  height:100%;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%); 
+}
+
+
+.reviewTicketCardClient {
+  margin-top: 20px;
+  margin-left: 30px;
+  width: 800px;
+  height: 170px;
+}
+
+.reviewTicketInfoClient {
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 30px;
+  width: 400px;
+  height: 96%;
 }

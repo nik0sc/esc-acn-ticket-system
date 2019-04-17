@@ -13,13 +13,17 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-import { Card, CardContent, Grid, FormControl, Select, InputLabel, OutlinedInput, MenuItem } from '@material-ui/core';
+import { Card, CardContent, Grid, FormControl, Select, InputLabel, OutlinedInput, MenuItem, DialogTitle, DialogContent } from '@material-ui/core';
 import { CardActions, TextField, Paper } from 'material-ui';
+import axios from 'axios';
+import logo from '../img/acnapi_logo.png';
+import AdminReplyTextField from './AdminReplyTextField';
 
 
 const styles = theme => ({
   appBar: {
-    position: 'relative',
+    position: 'static',
+    
   },
   flex: {
     flex: 1,
@@ -59,6 +63,30 @@ const styles = theme => ({
     width: 800,
     height: 150,
   },
+  title: {
+    marginLeft: 20,
+    fontWeight: 'bold',
+  },
+  save:{
+    position: 'absolute',
+    fontWeight: 'bold',
+    color:'#F9C03E',
+    outline: 'none',
+    fontSize: 18,
+    marginLeft: 1150,
+  },
+  captions:{
+    marginTop: 5,
+  },
+  container2: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField2: {
+    marginLeft: 25,
+    marginRight: 20,
+    marginTop: 30,
+  }
   
 });
 
@@ -92,6 +120,7 @@ class ReviewTicket extends React.Component {
         timeOpened: '',
         status: "0",
         team: "0",
+        response: '',
       }
     };
  
@@ -106,6 +135,8 @@ class ReviewTicket extends React.Component {
   // };
 
   
+
+  
   handleClose = () => {
     this.setState({
       open: false,
@@ -116,6 +147,24 @@ class ReviewTicket extends React.Component {
   componentDidMount(){
     
     console.log("CHILD" + this.props.currentT);
+
+    // get the
+
+    axios.get(`https://esc-ticket-service.lepak.sg/user/me`, {
+      headers: {
+        'X-Parse-Session-Token': 'r:d12843089b76295bc3121aaa49b4f94b'
+      }
+    })
+    .then((res) => {
+      if(res.request.status === 200){
+        this.setState({
+          fullName: res.data.long_name,
+          email: res.data.email,
+          phone: res.data.phone,
+          username: res.data.username,
+        })
+      }
+    })
 
     
   
@@ -131,7 +180,6 @@ class ReviewTicket extends React.Component {
     this.setState({
       currentT: this.props.currentT,
     })
-    
   };
 
   handleChange = event => {
@@ -152,8 +200,38 @@ class ReviewTicket extends React.Component {
       console.log("CHANGES: " + this.state.currentT);
     })
 
-   
   };
+
+  // handleClickReply = event => {
+  //   this.setState({
+  //     replyOpen: true,
+  //   })
+  // };
+
+  onChange = e => {
+    this.setState({
+      response: e.target.value,
+    })
+
+    console.log('admin is responding: ' + this.state.response)
+  }
+
+  // renderReply(){
+  //   if(this.state.replyOpen){
+  //     return (
+  //       <div>
+  //         <Dialog
+  //         onClose={this.handleReplyClose}
+  //         open={true}>
+  //         <DialogTitle> hi</DialogTitle>
+  //         <DialogContent>whatsup</DialogContent>
+  //         </Dialog>
+  //       </div>
+  //     )
+  //   }
+  // }
+
+  
 
 
 
@@ -161,6 +239,8 @@ class ReviewTicket extends React.Component {
 
   render() {
     const { classes } = this.props;
+
+
     return (
       <div>
         
@@ -169,13 +249,14 @@ class ReviewTicket extends React.Component {
           open={this.state.open}
           onClose={this.props.onClose}
         >
-          <AppBar className="appbar">
+          <AppBar className="appbar" style={{backgroundColor: '#000000'}} >
             <Toolbar>
-              <Typography variant="h6" color="inherit">
-                {"Review Ticket"}
+              <img src={logo} width='100px' height='40px' alt="teamwork"/>
+              <Typography variant="h6" color="inherit" className={classes.title}>
+                {"Admin: Review Ticket"}
               </Typography>
-              <Button color="inherit" onClick={this.props.onClose(this.state.currentT)} className="button2">
-                save
+              <Button color="inherit" onClick={this.props.onClose(this.state.currentT)} className={classes.save}>
+                Save
               </Button>
             </Toolbar>
           </AppBar> 
@@ -188,30 +269,37 @@ class ReviewTicket extends React.Component {
                 {"Ticket #" + this.props.currentT[0]} 
               </Typography>
               {/* title */}
-              <h4>{this.props.currentT[2]}</h4> 
-              {/* message */}
-              <h6>{this.props.currentT[3]}</h6>
+              <h4>{this.props.currentT[1]}</h4> 
+              {/* message */} 
+              <p>{this.props.currentT[2]}</p>
             </CardContent>
             </Card>
-
+            
+            <AdminReplyTextField onChange={this.onChange.bind(this)}/>
+           
+          
           </Grid>
           <Grid item xs={4}>
             <Card className="reviewTicketInfo">
             <CardContent>
-              <h5>Contact Information</h5>
+              <h5 className="infoTitle">Contact Information</h5>
               <Divider/>
-              <Typography>Full Name: {this.props.currentT[5]}</Typography>
-              <Typography>Username: {this.props.currentT[4]}</Typography>
-              <Typography>Email: </Typography>
-              <Typography>Phone Number: </Typography>
-              <h5>Ticket Information</h5>
-              <Typography>Ticket ID: {this.props.currentT[0]}</Typography>
-              <Typography>Priority: {this.props.currentT[6]}</Typography>   
-              <Typography>Priority: {this.props.currentT[7]}</Typography>         
-              <Typography>Categories: </Typography>
+              <Typography className={classes.captions}>Full Name: {this.state.fullName}</Typography>
+              <Typography>Username: {this.state.username}</Typography>
+              <Typography>Email: {this.state.email}</Typography>
+              <Typography>Phone Number: {this.state.phone}</Typography>
+
+              <br/>
+              <h5 className="infoTitle"> Ticket Information</h5>
+              <Divider/>
+              <Typography className={classes.captions}>Ticket ID: {this.props.currentT[0]}</Typography>
+              <Typography>Priority: {this.props.currentT[5]}</Typography>   
+              <Typography>Severity: {this.props.currentT[6]}</Typography>         
+              {/* <Typography>Categories: </Typography> */}
               <Typography>Date Opened by User: {this.state.dateOpened}</Typography>
               <Typography>Time Opened by User: {this.state.timeOpened}</Typography> 
-              <h5>Admin Actions</h5>
+              <Typography>Feedback: None</Typography><br />
+              <h5 className="infoTitle">Admin Actions</h5>
               <Divider />
               <div className="admin-actions">
                 <FormControl variant="outlined" className={classes.formControl}>
@@ -255,6 +343,7 @@ class ReviewTicket extends React.Component {
             <MenuItem value={3}>General Inquiry</MenuItem>
           </Select>
         </FormControl>
+        
           </div> 
             </CardContent>
             </Card>

@@ -1,46 +1,122 @@
 import React from 'react'
 import axios from 'axios'
 import {Redirect} from 'react-router-dom'
+import withStyles from '@material-ui/core/styles/withStyles';
+import { CssBaseline, Paper, Avatar, FormControl, InputLabel, Input, Button } from '@material-ui/core';
+import logo from '../img/acn_icon.png';
+import {withRouter} from 'react-router-dom'
+import compose from 'recompose/compose';
+import Cookies from 'universal-cookie';
+import { ToastsStore } from 'react-toasts';
 
+
+const styles = theme => ({
+  main: {
+    width: 'auto',
+    display: 'block', // Fix IE 11 issue.
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+      width: 400,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+  },
+  paper: {
+    marginTop: theme.spacing.unit * 8,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+  },
+  avatar: {
+    margin: theme.spacing.unit,
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing.unit,
+  },
+  submit: {
+    marginTop: theme.spacing.unit * 3,
+    backgroundColor: '#F9C03E',
+    fontWeight: 'bold',
+    color: 'black',
+    '&:hover': {
+      backgroundColor: '#EBA810',
+    }
+  },
+});
 
 class Admin extends React.Component{
-  
+
   state = {
     redirect: false
   }
 
+
     getAdmin = async(e) => {
         e.preventDefault();
-        const email = e.target.elements.email.value;
+        const username = e.target.elements.username.value;
         const password = e.target.elements.password.value;
-        if(email && password){
-          axios.get(`https://ug-api.acnapiv3.io/swivel/acnapi-common-services/common/login?email=${email}&password=${password}`, {
-            headers: {
-              'Server-Token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlF6Y3hRVEl5UkRVeU1qYzNSakEzTnpKQ01qVTROVVJFUlVZelF6VTRPRUV6T0RreE1UVTVPQSJ9.eyJpc3MiOiJodHRwczovL2FjbmFwaS1wcm9kLmF1dGgwLmNvbS8iLCJzdWIiOiJnWVppRDZzbzJLcXNMT1hmVUt5TjZpdHVXUXhaQnkyN0BjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9wbGFjZWhvbGRlci5jb20vcGxhY2UiLCJpYXQiOjE1NDk5NTI2NDksImV4cCI6MTU1MjU0NDY0OSwiYXpwIjoiZ1laaUQ2c28yS3FzTE9YZlVLeU42aXR1V1F4WkJ5MjciLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.uSISsVSh1REzY3UuMWm_QTEd4xs10cqoWtQpHj3xz9HhKx1_N0s4Wj7A-rQRsQJzQ12IiB5A05lQ17DdkaQkfi_4zeNTGQTo3MvE9Glf1wfcWCMe2WAPr78GSL0RQKuyKZpwrlFuxNghN_-sEVrG4gI7VZyWEc6S_m2076TXVPigTF29u9dA6NgzQkVRaqssulgO_SaZtG9mFwAJ19CaQluqrx10GHsd6OKN2YXPzvSBFa2ouUHlncePbgtKsOl660MQFnyTGtLTzYZPJRX7mpTHSSb4RWoY45lwtt5vfV0HwSC84nKyZvfkK6frFZkpltfSjiWRo6R62lzt5r1dcw'
-            }
-          })
-          .then((res) => {
-            console.log(res)
-            this.setState= {
-              redirect:true
-            }
-          }
-          )
-        }
-      }
+        if(username && password){
+          axios.post('https://user-service.ticket.lepak.sg/user/login', {
+      username: username,
+      password: password,
+    })
+    .then((res => {
+      const LoggedSessionToken = res.data.session_token;
+        const cookies = new Cookies();
+        cookies.set('AdminSessionToken', LoggedSessionToken, {path: '/'});
+    this.setState({
+      redirect: true,
+    })
+    console.log('success');
+  }))
+  .catch(error => {
+    ToastsStore.error('Login failed. Please check your username and password.')
+    console.log('failed')
+  })  
+}}
       
     render(){
+      const { classes } = this.props;
+
       if(this.state.redirect){
-        return <Redirect to="/tickets" />
+        this.props.history.push('/tickets');
       }
         return(
-            <form onSubmit={this.getAdmin}>
-                <input type="text" name="email" placeholder="Email" />
-                <input type="text" name="password" placeholder="Password" />
-                <button> Login </button>
-            </form>
+          <div className="background">
+          <main className={classes.main}>
+           <CssBaseline />
+           <Paper className={classes.paper}>
+             <Avatar className={classes.avatar}>
+               {/* <LockOutlinedIcon /> */}
+               <img src={logo} alt="acn_logo" width='40' height='40'/>
+             </Avatar>
+             <form className={classes.form}  onSubmit={this.getAdmin} >
+               <FormControl margin="normal" required fullWidth>
+               <InputLabel htmlFor="username">Username</InputLabel>
+               <Input id="username" name="username" autoComplete="username" autoFocus onChange={this.handleInputChange} />
+               </FormControl>
+               <FormControl margin="normal" required fullWidth>
+               <InputLabel>Password</InputLabel>
+                 <Input name="password" type="password" id="password" autoComplete="current-password" onChange={this.handleInputChange}/>
+                 </FormControl>
+               <Button
+                 type="submit"
+                 fullWidth
+                 variant="contained"
+                 className={classes.submit}
+               >
+                 Sign in
+               </Button>
+             </form> 
+           </Paper>
+         </main>
+           </div>
         )
     }
 }
 
-export default Admin;
+export default compose(withRouter, withStyles(styles))(Admin);
