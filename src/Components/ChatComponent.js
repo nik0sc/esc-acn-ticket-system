@@ -19,7 +19,7 @@ class ChatComponent extends React.Component {
     constructor(props){ //Properties should include at minimum Username and isAdmin
         super(props);
         this.state.Username = props.username;
-        this.state.isAdmin = (props.isAdmin === "true");
+        this.state.isAdmin = props.isAdmin;
         this.websocket.onmessage = this.onWSMessage;
         this.websocket.onopen = this.onWSOpen;
         if(this.state.isAdmin){

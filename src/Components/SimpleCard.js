@@ -104,10 +104,15 @@ class SimpleCard extends React.Component{
       if(res.request.status === 200){
         this.setState({
           fullName: res.data.long_name,
-          username: res.data.username,
+          username: res.data.username
         })
+        if(res.data.user_type !== 1){
+          this.setState({is_admin: true});
+        }else{
+          this.setState({is_admin: false});
+        }
       }
-    })
+    });
     
 
 
@@ -159,8 +164,14 @@ class SimpleCard extends React.Component{
   componentDidMount(){
 
     this.axiosFunc();
-   
     //this.interval = setInterval(this.axiosFunc, 10000);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log("checking if chat should be constructed");
+    if((this.state.username !== undefined) && (this.state.is_admin !== undefined) && (this.state.chatwidget === undefined)) {
+      this.setState({chatwidget: <ChatComponent username={this.state.username} isAdmin={this.state.is_admin}/>})
+    }
   }
 
   componentWillUnmount() {
@@ -329,8 +340,11 @@ class SimpleCard extends React.Component{
        </Dialog>);
    }
 
-  render(){
-    const { classes } = this.props;
+  render() {
+    const {classes} = this.props;
+
+    //render() is called before componentDidMount() and axiosFunc(), so this.state.fullName is undefined at this point.
+    console.log("simplecard render event");
 
     return(
       <Grid container spacing = {0} >
@@ -370,7 +384,7 @@ class SimpleCard extends React.Component{
             <Typography variant="h5"> 
                 Live Chat
             </Typography>
-            <ChatComponent username="username" isAdmin="false"/>
+            {this.state.chatwidget}
             <Divider />
             </CardContent>
         </Card>
