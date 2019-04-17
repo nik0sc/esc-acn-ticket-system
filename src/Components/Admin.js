@@ -61,8 +61,8 @@ class Admin extends React.Component{
         const password = e.target.elements.password.value;
         if(username && password){
           axios.post('https://user-service.ticket.lepak.sg/user/login', {
-      username: username,
-      password: password,
+            username: username,
+            password: password,
     })
     .then((res => {
       const LoggedSessionToken = res.data.session_token;

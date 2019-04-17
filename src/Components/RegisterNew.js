@@ -23,6 +23,7 @@ import {withRouter} from 'react-router-dom'
 import compose from 'recompose/compose';
 import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts';
 import logo from '../img/acn_icon.png';
+
 const message=null;
 
 const styles = theme => ({

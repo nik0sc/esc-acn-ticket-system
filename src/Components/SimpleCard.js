@@ -22,6 +22,10 @@ import Cookies from 'universal-cookie';
 import AdminReplyTextField from './AdminReplyTextField';
 
 
+const cookies = new Cookies();
+const CurrentSessionToken = cookies.get('sessionToken');
+
+
 const styles = {
   root:{
     width: '100%',
@@ -90,14 +94,12 @@ class SimpleCard extends React.Component{
   };
 
   axiosFunc = () => {
-    const cookies = new Cookies();
-    const CurrentSessionToken = cookies.get('sessionToken');
     console.log('current session token ' + CurrentSessionToken);
 
     //get user
     axios.get(`https://user-service.ticket.lepak.sg/user/me`, {
       headers: {
-        'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc',
+        'X-Parse-Session-Token': CurrentSessionToken,
       }
     })
     .then((res) => {
@@ -114,7 +116,7 @@ class SimpleCard extends React.Component{
     // get ticket
     axios.get(`https://ticket-service.ticket.lepak.sg/ticket/byUser`,{
       headers: {
-        'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc'
+        'X-Parse-Session-Token': CurrentSessionToken,
       }
     })
     .then((res) => {
@@ -200,7 +202,7 @@ class SimpleCard extends React.Component{
       })
       axios.get(`https://ticket-service.ticket.lepak.sg/ticket/${id}`,{
         headers:{
-          'X-Parse-Session-Token': 'r:5ab3041d2ff2484950e68251589ec347'
+          'X-Parse-Session-Token': CurrentSessionToken,
         }
       })
       .then((res => {
