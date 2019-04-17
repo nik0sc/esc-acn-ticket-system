@@ -6,6 +6,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import {Redirect} from 'react-router-dom'
+import Cookies from 'universal-cookie';
+
+
+const cookies = new Cookies();
 
 
 const styles = {
@@ -19,17 +23,22 @@ const styles = {
     marginLeft: -12,
     marginRight: 20,
   },
+  but: {
+    marginLeft: 'auto',
+  }
 };
 class ButtonAppBar extends React.Component{
-
     state = {
         redirect: false
     }
 
     handleClick = (e) => {
+        cookies.remove('sessionToken');
         this.setState({
             redirect: true
         })
+
+
     }
     
     render() {
@@ -47,37 +56,15 @@ class ButtonAppBar extends React.Component{
             <Typography variant="h6" color="inherit" className={classes.grow}>
             Support Ticket System
           </Typography>
+          {/* <Button className={classes.but}> Live Chat</Button> */}
           <Button onClick={this.handleClick.bind(this)} color="inherit">Log Out</Button>
         </Toolbar>
       </AppBar>
     </div>
-
         )
     }
-
-
 }
 
-
-// function ButtonAppBar(props) {
-
-
-//   const { classes } = props;
-
-
-//   return (
-//     <div className={classes.root}>
-//       <AppBar position="static">
-//         <Toolbar>
-//             <Typography variant="h6" color="inherit" className={classes.grow}>
-//             Support Ticket System
-//           </Typography>
-//           <Button onClick={this.change} color="inherit">Log Out</Button>
-//         </Toolbar>
-//       </AppBar>
-//     </div>
-//   );
-//}
 
 ButtonAppBar.propTypes = {
   classes: PropTypes.object.isRequired,

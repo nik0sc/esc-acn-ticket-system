@@ -1,98 +1,123 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import ListItemText from '@material-ui/core/ListItemText';
-import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
-import Chip from '@material-ui/core/Chip';
+// NOT USED, WILL DELETE
 
-const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  formControl: {
-    margin: 20,
-    minWidth: 120,
-    maxWidth: 300,
-  },
-  chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  
-});
+// import React from 'react';
+// import PropTypes from 'prop-types';
+// import classNames from 'classnames';
+// import { withStyles } from '@material-ui/core/styles';
+// import Input from '@material-ui/core/Input';
+// import InputLabel from '@material-ui/core/InputLabel';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import FormControl from '@material-ui/core/FormControl';
+// import ListItemText from '@material-ui/core/ListItemText';
+// import Select from '@material-ui/core/Select';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import Chip from '@material-ui/core/Chip';
 
+// const styles = theme => ({
+//   root: {
+//     display: 'flex',
+//     flexWrap: 'wrap',
+//   },
+//   formControl: {
+//     margin: theme.spacing.unit,
+//     minWidth: 120,
+//     maxWidth: 300,
+//   },
+//   chips: {
+//     display: 'flex',
+//     flexWrap: 'wrap',
+//   },
+//   chip: {
+//     margin: theme.spacing.unit / 4,
+//   },
+//   noLabel: {
+//     marginTop: theme.spacing.unit * 3,
+//   },
+// });
 
-const names = [
-  'API DevOps',
-  'Chart as a Service',
-  'Recruitment Platform',
-  'Aesop',
-  'Travel Marketplace',
-  'Banking Lifestyle App',
-  'AR Car Visualizer',
-  'AR Car Manual',
-  'AR Gamification',
-  'AR Theatre',
-];
+// const ITEM_HEIGHT = 48;
+// const ITEM_PADDING_TOP = 8;
+// const MenuProps = {
+//   PaperProps: {
+//     style: {
+//       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+//       width: 250,
+//     },
+//   },
+// };
 
-function getStyles(name, that) {
-  return {
-    fontWeight:
-      that.state.name.indexOf(name) === -1
-        ? that.props.theme.typography.fontWeightRegular
-        : that.props.theme.typography.fontWeightMedium,
-  };
-}
+// const names = [
+//   'Oliver Hansen',
+//   'Van Henry',
+//   'April Tucker',
+//   'Ralph Hubbard',
+//   'Omar Alexander',
+//   'Carlos Abbott',
+//   'Miriam Wagner',
+//   'Bradley Wilkerson',
+//   'Virginia Andrews',
+//   'Kelly Snyder',
+// ];
 
-class MultipleSelect extends React.Component {
-  state = {
-    name: [],
-  };
-  
+// function getStyles(name, that) {
+//   return {
+//     fontWeight:
+//       that.state.name.indexOf(name) === -1
+//         ? that.props.theme.typography.fontWeightRegular
+//         : that.props.theme.typography.fontWeightMedium,
+//   };
+// }
 
-  handleChange = event => {
-    this.setState({ name: event.target.value });     // push is 1 step slow
-  };
+// class MultipleSelect extends React.Component {
+//   state = {
+//     name: [],
+//   };
 
+//   handleChange = event => {
+//     this.setState({ name: event.target.value });
+//   };
 
-  render() {
-    const { classes } = this.props;
+//   handleChangeMultiple = event => {
+//     const { options } = event.target;
+//     const value = [];
+//     for (let i = 0, l = options.length; i < l; i += 1) {
+//       if (options[i].selected) {
+//         value.push(options[i].value);
+//       }
+//     }
+//     this.setState({
+//       name: value,
+//     });
+//   };
 
-    return (
-      <div className={classes.root}>
-        <FormControl className={classes.formControl}>
-        <h6> Topics</h6>
-          <InputLabel htmlFor="select-multiple-checkbox"></InputLabel>
-          <Select
-            multiple
-            value={this.state.name}
-            onChange={this.handleChange}
-            input={<Input id="select-multiple-checkbox" />}
-            renderValue={selected => selected.join(', ')}
-            //MenuProps={MenuProps}
-          >
-            {names.map(name => (
-              <MenuItem key={name} value={name}>
-                <Checkbox checked={this.state.name.indexOf(name) > -1} />
-                <ListItemText primary={name} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-    );
-  }
-}
+//   render() {
+//     const { classes } = this.props;
 
-MultipleSelect.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+//     return (
+//       <div className={classes.root}>
+//         <FormControl className={classes.formControl}>
+//           <InputLabel htmlFor="select-multiple">Name</InputLabel>
+//           <Select
+//             multiple
+//             value={this.state.name}
+//             onChange={this.handleChange}
+//             input={<Input id="select-multiple" />}
+//             MenuProps={MenuProps}
+//           >
+//             {names.map(name => (
+//               <MenuItem key={name} value={name} style={getStyles(name, this)}>
+//                 {name}
+//               </MenuItem>
+//             ))}
+//           </Select>
+//         </FormControl>
+//       </div>
+//     );
+//   }
+// }
 
-export default withStyles(styles, { withTheme: true })(MultipleSelect);
+// MultipleSelect.propTypes = {
+//   classes: PropTypes.object.isRequired,
+// };
+
+// export default withStyles(styles, { withTheme: true })(MultipleSelect);

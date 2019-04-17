@@ -17,8 +17,7 @@ import FormDialog from "./FormDialog";
 import axios from 'axios'
 import { TextField, Paper } from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-//import CommentExampleReplyFormOuter from './CommentExampleReplyFormOuter';
-import ChatComponent from "./ChatComponent";
+import CommentExampleReplyFormOuter from './CommentExampleReplyFormOuter';
 
 
 const styles = {
@@ -27,7 +26,7 @@ const styles = {
     backgroundColor: '#FFFFFF',
 
   },
-  card: {   
+  card: {
     minWidth: 275,
     margin: 20,
     height: 500,
@@ -36,7 +35,7 @@ const styles = {
   title: {
     fontSize: 14,
   },
- 
+
 menu: {
   margin: 20,
   minWidth: 275,
@@ -88,11 +87,11 @@ class SimpleCard extends React.Component{
     .then((res) => {
       if(res.request.status === 200){
         this.setState({
-          fullName: res.data.long_name, //This is probably the username.
+          fullName: res.data.long_name,
         })
       }
     })
-    
+
 
 
     // get ticket
@@ -139,7 +138,7 @@ class SimpleCard extends React.Component{
 
   componentDidMount(){
     this.axiosFunc();
-   
+
     //this.interval = setInterval(this.axiosFunc, 10000);
 
     //this.interval = setInterval(this.axiosFunc, 5000);
@@ -152,13 +151,13 @@ class SimpleCard extends React.Component{
 
 
   _renderItems(){
-    return this.state.id.map((el, i) => 
+    return this.state.id.map((el, i) =>
         <ListItem button onClick={this.handleClick.bind(this, el[0])} key={i}>
           <ListItemText primary={'Ticket ' + el[0] + ': ' + el[2]} secondary={'Progress: ' + el[1]}>
           </ListItemText>
         </ListItem>
       )
-      
+
     }
 
   // componentDidUpdate(prevProps ,prevState){
@@ -173,7 +172,7 @@ class SimpleCard extends React.Component{
   //   } else return null;
   // }
   // shouldComponentUpdate(nextProps, nextState){
-  //   return this.state.numOfTicketsOpened !== 
+  //   return this.state.numOfTicketsOpened !==
   // }
 
     handleClick = (id, e) => {
@@ -193,11 +192,11 @@ class SimpleCard extends React.Component{
           open_time: res.data.open_time,
           assigned_team: res.data.assigned_team,
           message: res.data.message,
-          
-           // TODO: add progress 
+
+           // TODO: add progress
 
         })
-        
+
         if(this.state.assigned_team === null){
           this.setState({
             assigned_team: "Currently not assigned",
@@ -216,7 +215,7 @@ class SimpleCard extends React.Component{
     handleClickOpen = () => {
       this.setState({ open: true });
     };
-  
+
     handleClose = () => {
       this.setState({ open: false });
     };
@@ -243,7 +242,7 @@ class SimpleCard extends React.Component{
     <Grid container>
           <Grid item xs={8}>
             <Card className="reviewTicketCard">
-            <CardContent> 
+            <CardContent>
                 <h5>{this.state.title}</h5>
               <Typography >
                 {this.state.message}
@@ -273,7 +272,7 @@ class SimpleCard extends React.Component{
           </Grid>
         </Grid>
           </MuiThemeProvider>
-          
+
        </Dialog>);
    }
 
@@ -287,7 +286,7 @@ class SimpleCard extends React.Component{
         <Card className={classes.card}>
       <CardContent>
         <List style={{maxHeight: 500, overflow: 'auto', margin:0, padding: 0,}}>
-        <ListSubheader className={classes.root}> 
+        <ListSubheader className={classes.root}>
           <ListItemText>
               <h3>Tickets</h3>
             </ListItemText>
@@ -300,9 +299,9 @@ class SimpleCard extends React.Component{
           </ListSubheader>
           <div>
           {this._renderItems()}
-          </div> 
+          </div>
           </List>
-        
+
       </CardContent>
     </Card>
         </Grid>
