@@ -111,14 +111,14 @@ function registerClient(ws,message){ //Registering a new client constructs a new
     rooms.push(newRoom);
     nonAdmins.push(newUser);
     //ws.send(JSON.stringify({type: "receipt", room: {newRoom.roomId}));
-    var receipt = sendReceipt(newUser,newRoom);
-    console.log("Delivered receipt: %s", receipt);
+    sendReceipt(newUser,newRoom);
 }
 
 function registerAdmin(ws,message){ //Registering a new admin adds said admin to all currently open rooms.
     var newAdminUser = new User(ws,message.user,true);
     wsMap.set(ws,newAdminUser);
     admins.push(newAdminUser);
+    console.log(rooms);
     rooms.forEach(function (room) {
         room.participants.push(newAdminUser);
         sendReceipt(newAdminUser,room);
@@ -128,6 +128,7 @@ function registerAdmin(ws,message){ //Registering a new admin adds said admin to
 function sendReceipt(tar_user, r_room ){
     var receiptJSONstring = JSON.stringify({type: "receipt", room:{roomId: r_room.roomId, name: r_room.servicedClient.username} });
     tar_user.webSocket.send(receiptJSONstring);
+    console.log("Delivered receipt: %s", receiptJSONstring);
     return receiptJSONstring;
 }
 

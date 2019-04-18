@@ -97,7 +97,7 @@ class SimpleCard extends React.Component{
     //get user
     axios.get(`https://user-service.ticket.lepak.sg/user/me`, {
       headers: {
-        'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc',
+        'X-Parse-Session-Token': CurrentSessionToken,
       }
     })
     .then((res) => {
@@ -106,6 +106,7 @@ class SimpleCard extends React.Component{
           fullName: res.data.long_name,
           username: res.data.username
         })
+        console.log(res.data);
         if(res.data.user_type !== 1){
           this.setState({is_admin: true});
         }else{

@@ -33,14 +33,14 @@ class ChatComponent extends React.Component {
                 type: "register",
                 //room: this.state.Username,
                 user: this.state.Username,
-                isadmin: false
+                isAdmin: false
             })); //Expect a receipt JSON from server.
         }else{
             this.websocket.send(JSON.stringify({
                 type: "register",
                 room: this.state.Username,
                 user: this.state.Username,
-                isadmin: true
+                isAdmin: true
             })); //Expect receipt JSONs from server whenever admin is added to a room on new client connect.
         }
     };
