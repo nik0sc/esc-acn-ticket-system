@@ -13,7 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-import { Card, CardContent, Grid, FormControl, Select, InputLabel, OutlinedInput, MenuItem, DialogTitle, DialogContent } from '@material-ui/core';
+import { Card, CardContent, Grid, FormControl, Select, InputLabel, OutlinedInput, MenuItem, DialogTitle, DialogContent, Tooltip } from '@material-ui/core';
 import { CardActions, TextField, Paper } from 'material-ui';
 import axios from 'axios';
 import logo from '../img/acnapi_logo.png';
@@ -271,16 +271,23 @@ class ClientReviewTicket extends React.Component {
                 <CardContent>
                     <h5 className="infoTitle">User's Actions</h5>
                     <Divider />
-                    
+                    <Tooltip disableFocusListener disableTouchListener title="By selecting 'helpful', you
+                    are satisifed with our response and you are ready to close this ticket!">
                     <Button size="medium" variant="contained" disabled={this.state.disabledGood}
             style={{backgroundColor: '#81DF44', marginLeft: 70, outline: 'none',
           borderRadius: 10, fontWeight: 'bold', marginTop: 20, textTransform: 'none', boxShadow:'none',}}
             onClick={this.handleHelpfulClick}>Helpful</Button>
+            </Tooltip>
+            <Tooltip disableFocusListener disableTouchListener title="By selecting 'not helpful', you are not
+            satisfied with our responses. This means you can contact us through live chat, or we'll contact you
+            through email for more information.">
             <Button variant="contained" size="medium" disabled={this.state.disabledBad} 
             style={{backgroundColor: '#E34D4C', marginTop: 20,marginLeft: 30, outline:'none', 
             borderRadius: 10, fontWeight: 'bold', textTransform:'none', 
             boxShadow:'none',}} onClick={this.handleNotHelpfulClick}
-            > Not Helpful</Button>
+            > Not Helpful</Button>            
+            </Tooltip>
+
                     
 
                 </CardContent>

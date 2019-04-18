@@ -50,6 +50,7 @@ const styles = {
 menu: {
   margin: 20,
   minWidth: 275,
+  height: "50vh",
 },
 
 stats: {
@@ -192,7 +193,9 @@ class SimpleCard extends React.Component{
     if((this.state.username !== undefined) && (this.state.is_admin !== undefined) && (this.state.chatwidget === undefined)) {
       console.log("constructing chat");
 
-      this.setState({chatwidget: <ChatComponent username={this.state.username} isAdmin={this.state.is_admin}/>})
+      this.setState({
+        chatwidget: <ChatComponent username={this.state.username} isAdmin={this.state.is_admin}/>
+      })
     }
   }
 
@@ -447,9 +450,14 @@ class SimpleCard extends React.Component{
               {/* Welcome to Accenture's ticket system */}
               Welcome Back, {this.state.fullName}
               </Typography>
+              <p>Here are your ticket statistics as shown below. </p>
+              <p style={{display:'inline-block'}}>New</p>
+              <p style={{display:'inline-block'}}>In Progress</p>
+              <p style={{display:'inline-block'}}>Closed</p>              
+
             </CardContent>
         </Card> 
-        <Card className={classes.stats}>
+        {/* <Card className={classes.stats}>
           <CardContent>
             <Typography variant="h5"> 
                 Live Chat
@@ -457,7 +465,7 @@ class SimpleCard extends React.Component{
             {this.state.chatwidget}
             <Divider />
             </CardContent>
-        </Card>
+        </Card> */}
         </Grid>
       </Grid>
 

@@ -1,4 +1,5 @@
 import React from  'react';
+import { Button, Input } from '@material-ui/core';
 
 class ChatInput extends React.Component {
     state = {
@@ -18,13 +19,16 @@ class ChatInput extends React.Component {
 
     render(){
     return (
-        <div>
-            <form onSubmit={e => this.onSubmit(e)}>
+        <div className="containerChat">
+            <form className="chatForm" onSubmit={e => this.onSubmit(e)}>
                 <input
                     onChange={e => this.onChange(e)}
                     value={this.state.text}
                     type="text"
                     autoFocus={true}
+                    className="chatinput"
+                    
+                    
                 />
                 <button color="inherit">Send</button>
             </form>

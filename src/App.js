@@ -23,6 +23,9 @@ import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toast
 import LandingPage from './Components/LandingPage';
 import ClientReviewTicket from './Components/ClientReviewTicket';
 import ClientChat from './Components/ClientChat';
+import { ThemeProvider } from '@livechat/ui-kit';
+import ChatComponent from './Components/ChatComponent';
+import AdminChat from './Components/AdminChat';
 
 const cookies = new Cookies();
 
@@ -50,7 +53,10 @@ class App extends Component {
   
   componentDidMount() {
     loadReCaptcha();
+   
   }
+
+
 
   
   render() {
@@ -98,7 +104,7 @@ class App extends Component {
               <Route exact path="/tickets" component={Tickets}>
               </Route>
               <Route path="/reviewTicket" component={ReviewTicketAgain} ></Route>
-              <Route path="/talk" component={CommentExampleReplyFormOuter}>
+              <Route path="/AdminChat" component={AdminChat}>
               </Route>
               <Route path="*" exact={true} component={NotFound} />
               </Switch>

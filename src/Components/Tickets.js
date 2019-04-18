@@ -46,7 +46,7 @@ class Tickets extends React.Component{
   axiosFunc = () => {
     const cookies = new Cookies();
     const LoggedSessionToken = cookies.get('AdminSessionToken');
-    const limit = 10;
+    const limit = 15;
     const offset = 0;
 
     axios.get(`https://ticket-service.ticket.lepak.sg/ticket?limit=${limit}&offset=${offset}`,{
@@ -271,6 +271,8 @@ class Tickets extends React.Component{
 
 const options = {
     filterType: 'dropdown',
+    resizableColumns: true,
+    rowsPerPageOptions: [5, 10, 15],
     onRowClick: rowData => {
         //const id = rowData[0];
         // console.log(id)
@@ -281,6 +283,7 @@ const options = {
           currentTicketID: rowData[0],
         })
       }
+      
       
   };
 

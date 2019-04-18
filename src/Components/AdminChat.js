@@ -46,7 +46,7 @@ const styles = (theme) => ({
 });
 
 
-class ClientChat extends React.Component {
+class AdminChat extends React.Component {
     state={
         mounted: false,
     }    
@@ -91,9 +91,7 @@ class ClientChat extends React.Component {
 
     const { classes } = this.props;
 
-    if(this.state.redirect){
-      this.props.history.push('/dashboard');
-    }   
+    
 
 
     return (
@@ -102,11 +100,11 @@ class ClientChat extends React.Component {
             <Toolbar>
               <img src={logo} width='100px' height='40px' alt="teamwork" />
               <Typography variant="h6" color="inherit" className={classes.title}>
-                Chat With Admins
+               Admin: Real-Time Chat
               </Typography>
-              <Button color="inherit" className={classes.save} onClick={this.handleClose}>
+              {/* <Button color="inherit" className={classes.save} onClick={this.handleClose}>
                 CLOSE
-              </Button>
+              </Button> */}
             </Toolbar>
           </AppBar>
           <div style={{backgroundColor: '#F9C03E'}}>
@@ -137,7 +135,7 @@ class ClientChat extends React.Component {
 }}
 
 
-ClientChat.propTypes = {
+AdminChat.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -147,4 +145,4 @@ ClientChat.propTypes = {
 export default compose(
   withRouter,
   withStyles(styles),
-)(ClientChat);
+)(AdminChat);
