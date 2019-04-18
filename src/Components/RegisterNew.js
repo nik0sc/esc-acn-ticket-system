@@ -199,15 +199,6 @@ class RegisterNew extends React.Component{
     } 
   }}
     
-  
-
-  // renderCode(){
-  //   if(this.state.redirect)
-  //   return (<Dialog>
-  //     open={true}
-  //   </Dialog>)
-  // }
-
 
   render(){
     const { classes } = this.props;
@@ -221,17 +212,9 @@ class RegisterNew extends React.Component{
       
       <div>
           <main className={classes.main}> 
-          {/* {this.renderCode()} */}
       <CssBaseline />
       <Paper className={classes.paper}>
       <img src={logo} width="40" height="40" alt="acn_logo" />
-        {/* <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar> */}
-        {/* <div className="PageSwitcher">
-                <NavLink to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign In</NavLink>
-                <NavLink exact to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item">Sign Up</NavLink> 
-            </div> */}
         <form className={classes.form}  onSubmit={this.getUser.bind(this)} noValidate>
         <FormControl margin="normal" required className={classes.first}>
             <InputLabel htmlFor="firstName">First Name</InputLabel>

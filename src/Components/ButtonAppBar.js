@@ -42,7 +42,7 @@ const styles = {
 class ButtonAppBar extends React.Component{
     state = {
         redirect: false,
-        try: false,
+        openChat: false,
     }
 
     handleClick = (e) => {
@@ -53,12 +53,22 @@ class ButtonAppBar extends React.Component{
 
 
     }
+
+    handleChat = () => {
+      this.setState({
+        openChat: true,
+      })
+    }
     
     render() {
 
         const { classes } = this.props;
         if(this.state.redirect){
           return <Redirect to='/'/>
+        }
+
+        if(this.state.openChat){
+          return <Redirect to='/chat'/>
         }
 
     
@@ -71,7 +81,7 @@ class ButtonAppBar extends React.Component{
             <Typography variant="h6" color="inherit" className={classes.grow}>
             Support Ticket System
           </Typography>
-          {/* <Button className={classes.but}> Live Chat</Button> */}
+          <Button onClick={this.handleChat.bind(this)} color="inherit" className={classes.logout}> Live Chat Test</Button>
           <Button onClick={this.handleClick.bind(this)} color="inherit" className={classes.logout}>Log Out</Button>
         </Toolbar>
       </AppBar>

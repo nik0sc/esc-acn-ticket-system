@@ -144,16 +144,6 @@ handleInputChange = (e) => {
       <Paper className={classes.paper}>
       
         <img src={logo} width='40' height='40' alt="acn_logo" />
-          {/* <LockOutlinedIcon /> */}
-          
-        {/* <div className="PageSwitcher">
-        <NavLink exact to="/" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item" 
-        >Sign In</NavLink>
-        <NavLink to="/register" activeClassName="PageSwitcher__Item--Active" className="PageSwitcher__Item" 
-        >Sign Up</NavLink> 
-        {/* <Button style={{backgroundColor: '#414141', outline: 'none', }}>Sign In</Button>
-        <Button>Sign Up</Button> */}
-        {/* </div>  */}
         <form className={classes.form}  onSubmit={this.getUser.bind(this)} >
           <FormControl margin="normal" required fullWidth>
           <InputLabel htmlFor="username">Username</InputLabel>

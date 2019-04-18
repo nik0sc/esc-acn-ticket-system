@@ -21,6 +21,12 @@ import AdminReplyTextField from './AdminReplyTextField';
 import {Redirect, NavLink, Route, Switch, Link} from 'react-router-dom'
 import {withRouter} from 'react-router-dom'
 import compose from 'recompose/compose';
+import Cookies from 'universal-cookie';
+
+
+const cookies = new Cookies();
+const LoggedSessionToken = cookies.get('AdminSessionToken');
+
 
 const styles = (theme) => ({
   appBar: {
@@ -84,9 +90,33 @@ class ReviewTicketAgain extends React.Component {
   };
 
   handleClose = () => {
+
+    // update ticket
+    axios.put(`https://esc-ticket-service.lepak.sg/ticket/${this.props.location.state.currentTicketID}/protected`,{
+      response: this.state.response,
+      team: this.state.team,
+      },{
+      headers: {
+        'X-Parse-Session-Token': 'r:5ab3041d2ff2484950e68251589ec347',
+      },
+    })
+    .then((res) => {
+      if(res.request.status === 200){
+        this.setState({
+          response: this.state.response,
+          team: this.state.team,
+        }, function(){
+          console.log('after updating: ' + 'response: ' + this.state.response + 'team: ' + this.state.team);
+        })
+      }
+    })
+
     this.setState({
       redirect: true,
     })
+
+
+  
   }
 
   onChange = e => {
@@ -119,16 +149,71 @@ class ReviewTicketAgain extends React.Component {
           // add status(progress)
           
         })
+        if(this.state.team === null){
+          this.setState({
+              team: 0,
+          })
+      }
+      if(this.state.priority === 1){
+          this.setState({
+              priority: 'Low',
+          })
+      }
+      if(this.state.priority === 2){
+          this.setState({
+              priority: 'Medium',
+          })
+      }
+      if(this.state.priority === 3){
+          this.setState({
+              priority: 'High',
+          })
+      }
+      if(this.state.priority === 4){
+          this.setState({
+              priority: 'Urgent',
+          })
+      }
+      if(this.state.severity === 1){
+          this.setState({
+              severity: 'Low',
+          })
+      }
+      if(this.state.severity === 2){
+          this.setState({
+              severity: 'Medium',
+          })
+      }
+      if(this.state.severity === 3){
+          this.setState({
+              severity: 'High',
+          })
+      }
+      if(this.state.severity === 4){
+          this.setState({
+              severity: 'Critical',
+          })
+      }
 
         if(this.state.flag === 0){
           this.setState({
-            flag: '-',
+            flag: 'New',
           })
         }
-        if(this.state.team === null){
+        if(this.state.flag === 1){
           this.setState({
-            team: 0,
-          });
+            flag: 'In Progress',
+          })
+        }
+        if(this.state.flag === 2){
+          this.setState({
+            flag: 'Insufficient',
+          })
+        }
+        if(this.state.flag === 3){
+          this.setState({
+            flag: 'Closed',
+          })
         }
       }
     }))
@@ -216,7 +301,7 @@ class ReviewTicketAgain extends React.Component {
             >
             <MenuItem value={0}>New</MenuItem>
             <MenuItem value={1}>In Progress</MenuItem>
-            <MenuItem value={2}>Closed</MenuItem>
+            <MenuItem value={3}>Closed</MenuItem>
           </Select>
         </FormControl>
         <FormControl variant="outlined" className={classes.formControl}>

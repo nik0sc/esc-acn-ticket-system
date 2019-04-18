@@ -20,6 +20,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
 import { ToastsStore } from 'react-toasts';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
+const CurrentSessionToken = cookies.get('sessionToken');
 
 
 const styles = theme => ({
@@ -38,23 +42,23 @@ const styles = theme => ({
   },
 });
 
-const topics = [
-  'API DevOps',
-  'AR Menu',
-  'Smart Lock',
-  'Iot Led Wall',
-  'Others',
-];
+// const topics = [
+//   'API DevOps',
+//   'AR Menu',
+//   'Smart Lock',
+//   'Iot Led Wall',
+//   'Others',
+// ];
 
 
-function getStyles(topic, that) {
-  return {
-    fontWeight:
-      that.state.topics.indexOf(topics) === -1
-        ? that.props.theme.typography.fontWeightRegular
-        : that.props.theme.typography.fontWeightMedium,
-  };
-}
+// function getStyles(topic, that) {
+//   return {
+//     fontWeight:
+//       that.state.topics.indexOf(topics) === -1
+//         ? that.props.theme.typography.fontWeightRegular
+//         : that.props.theme.typography.fontWeightMedium,
+//   };
+// }
 
 class FormDialog extends React.Component {
 
@@ -66,6 +70,7 @@ class FormDialog extends React.Component {
     topics: [],
     priority: '',
     severity: '',
+    createdTicketID:'',
   };
 
   handleClickOpen = scroll => () => {
@@ -94,6 +99,8 @@ class FormDialog extends React.Component {
     if(this.state.message !== '' && this.state.title !== '' && this.state.topics !== '' && this.state.priority !== '' && this.state.severity !== ''){
       ToastsStore.success('Your query has been submitted!')
       
+
+      // create ticket
       axios.post(`https://esc-ticket-service.lepak.sg/ticket`, {
           title: this.state.title,
           message: this.state.message,
@@ -103,26 +110,21 @@ class FormDialog extends React.Component {
         headers: {
           'Content-Type': 'application/json',
           // legit token
-          'X-Parse-Session-Token': 'r:f6540c5b28522ed9d6a93c6e13fb31bc',
-
-
-
-          //'X-Parse-Session-Token': 'r:85d020c6dbeb6a0680bca1c96487b6ce',
-
-          
-          // rememeber to change session token!!!!!
+          'X-Parse-Session-Token': CurrentSessionToken,
         }
       })
       .then((res) => {
         if(res.request.status === 200){
           console.log('success send ticket') 
+          this.setState({
+            createdTicketID: res.data.id,
+          })
         }
-        this.setState({
-          addTicket: true,
-        })
+        
 
       })
-      this.setState({ open: false, topics: [], priority: '', severity: '', addTicket: false});
+
+      this.setState({ open: false, priority: '', severity: '',});
 
     }
   };
@@ -179,7 +181,7 @@ class FormDialog extends React.Component {
               onChange={this.setTitle}
             />
             <div className={classes.root}>
-            <FormControl variant="outlined" className={classes.formControl}>
+            {/* <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel htmlFor="select-multiple">Topics</InputLabel>
           <Select
             multiple
@@ -200,7 +202,7 @@ class FormDialog extends React.Component {
               </MenuItem>
             ))}
           </Select>
-        </FormControl> 
+        </FormControl>  */}
         
         {/* priority for ticket system  */}
         

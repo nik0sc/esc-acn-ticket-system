@@ -21,6 +21,8 @@ import ReviewTicketAgain from './Components/ReviewTicketAgain';
 import ReviewTicket from './Components/ReviewTicket';
 import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts';
 import LandingPage from './Components/LandingPage';
+import ClientReviewTicket from './Components/ClientReviewTicket';
+import ClientChat from './Components/ClientChat';
 
 const cookies = new Cookies();
 
@@ -87,6 +89,8 @@ class App extends Component {
               </Route>
               <Route path="/admin" component={Admin} >
               </Route>
+              <Route path="/chat" component={ClientChat}></Route>
+              <Route path="/clientReview" component={ClientReviewTicket}></Route>
               <SecretRoute path="/dashboard" component={Dashboard} >
               </SecretRoute>
               {/* <Route path="/dashboard" component={Dashboard} >

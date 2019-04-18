@@ -17,7 +17,11 @@ const styles = theme => ({
   }
 });
 
-class AdminReplyTextField extends React.Component {
+class ClientReplyTextField extends React.Component {
+
+    componentDidMount(){
+        axios.
+    }
 
   render() {
     const { classes } = this.props;
@@ -32,13 +36,13 @@ class AdminReplyTextField extends React.Component {
           label="Admin's Reply"
           multiline
           rows="12"
-          defaultValue="No admins has responded yet."
+          defaultValue="Admin has not replied yet."
           onChange= {this.props.onChange}
           className={classes.textField}
           margin="normal"
           variant="outlined"
           InputProps={{
-            readOnly: false,
+            readOnly: true,
           }}
         />
 
@@ -48,8 +52,8 @@ class AdminReplyTextField extends React.Component {
   }
 }
 
-AdminReplyTextField.propTypes = {
+ClientReplyTextField.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(AdminReplyTextField);
+export default withStyles(styles)(ClientReplyTextField);
