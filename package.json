@@ -27,6 +27,7 @@
     "material-ui": "^0.20.2",
     "material-ui-dropzone": "^2.3.2",
     "material-ui-icons": "^1.0.0-beta.36",
+    "material-ui-image": "^3.1.0",
     "material-ui-pickers": "^2.2.4",
     "mui-datatables": "^2.0.0-beta.58",
     "mysql2": "^1.6.5",

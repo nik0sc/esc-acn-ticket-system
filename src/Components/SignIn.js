@@ -25,7 +25,8 @@ import { loadProgressBar } from 'axios-progress-bar'
 import 'axios-progress-bar/dist/nprogress.css'
 import { ToastsStore } from 'react-toasts';
 import { createMuiTheme } from '@material-ui/core/styles';
-import logo from '../img/acn_icon.png';
+import logo from '../img/acn_logo_black.png';
+import { Image } from 'material-ui-icons';
 
 const styles = theme => ({
   main: {
@@ -142,8 +143,10 @@ handleInputChange = (e) => {
       <CssBaseline />
 
       <Paper className={classes.paper}>
+
       
-        <img src={logo} width='40' height='40' alt="acn_logo" />
+        <img src={logo}  width='110' height='40' alt="acn_logo"/>
+        {/* <Image src={logo} alt="acn_logo" styles={{aspectRatio: 0.5}}/> */}
         <form className={classes.form}  onSubmit={this.getUser.bind(this)} >
           <FormControl margin="normal" required fullWidth>
           <InputLabel htmlFor="username">Username</InputLabel>

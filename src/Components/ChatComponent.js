@@ -107,7 +107,6 @@ class ChatComponent extends React.Component {
     };
 
     render(){
-        console.log("is theme there?: " + this.props.theme);
         var messages = this.state.messagesByRoom.get(this.state.current_room); //Get all messages stored.
         if(messages === undefined || messages == null){
             messages = [];

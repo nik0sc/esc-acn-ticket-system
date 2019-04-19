@@ -184,7 +184,7 @@ class ClientReviewTicket extends React.Component {
         this.setState({
           disabledGood: false, 
           disabledBad: true,
-          flag: "In Progress",
+          flag: "Insufficient Response",
         })
       };
 

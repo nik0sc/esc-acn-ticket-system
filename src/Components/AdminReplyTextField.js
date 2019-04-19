@@ -32,7 +32,7 @@ class AdminReplyTextField extends React.Component {
           label="Admin's Reply"
           multiline
           rows="12"
-          defaultValue="No admins has responded yet."
+          defaultValue="No admins have responded yet."
           onChange= {this.props.onChange}
           className={classes.textField}
           margin="normal"

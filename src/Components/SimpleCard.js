@@ -17,7 +17,6 @@ import FormDialog from "./FormDialog";
 import axios from 'axios'
 import { TextField, Paper } from 'material-ui';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import CommentExampleReplyFormOuter from './CommentExampleReplyFormOuter';
 import Cookies from 'universal-cookie';
 import AdminReplyTextField from './AdminReplyTextField';
 import ChatComponent from "./ChatComponent";

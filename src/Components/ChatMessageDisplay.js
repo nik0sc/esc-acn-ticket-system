@@ -81,7 +81,7 @@ class ChatMessageDisplay extends React.Component {
     render(){
         const arrm = this.props.messages;
         return(
-                <div style={{height: "500px", overflow: "auto"}}>
+                <div style={{height: "80vh", overflow: "auto"}}>
                 <ul style={{listStyleType: "none"}}>
                     {arrm.map(m => this.renderMessage(m))}
                 </ul>

@@ -27,7 +27,7 @@ import { ThemeProvider } from '@livechat/ui-kit';
 
 
 const cookies = new Cookies();
-const CurrentSessionToken = cookies.get('sessionToken');
+const CurrentSessionToken = cookies.get('AdminSessionToken');
 
 
 const styles = (theme) => ({  

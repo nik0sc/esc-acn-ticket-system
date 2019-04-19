@@ -48,7 +48,7 @@ const styles = (theme) => ({
 
 class ClientChat extends React.Component {
     state={
-        mounted: false,
+        mountChat: false,
     }    
 
   axiosFunc(){
@@ -68,7 +68,7 @@ class ClientChat extends React.Component {
         this.setState({
             fullName: res.data.long_name,
             username: res.data.username,
-            mounted: true,
+            mountChat: true,
         })
     }
     }))
@@ -77,7 +77,7 @@ class ClientChat extends React.Component {
 
 
     renderChat(){
-        if(this.state.mounted){
+        if(this.state.mountChat){
             return <ChatComponent username={this.state.username} isAdmin={this.state.is_admin} />
         }
     }

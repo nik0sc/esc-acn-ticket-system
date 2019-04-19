@@ -29,6 +29,12 @@ const customStyles = {
 
 class Tickets extends React.Component{
 
+  state= {
+    datas: [],
+    limit: 10,
+    prev: 0,
+    }
+
   constructor(props){
     super(props);
     this.state= {
@@ -43,13 +49,13 @@ class Tickets extends React.Component{
     clearInterval(this.interval);
   }
 
-  axiosFunc = () => {
+  axiosFunc = (limit, start) => {
     const cookies = new Cookies();
     const LoggedSessionToken = cookies.get('AdminSessionToken');
-    const limit = 15;
-    const offset = 0;
+    const {datas} = this.state;
 
-    axios.get(`https://ticket-service.ticket.lepak.sg/ticket?limit=${limit}&offset=${offset}`,{
+
+    axios.get(`https://ticket-service.ticket.lepak.sg/ticket?limit=${this.state.limit}&offset=${start}`,{
           headers: {
             'X-Parse-Session-Token': 'r:5ab3041d2ff2484950e68251589ec347',
           },
@@ -118,7 +124,7 @@ class Tickets extends React.Component{
     
   componentDidMount(){
     console.log('component mounted');
-    this.axiosFunc();
+    this.axiosFunc(15, 0);
     //this.interval = setInterval(this.axiosFunc, 10000);
 
   }
@@ -273,6 +279,16 @@ const options = {
     filterType: 'dropdown',
     resizableColumns: true,
     rowsPerPageOptions: [5, 10, 15],
+    onChangePage: (currentPage) => {
+      const {prev, limit} = this.state;
+      if(currentPage > prev){
+        this.setState({
+          prev: prev+1,
+        })
+        this.axiosFunc(limit, currentPage * limit);
+      }
+
+    },
     onRowClick: rowData => {
         //const id = rowData[0];
         // console.log(id)
@@ -283,6 +299,7 @@ const options = {
           currentTicketID: rowData[0],
         })
       }
+    
       
       
   };
