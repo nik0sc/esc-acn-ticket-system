@@ -61,8 +61,8 @@ class ChatMessageDisplay extends React.Component {
             <li>
                 <div>
                     {/* <b>{user}:</b>{" " + msg}<br></br> */}
-                    <span style={{fontSize:10}}>{user}</span>
-                    <p style={{backgroundColor: "#F9C03E"}}>{msg}</p>
+                    <span style={{fontSize:10, fontWeight: 'bold', }}>{user} says:</span> 
+                    <p className="clientBubble">{msg}</p>
                 </div>
                 {/* <Message authorName={user} style={{color: "black"}}>
                 <MessageText>{msg}</MessageText>

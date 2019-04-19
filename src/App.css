@@ -295,11 +295,18 @@
   max-width: 70%;
   justify-content: center;
   justify-self: center;
-  display: flex;
+  display: flex; 
 
-} */
+}*/
 
 .testing123 {
   justify-content: center;
   margin-left: 35%;
+}
+
+.clientBubble {
+  border: 2px solid #94C2ED;
+  background-color: #94C2ED;
+  border-radius: 25px;
+  
 }

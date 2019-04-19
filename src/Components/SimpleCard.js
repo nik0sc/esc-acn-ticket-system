@@ -39,7 +39,7 @@ const styles = {
   card: {   
     minWidth: 275,
     margin: 20,
-    height: '85vh',
+    height: '80vh',
     
   },
   title: {
@@ -49,7 +49,7 @@ const styles = {
 menu: {
   margin: 20,
   minWidth: 275,
-  height: "85vh",
+  height: "80vh",
 },
 
 stats: {
@@ -490,9 +490,8 @@ class SimpleCard extends React.Component{
                  <li>Product Inquiry</li>
                  <li>General Inquiry</li>
                </ul>
-               For a list of our products, click <a href="https://beta.acnapi.io">here</a>.
+               For a list of our products, click <a href="https://beta.acnapi.io" target="_blank">here</a>.
               </Typography>
-
             </CardContent>
         </Card> 
         {/* <Card className={classes.stats}>

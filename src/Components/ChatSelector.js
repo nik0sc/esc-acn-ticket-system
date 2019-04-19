@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import { ListSubheader, List, ListItem, ListItemText } from '@material-ui/core';
 
 class ChatSelector extends React.Component {
 
@@ -18,7 +19,8 @@ class ChatSelector extends React.Component {
         return(
             <li>
                 <div>
-                    <button onClick={() => this.props.onSelect(room_id)}>{room_displayed_name}</button>
+                    <Button style={{color: 'white', textTransform: 'none', outline: 'none', backgroundColor: '#A4A4A7'}}
+                    onClick={() => this.props.onSelect(room_id)}>{room_displayed_name}</Button>
                 </div>
             </li>
         )
@@ -26,10 +28,14 @@ class ChatSelector extends React.Component {
 
     render(){
         return(
-            <div style={{height: "100px", position: "static", bottom: "0", overflow: "auto"}}>
-                <ul style={{listStyleType: "none"}}>
-                    <li>Active Chats</li>
-                    {this.state.clientusers.map(r => this.renderClientuser(r))}
+            <div style={{position: "static", bottom: "0", overflow: "auto", marginTop: '20px'}}>
+                {/* {/* <ListSubheader>Active Chats</ListSubheader> */}
+                {/* <ListItem style={{backgroundColor: "#A4A4A7"}}>
+                {this.state.clientusers.map(r => this.renderClientuser(r))}
+                </ListItem> */}
+            <ul style={{listStyleType: "none"}}>
+            <li>Active Chats</li>
+            {this.state.clientusers.map(r => this.renderClientuser(r))}
                 </ul>
             </div>
         );

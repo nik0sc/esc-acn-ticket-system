@@ -1,5 +1,5 @@
 import React from  'react';
-import { Button, Input } from '@material-ui/core';
+import { Button, Input, OutlinedInput } from '@material-ui/core';
 
 class ChatInput extends React.Component {
     state = {
@@ -21,16 +21,18 @@ class ChatInput extends React.Component {
     return (
         <div className="containerChat">
             <form className="chatForm" onSubmit={e => this.onSubmit(e)}>
-                <input
+                <OutlinedInput
                     onChange={e => this.onChange(e)}
                     value={this.state.text}
                     type="text"
+                    placeholder="Type your message..."
                     autoFocus={true}
-                    className="chatinput"
-                    
-                    
+                    required
+                    style={{display: 'inline-flex'}}
                 />
-                <button color="inherit">Send</button>
+                <Button size="large" style={{fontWeight: 'bold',
+                color: 'black', backgroundColor: '#F2F5F8', display: "inline-flex",}}
+                >Send</Button>
             </form>
         </div>);
     }

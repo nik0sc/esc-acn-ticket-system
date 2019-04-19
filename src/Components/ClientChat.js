@@ -116,9 +116,13 @@ class ClientChat extends React.Component {
               </Button>
             </Toolbar>
           </AppBar>
-          <div style={{backgroundColor: '#F9C03E'}}>
-          </div>
-          {this.renderChat()}
+
+          <Grid container style={{alignItems: 'center', alignContent: 'center', justifyContent: 'center', backgroundColor:"#F2F5F8"}}>
+            <Grid item xs={6} style={{alignItems: 'center', alignContent: 'center',textAlign: 'center', 
+          }}>
+            {this.renderChat()}
+            </Grid>
+          </Grid>
 
 
 

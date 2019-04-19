@@ -117,14 +117,13 @@ class FormDialog extends React.Component {
       
 
       // create ticket
-      axios.post(`https://esc-ticket-service.lepak.sg/ticket`, {
+      axios.post(`https://ticket-service.ticket.lepak.sg/ticket`, {
           title: this.state.title,
           message: this.state.message,
           priority: this.state.priority,
           severity: this.state.severity,
       }, {
         headers: {
-          'Content-Type': 'application/json',
           // legit token
           'X-Parse-Session-Token': CurrentSessionToken,
         }
@@ -139,6 +138,9 @@ class FormDialog extends React.Component {
         
 
       })
+
+
+
 
       this.setState({ open: false, priority: '', severity: '',});
 
@@ -244,7 +246,6 @@ class FormDialog extends React.Component {
             <MenuItem value={1}>Low</MenuItem>
             <MenuItem value={2}>Normal</MenuItem>
             <MenuItem value={3}>High</MenuItem>
-            <MenuItem value={4}>Urgent</MenuItem>
           </Select>
         </FormControl>
       
@@ -272,7 +273,6 @@ class FormDialog extends React.Component {
             <MenuItem value={1}>Low</MenuItem>
             <MenuItem value={2}>Normal</MenuItem>
             <MenuItem value={3}>High</MenuItem>
-            <MenuItem value={4}>Critical</MenuItem>
           </Select>
         </FormControl>
 
