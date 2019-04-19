@@ -40,7 +40,7 @@ class ChatComponent extends React.Component {
                 type: "register",
                 room: this.state.Username,
                 user: this.state.Username,
-                isadmin: true
+                isAdmin: true
             })); //Expect receipt JSONs from server whenever admin is added to a room on new client connect.
         }
     };

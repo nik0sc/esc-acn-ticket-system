@@ -39,7 +39,7 @@ const styles = {
   card: {   
     minWidth: 275,
     margin: 20,
-    height: 500,
+    height: '85vh',
     
   },
   title: {
@@ -49,7 +49,7 @@ const styles = {
 menu: {
   margin: 20,
   minWidth: 275,
-  height: "50vh",
+  height: "85vh",
 },
 
 stats: {
@@ -89,14 +89,16 @@ class SimpleCard extends React.Component{
     ticketid: '',
     assigned_team: '',
     message: '',
-    disabledGood: false,
-    disabledBad: false,
     redirectConfirm: false,
     currentTicketPriority: '',
     currentTicketSeverity: '',
     redirectReview: false,
     flag: '',
     currentTicketID: '',
+    newTicketCount: 0,
+    progressTicketCount: 0,
+    closedTicketCount: 0,
+
  
     // progress, flag
 
@@ -140,11 +142,7 @@ class SimpleCard extends React.Component{
           id: res.data.map((data => {return([data.id, data.priority, data.title, data.status_flag])})),
         })
         console.log("REEEE" + this.state.id);
-
-
-       
-
-          console.log(this.state.allTickets)
+        console.log(this.state.allTickets)
 
 
         let editData = [...this.state.id];
@@ -153,19 +151,31 @@ class SimpleCard extends React.Component{
         for(var i=0; i < editData.length; i++){
           if(editData[i][3] === 0){
             editData[i][3] = "New";
+            this.setState({
+              newTicketCount: this.state.newTicketCount + 1,
+            })
           }
           if(editData[i][3] === 1){
             editData[i][3] = "In Progress";
+            this.setState({
+              progressTicketCount: this.state.progressTicketCount + 1,
+            })
           }
           if(editData[i][3] === 2){
-            editData[i][3] = "Closed";
+            editData[i][3] = "In Progress";
+            this.setState({
+              progressTicketCount: this.state.progressTicketCount + 1,
+            })
           }
-
-          //this is temp, pls remove after since no status in API call 
-          // if(editData[i][3] === 3){
-          //   editData[i][3] = "New";
-          // }
+          if(editData[i][3] === 3){
+            editData[i][3] = "Closed";
+            this.setState({
+              closedTicketCount: this.state.closedTicketCount + 1,
+            })
+          }
+          
         }
+
         this.setState({
           id: editData,
         });
@@ -186,17 +196,17 @@ class SimpleCard extends React.Component{
   }
 
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log("checking if chat should be constructed");
-    console.log(this.state);
-    if((this.state.username !== undefined) && (this.state.is_admin !== undefined) && (this.state.chatwidget === undefined)) {
-      console.log("constructing chat");
+  // componentDidUpdate(prevProps, prevState, snapshot) {
+  //   console.log("checking if chat should be constructed");
+  //   console.log(this.state);
+  //   if((this.state.username !== undefined) && (this.state.is_admin !== undefined) && (this.state.chatwidget === undefined)) {
+  //     console.log("constructing chat");
 
-      this.setState({
-        chatwidget: <ChatComponent username={this.state.username} isAdmin={this.state.is_admin}/>
-      })
-    }
-  }
+  //     this.setState({
+  //       chatwidget: <ChatComponent username={this.state.username} isAdmin={this.state.is_admin}/>
+  //     })
+  //   }
+  // }
 
 
   
@@ -210,9 +220,6 @@ class SimpleCard extends React.Component{
   _renderItems(){
     // return this.state.id.map((el, i) => 
     return this.state.id.map((el, i) => 
-
-   
-
         <ListItem button onClick={this.handleClick.bind(this, el[0])} key={i}>
           <ListItemText primary={'Ticket ' + el[0] + ': ' + el[2]} secondary={'Progress: ' + el[3]}>
           </ListItemText>
@@ -252,7 +259,7 @@ class SimpleCard extends React.Component{
             response: res.data.response,
   
             
-             // TODO: add status, flag 
+             // TODO: add flag 
   
           })
 
@@ -449,10 +456,42 @@ class SimpleCard extends React.Component{
               {/* Welcome to Accenture's ticket system */}
               Welcome Back, {this.state.fullName}
               </Typography>
-              <p>Here are your ticket statistics as shown below. </p>
-              <p style={{display:'inline-block'}}>New</p>
-              <p style={{display:'inline-block'}}>In Progress</p>
-              <p style={{display:'inline-block'}}>Closed</p>              
+              <p>Welcome to your ACNAPI Dashboard. Your ticket statistics: </p>
+              <Grid container>
+              <Grid item xs style={{alignItems: 'center', alignContent: 'center',textAlign: 'center'}}>
+              <p style={{display:'inline-block', fontWeight: 'bold'}}>Total of Tickets Sent</p>
+              <p>{this.state.newTicketCount + this.state.progressTicketCount + this.state.closedTicketCount}</p>
+              </Grid>
+              </Grid>
+              <Grid container>
+              <Grid item xs style={{alignItems: 'center', alignContent: 'center',textAlign: 'center'}}>
+              <p style={{display:'inline-block', fontWeight: 'bold', color: 'red'}}>New</p>
+              <p>{this.state.newTicketCount}</p>
+              </Grid>
+              <Grid item xs style={{alignItems: 'center', alignContent: 'center', textAlign: 'center'}}>
+              <p style={{display:'inline-block', fontWeight: 'bold', color: 'blue'}}>In Progress</p>
+              <p>{this.state.progressTicketCount}</p>
+              </Grid>
+              <Grid item xs style={{alignItems: 'center', alignContent: 'center', textAlign: 'center'}}>
+              <p style={{display:'inline-block', fontWeight: 'bold', color: 'green'}}>Closed</p> 
+              <p>{this.state.closedTicketCount}</p>
+              </Grid>
+              </Grid>
+              <Divider />
+              <Typography variant="h5" className="guttertop" style={{fontWeight: 'bold'}}>
+              Support Policy
+              </Typography>
+              <Typography style={{textAlign: 'justify'}}>
+               We repond to any form of queries but not limited to:
+               <ul>
+                 <li>Technical</li>
+                 <li>Billing</li>
+                 <li>Sales</li>
+                 <li>Product Inquiry</li>
+                 <li>General Inquiry</li>
+               </ul>
+               For a list of our products, click <a href="https://beta.acnapi.io">here</a>.
+              </Typography>
 
             </CardContent>
         </Card> 

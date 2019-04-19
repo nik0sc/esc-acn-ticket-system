@@ -140,21 +140,29 @@ class ClientReviewTicket extends React.Component {
         if(this.state.flag === 0){
             this.setState({
                 flag: 'New',
+                disabledBad: true,
+                disabledGood: true,
             })
         }
         if(this.state.flag === 1){
             this.setState({
                 flag: 'In Progress',
+                disabledBad: false,
+                disabledGood: false,
             })
         }
         if(this.state.flag === 2){
             this.setState({
-                flag: 'Insufficient',
+                flag: 'In Progress',
+                disabledBad: true,
+                disabledGood: true,
             })
         }
         if(this.state.flag === 3){
             this.setState({
                 flag: 'Closed',
+                disabledBad: true,
+                disabledGood: true,
             })
         }
     }
