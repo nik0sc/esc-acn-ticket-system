@@ -8,6 +8,7 @@ import {withRouter} from 'react-router-dom'
 import compose from 'recompose/compose';
 import Cookies from 'universal-cookie';
 import { ToastsStore } from 'react-toasts';
+import bg from '../img/accenture_big.png';
 
 
 const styles = theme => ({
@@ -86,7 +87,7 @@ class Admin extends React.Component{
         this.props.history.push('/tickets');
       }
         return(
-          <div className="background">
+          <div>
           <main className={classes.main}>
            <CssBaseline />
            <Paper className={classes.paper}>
@@ -114,6 +115,7 @@ class Admin extends React.Component{
              </form> 
            </Paper>
          </main>
+         <img src={bg} width="400" height="240" className="testing123"/>
            </div>
         )
     }

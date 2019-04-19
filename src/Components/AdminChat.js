@@ -102,26 +102,10 @@ class AdminChat extends React.Component {
               <Typography variant="h6" color="inherit" className={classes.title}>
                Admin: Real-Time Chat
               </Typography>
-              {/* <Button color="inherit" className={classes.save} onClick={this.handleClose}>
-                CLOSE
-              </Button> */}
             </Toolbar>
           </AppBar>
           <div style={{backgroundColor: '#F9C03E'}}>
           </div>
-          {/* <Grid
-          container
-          spacing={0}
-          direction="column"
-          alignItems="center"
-          justify="center"
-          >
-          <Grid item xs={12}>
-          <Card>
-          {this.renderChat()}
-          </Card>
-          </Grid>
-          </Grid> */}
           {this.renderChat()}
 
 

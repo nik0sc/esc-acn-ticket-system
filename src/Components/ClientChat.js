@@ -49,6 +49,7 @@ const styles = (theme) => ({
 class ClientChat extends React.Component {
     state={
         mountChat: false,
+        redirect: false,
     }    
 
   axiosFunc(){
@@ -85,8 +86,14 @@ class ClientChat extends React.Component {
     componentDidMount(){
         this.axiosFunc(); 
     }
-   
-    
+
+    handleClose = () => {
+      this.setState({
+        redirect: true,
+      })
+      
+    }
+  
   render() {
 
     const { classes } = this.props;
@@ -111,19 +118,6 @@ class ClientChat extends React.Component {
           </AppBar>
           <div style={{backgroundColor: '#F9C03E'}}>
           </div>
-          {/* <Grid
-          container
-          spacing={0}
-          direction="column"
-          alignItems="center"
-          justify="center"
-          >
-          <Grid item xs={12}>
-          <Card>
-          {this.renderChat()}
-          </Card>
-          </Grid>
-          </Grid> */}
           {this.renderChat()}
 
 

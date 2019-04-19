@@ -122,11 +122,6 @@ class ClientReviewTicket extends React.Component {
                 priority: 'High',
             })
         }
-        if(this.state.priority === 4){
-            this.setState({
-                priority: 'Urgent',
-            })
-        }
         if(this.state.severity === 1){
             this.setState({
                 severity: 'Low',
@@ -142,11 +137,6 @@ class ClientReviewTicket extends React.Component {
                 severity: 'High',
             })
         }
-        if(this.state.severity === 4){
-            this.setState({
-                severity: 'Critical',
-            })
-        }
         if(this.state.flag === 0){
             this.setState({
                 flag: 'New',
@@ -159,7 +149,7 @@ class ClientReviewTicket extends React.Component {
         }
         if(this.state.flag === 2){
             this.setState({
-                flag: 'In Progress',
+                flag: 'Insufficient',
             })
         }
         if(this.state.flag === 3){

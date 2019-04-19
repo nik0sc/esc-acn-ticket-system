@@ -22,7 +22,7 @@ import { Dialog } from 'material-ui';
 import {withRouter} from 'react-router-dom'
 import compose from 'recompose/compose';
 import {ToastsContainer, ToastsStore, ToastsContainerPosition} from 'react-toasts';
-import logo from '../img/acn_icon.png';
+import logo from '../img/acn_logo_black.png';
 
 const message=null;
 
@@ -210,11 +210,11 @@ class RegisterNew extends React.Component{
     
     return(
       
-      <div>
+      <div className="backgroundRegister">
           <main className={classes.main}> 
       <CssBaseline />
       <Paper className={classes.paper}>
-      <img src={logo} width="40" height="40" alt="acn_logo" />
+      <img src={logo} width="80" height="30" alt="acn_logo" />
         <form className={classes.form}  onSubmit={this.getUser.bind(this)} noValidate>
         <FormControl margin="normal" required className={classes.first}>
             <InputLabel htmlFor="firstName">First Name</InputLabel>

@@ -17,14 +17,17 @@ import compose from 'recompose/compose';
 
 const customStyles = {
   HighCell: {
+    color: "#F23913",
+  },
+  MediumCell:{
     color: "#F2852B",
   },
-  UrgentCell:{
-    color: '#F23913',
+  LowCell:{
+    color: '#59af26'
   },
-  CriticalCell: {
-    color: '#F23913',
-  }
+  InsufficientCell:{
+    color: '#ed4a3b'
+  },
 };
 
 class Tickets extends React.Component{
@@ -90,26 +93,21 @@ class Tickets extends React.Component{
                 allT[i].priority = "Low";
               }
               if(allT[i].priority ===2){
-                allT[i].priority = "Normal";
+                allT[i].priority = "Medium";
               }
               if(allT[i].priority ===3){
                 allT[i].priority = "High";
-              }
-              if(allT[i].priority === 4){
-                allT[i].priority = "Urgent";
               }
               if(allT[i].severity === 1){
                 allT[i].severity = "Low";
               }
               if(allT[i].severity ===2){
-                allT[i].severity = "Normal";
+                allT[i].severity = "Medium";
               }
               if(allT[i].severity ===3){
                 allT[i].severity = "High";
               }
-              if(allT[i].severity === 4){
-                allT[i].severity = "Critical";
-              }
+              
             }
             this.setState({
               allTickets: allT,
@@ -208,11 +206,13 @@ class Tickets extends React.Component{
              options: {
               filter: true,
               sort: true,
+              filterOptions: ['Low', 'Medium', 'High'],
               setCellProps: (value) => {
                   return{
                       className: classnames ({
                           [this.props.classes.HighCell]: value === "High",
-                          [this.props.classes.UrgentCell]: value === "Urgent",
+                          [this.props.classes.MediumCell]: value === "Medium",
+                          [this.props.classes.LowCell]: value === "Low",
                       })
                   };
               }
@@ -224,10 +224,13 @@ class Tickets extends React.Component{
               options: {
                filter: true,
                sort: true,
+               filterOptions: ['Low', 'Medium', 'High'],
                setCellProps: (value) =>{
                    return{
                        className: classnames ({
-                           [this.props.classes.CriticalCell]: value === "Critical",
+                        [this.props.classes.HighCell]: value === "High",
+                        [this.props.classes.MediumCell]: value === "Medium",
+                        [this.props.classes.LowCell]: value === "Low",
                        })
                    };
                }
@@ -239,21 +242,17 @@ class Tickets extends React.Component{
               options: {
                filter: true,
                sort: true,
+               filterOptions: ['Billing', 'Technical', 'Sales', 'General Inquiry'],
               }
              },
-            // {
-            //    name: "progress",
-            //    label: "Progress",
-            //    options: {
-            //     filter: true,
-            //     sort: true,
-            //    }},
             {
               name: "flag",
-              label: "Flag",
+              label: "Status",
+              
               options: {
-                filter: false,
-                sort: false,
+                filter: true,
+                sort: true,
+                filterOptions: ['New', 'In Progress', 'Insufficent', 'Closed'],
               }
             },
                 {

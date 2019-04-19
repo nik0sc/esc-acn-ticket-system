@@ -67,10 +67,11 @@ class FormDialog extends React.Component {
     scroll: 'paper',
     title: '',
     message: '',
-    topics: [],
     priority: '',
     severity: '',
-    createdTicketID:'',
+    createdTicketID:'',    // for email notification
+    username: '',          // for email notification
+    email: '',             // for email notification
   };
 
   handleClickOpen = scroll => () => {
@@ -98,6 +99,21 @@ class FormDialog extends React.Component {
     }
     if(this.state.message !== '' && this.state.title !== '' && this.state.topics !== '' && this.state.priority !== '' && this.state.severity !== ''){
       ToastsStore.success('Your query has been submitted!')
+
+      // get user (for email integration)
+      axios.get(`https://user-service.ticket.lepak.sg/user/me`, {
+      headers: {
+        'X-Parse-Session-Token': CurrentSessionToken,
+      }
+    })
+    .then((res) => {
+      if(res.request.status === 200){
+        this.setState({
+          username: res.data.username,
+          email: res.data.email,
+        })
+      }
+    })
       
 
       // create ticket

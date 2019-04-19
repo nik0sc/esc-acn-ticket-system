@@ -158,11 +158,14 @@
 }
 
 .background {
-  background-color: #F9C03E !important;
-  background-size: cover;
-  -webkit-background-size: cover;
+  /* background-color: rgb(255, 255, 255) !important; */
+  background-image: url('../src/img/accenture_big.png');
+  background-size: 70%;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  /* -webkit-background-size: cover;
   -moz-background-size: cover;
-  -o-background-size: cover;
+  -o-background-size: cover; */
   height:100%;
   width: 100%;
   position: absolute;
@@ -208,6 +211,23 @@
 .backgroundSignIn {
   /* background-image: url('../src/img/black.jpg'); */
   background-image: url('../src/img/login_page.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  height:100%;
+  width: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%); 
+}
+
+.backgroundRegister {
+  /* background-image: url('../src/img/black.jpg'); */
+  background-image: url('../src/img/background_register.png');
   background-repeat: no-repeat;
   background-size: contain;
   -webkit-background-size: cover;
@@ -278,3 +298,8 @@
   display: flex;
 
 } */
+
+.testing123 {
+  justify-content: center;
+  margin-left: 35%;
+}
