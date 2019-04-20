@@ -69,10 +69,25 @@ class FormDialog extends React.Component {
     message: '',
     priority: '',
     severity: '',
-    createdTicketID:'',    // for email notification
-    username: '',          // for email notification
-    email: '',             // for email notification
+    sendEmail: false,
   };
+
+  componentDidMount(){
+     // get user (for email integration)
+     axios.get(`https://user-service.ticket.lepak.sg/user/me`, {
+      headers: {
+        'X-Parse-Session-Token': CurrentSessionToken,
+      }
+    })
+    .then((res) => {
+      if(res.request.status === 200){
+        this.setState({
+          username: res.data.username,
+          email: res.data.email,
+        })
+      }
+    })
+  }
 
   handleClickOpen = scroll => () => {
     this.setState({ open: true, scroll });
@@ -92,31 +107,16 @@ class FormDialog extends React.Component {
     this.setState({message: event.target.value})
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async(e) => {
     if(this.state.message  === '' || this.state.title === '' || this.state.topics===[] || this.state.priority === '' || this.state.severity === ''){
       //console.log('not clear')
       ToastsStore.error('Empty fields detected.')
     }
     if(this.state.message !== '' && this.state.title !== '' && this.state.topics !== '' && this.state.priority !== '' && this.state.severity !== ''){
-      ToastsStore.success('Your query has been submitted!')
+      ToastsStore.success('Your query has been submitted! A confirmation email is sent to you.')
 
-      // get user (for email integration)
-      axios.get(`https://user-service.ticket.lepak.sg/user/me`, {
-      headers: {
-        'X-Parse-Session-Token': CurrentSessionToken,
-      }
-    })
-    .then((res) => {
-      if(res.request.status === 200){
-        this.setState({
-          username: res.data.username,
-          email: res.data.email,
-        })
-      }
-    })
-      
-
-      // create ticket
+    
+      //create ticket
       axios.post(`https://ticket-service.ticket.lepak.sg/ticket`, {
           title: this.state.title,
           message: this.state.message,
@@ -133,21 +133,40 @@ class FormDialog extends React.Component {
           console.log('success send ticket') 
           this.setState({
             createdTicketID: res.data.id,
+            sendEmail: true,
           })
         }
-        
-
       })
 
 
 
-
-      this.setState({ open: false, priority: '', severity: '',});
+      
+      this.setState({ open: false, priority: '', severity: '', sendMail: false});
 
     }
   };
 
 
+  sendMail(){
+    if(this.state.sendEmail){
+      axios({
+        method: "POST",
+        url: 'https://ticketnotify.herokuapp.com/send',
+        data: {
+          name: this.state.username,
+          email: this.state.email,
+          createdTicketID: this.state.createdTicketID,
+        }
+      })
+      .then((res => {
+        if(res.data.msg === 'success'){
+        }
+        else{
+        }
+      }))
+    }
+  }
+ 
   handleChange = event => {
     this.setState({ 
       topics: event.target.value }, function(){
@@ -174,6 +193,7 @@ class FormDialog extends React.Component {
         Create Ticket
       
           </Button>  */}
+          {this.sendMail()}
           <Add className="icon" onClick={this.handleClickOpen('paper')}/>
         <Dialog
           open={this.state.open}

@@ -482,13 +482,13 @@ class SimpleCard extends React.Component{
               Support Policy
               </Typography>
               <Typography style={{textAlign: 'justify'}}>
-               We repond to any form of queries but not limited to:
+               We respond to any form of enquiries which are not limited to:
                <ul>
                  <li>Technical</li>
                  <li>Billing</li>
                  <li>Sales</li>
-                 <li>Product Inquiry</li>
-                 <li>General Inquiry</li>
+                 <li>Product Enquiry</li>
+                 <li>General Enquiry</li>
                </ul>
                For a list of our products, click <a href="https://beta.acnapi.io" target="_blank">here</a>.
               </Typography>
