@@ -45,6 +45,22 @@ const SecretRoute = ({ component: Comp, path, ...rest }) => {
   );
 };
 
+const AdminRoute = ({ component: Comp, path, ...rest }) => {
+  return (
+    <Route
+      path={path}
+      {...rest}
+      render={(props) => {
+        return (cookies.get('AdminSessionToken')) ? (
+          <Comp {...props} />
+        ) : (
+          <Redirect to='/' />
+        );
+      }}
+    />
+  );
+};
+
 loadProgressBar();
 // show progress bar when axios is too slow 
 
@@ -86,25 +102,25 @@ class App extends Component {
           <div className="App_Form" >
           <Switch>
          
-              <Route exact path="/" component={SignIn}  >
+              <Route path="/login" component={SignIn}  >
               </Route>
               <Route path="/register" component={RegisterNew}>
               </Route>
-              <Route path="/landing" component={LandingPage}>
+              <Route exact path="/" component={LandingPage}>
               </Route>
               <Route path="/admin" component={Admin} >
               </Route>
-              <Route path="/chat" component={ClientChat}></Route>
-              <Route path="/clientReview" component={ClientReviewTicket}></Route>
+              <SecretRoute path="/chat" component={ClientChat}></SecretRoute>
+              <SecretRoute path="/clientReview" component={ClientReviewTicket}></SecretRoute>
               <SecretRoute path="/dashboard" component={Dashboard} >
               </SecretRoute>
               {/* <Route path="/dashboard" component={Dashboard} >
               </Route> */}
-              <Route exact path="/tickets" component={Tickets}>
-              </Route>
-              <Route path="/reviewTicket" component={ReviewTicketAgain} ></Route>
-              <Route path="/AdminChat" component={AdminChat}>
-              </Route>
+              <AdminRoute exact path="/tickets" component={Tickets}>
+              </AdminRoute>
+              <AdminRoute path="/reviewTicket" component={ReviewTicketAgain} ></AdminRoute>
+              <AdminRoute path="/AdminChat" component={AdminChat}>
+              </AdminRoute>
               <Route path="*" exact={true} component={NotFound} />
               </Switch>
               </div>

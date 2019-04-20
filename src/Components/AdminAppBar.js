@@ -37,6 +37,13 @@ const styles = {
     outline: 'none',
     textTransform: 'none',
     fontSize: 18,
+  },
+  liveChat:{
+    fontWeight: 'bold',
+    color:'white',
+    outline: 'none',
+    textTransform: 'none',
+    fontSize: 18,
   }
 };
 class AdminAppBar extends React.Component{
@@ -46,7 +53,7 @@ class AdminAppBar extends React.Component{
     }
 
     handleClick = (e) => {
-        cookies.remove('sessionToken');
+        cookies.remove('AdminSessionToken');
         this.setState({
             redirect: true
         })
@@ -82,7 +89,7 @@ class AdminAppBar extends React.Component{
             <Typography variant="h6" color="inherit" className={classes.grow}>
             Admin: Ticket System
           </Typography>
-          <Button onClick={this.handleChat} color="inherit" className={classes.logout}> Live Chat</Button>
+          <Button onClick={this.handleChat} color="inherit" className={classes.liveChat}> Live Chat</Button>
           <Button onClick={this.handleClick.bind(this)} color="inherit" className={classes.logout}>Log Out</Button>
         </Toolbar>
       </AppBar>

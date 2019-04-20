@@ -23,7 +23,6 @@ import ChatComponent from "./ChatComponent";
 import compose from 'recompose/compose';
 import {Redirect, NavLink, Route, Switch, Link, withRouter} from 'react-router-dom'
 
-
 const cookies = new Cookies();
 const CurrentSessionToken = cookies.get('sessionToken');
 
@@ -274,7 +273,7 @@ class SimpleCard extends React.Component{
 
             if(this.state.response === null){
               this.setState({
-                response: "Admin has not replied yet."
+                response: "Admin have not replied yet."
               })
             }
 
@@ -490,7 +489,8 @@ class SimpleCard extends React.Component{
                  <li>Product Enquiry</li>
                  <li>General Enquiry</li>
                </ul>
-               For a list of our products, click <a href="https://beta.acnapi.io" target="_blank">here</a>.
+               <br/>
+               If you would like more information on ACNAPI or our products, click <a href="https://beta.acnapi.io" target="_blank">here</a>.
               </Typography>
             </CardContent>
         </Card> 

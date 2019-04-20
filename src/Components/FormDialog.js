@@ -264,7 +264,7 @@ class FormDialog extends React.Component {
               <em>None</em>
             </MenuItem>
             <MenuItem value={1}>Low</MenuItem>
-            <MenuItem value={2}>Normal</MenuItem>
+            <MenuItem value={2}>Medium</MenuItem>
             <MenuItem value={3}>High</MenuItem>
           </Select>
         </FormControl>
@@ -291,7 +291,7 @@ class FormDialog extends React.Component {
               <em>None</em>
             </MenuItem>
             <MenuItem value={1}>Low</MenuItem>
-            <MenuItem value={2}>Normal</MenuItem>
+            <MenuItem value={2}>Medium</MenuItem>
             <MenuItem value={3}>High</MenuItem>
           </Select>
         </FormControl>
