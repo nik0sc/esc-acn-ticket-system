@@ -155,13 +155,13 @@ class SimpleCard extends React.Component{
             })
           }
           if(editData[i][3] === 1){
-            editData[i][3] = "In Progress";
+            editData[i][3] = "Waiting for your response";
             this.setState({
               progressTicketCount: this.state.progressTicketCount + 1,
             })
           }
           if(editData[i][3] === 2){
-            editData[i][3] = "In Progress";
+            editData[i][3] = "Response Insufficient";
             this.setState({
               progressTicketCount: this.state.progressTicketCount + 1,
             })

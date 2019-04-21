@@ -69,6 +69,7 @@ class ClientReviewTicket extends React.Component {
     time_open: '',
     redirect: false,
     flag: '',
+    updateTicket: false,
     
   }
 
@@ -146,14 +147,14 @@ class ClientReviewTicket extends React.Component {
         }
         if(this.state.flag === 1){
             this.setState({
-                flag: 'In Progress',
+                flag: 'Waiting for your response',
                 disabledBad: false,
                 disabledGood: false,
             })
         }
         if(this.state.flag === 2){
             this.setState({
-                flag: 'In Progress',
+                flag: 'Response Insufficient',
                 disabledBad: true,
                 disabledGood: true,
             })
@@ -187,9 +188,30 @@ class ClientReviewTicket extends React.Component {
       };
 
     handleClose = () => {
+      if(this.state.flag === 'Insufficient Response'){
+        this.setState({
+          flag: "2",
+        })
+      }
 
+      if(this.state.flag === 'Closed'){
+        this.setState({
+          flag: "3",
+        })
+      }
+
+      this.setState({
+        updateTicket: true,
+      })
+    }
         // change string flag back into integer flag
-        axios.put(`https://ticket-service.ticket.lepak.sg/ticket/${this.props.location.state.currentTicketIDClient}/protected`,{
+        
+
+        renderUpdate(){
+          console.log('ticket flag is updated to be: ' + this.state.flag)
+
+          if(this.state.updateTicket){
+            axios.put(`https://ticket-service.ticket.lepak.sg/ticket/${this.props.location.state.currentTicketIDClient}/protected`,{
             status_flag: this.state.flag,
         },{
             headers: {
@@ -198,9 +220,13 @@ class ClientReviewTicket extends React.Component {
         })
         console.log('client updated flag successfully')
         this.setState({
+            
             redirect: true,
         })
-    }
+
+          }
+        }
+    
     
 
   render() {
@@ -214,6 +240,7 @@ class ClientReviewTicket extends React.Component {
 
     return (
       <div>
+        {this.renderUpdate()}
            <AppBar className="appbar" style={{backgroundColor: '#000000'}} >
             <Toolbar>
               <img src={logo} width='100px' height='40px' alt="teamwork" />
