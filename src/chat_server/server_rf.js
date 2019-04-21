@@ -75,7 +75,7 @@ wss.on('connection', function (ws) { //ws is a WebSocket object representing the
             admins = admins.filter(function(v){
                 return v !== departingUser;
             });
-        }else{
+        }else{ //TODO: Send some message to admins so they know that the room is closed
             var toClose = departingUser.activeRooms.pop(); //Non admins will only have one entry.
             toClose.participants.forEach(function (user) {
                 if (user !== departingUser){ //These are the admins, remove their references to this room.

@@ -1,4 +1,5 @@
 import React from  'react';
+import Button from '@material-ui/core/Button';
 
 class ChatInput extends React.Component {
     state = {
@@ -26,7 +27,14 @@ class ChatInput extends React.Component {
                     type="text"
                     autoFocus={true}
                 />
-                <button color="inherit">Send</button>
+                <Button type="submit"
+                    style={{
+                    background: '#EEAAFF',
+                    borderRadius: 3,
+                    border: 0,
+                    color: 'black',
+                    height: 40,
+                    padding: '0 30px'}}>Envoyer</Button>
             </form>
         </div>);
     }
