@@ -75,23 +75,9 @@ wss.on('connection', function (ws) { //ws is a WebSocket object representing the
             admins = admins.filter(function(v){
                 return v !== departingUser;
             });
-        }else{ //TODO: Send some message to admins so they know that the room is closed
-            var toClose = departingUser.activeRooms.pop(); //Non admins will only have one entry.
-            toClose.participants.forEach(function (user) {
-                if (user !== departingUser){ //These are the admins, remove their references to this room.
-                    user.activeRooms = user.activeRooms.filter(function (v) {
-                        return v !== toClose;
-                    });
-                }
-            });
-            toClose.participants = [];
-            rooms = rooms.filter(function (v) {
-                return v!==toClose;
-            });
-            nonAdmins = nonAdmins.filter(function (v) {
-                return v !== departingUser;
-            });
-            console.log("A user has left");
+        }else{
+            console.log("handling non admin departure");
+            handleNonAdminClose(departingUser);
         }
 
     });
@@ -122,6 +108,28 @@ function registerAdmin(ws,message){ //Registering a new admin adds said admin to
     rooms.forEach(function (room) {
         room.participants.push(newAdminUser);
         sendReceipt(newAdminUser,room);
+    });
+}
+
+//TODO: Send some message to admins so they know that the room is closed and is no longer being served
+function handleNonAdminClose(departingUser){
+    var toClose = departingUser.activeRooms.pop(); //Non admins will only have one entry.
+    console.log(toClose.participants);
+    toClose.participants.forEach(function (user) {
+        if (user !== departingUser){ //These are the admins, remove their references to this room.
+            user.activeRooms = user.activeRooms.filter(function (v) {
+                return v !== toClose;
+            });
+            if(user.webSocket.readyState !== 3) user.webSocket.send(JSON.stringify({type: "eviction", room:toClose.roomId}));
+            console.log("Delivered eviction notice");
+        }
+    });
+    toClose.participants = [];
+    rooms = rooms.filter(function (v) {
+        return v!==toClose;
+    });
+    nonAdmins = nonAdmins.filter(function (v) {
+        return v !== departingUser;
     });
 }
 

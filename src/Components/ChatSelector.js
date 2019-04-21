@@ -10,8 +10,12 @@ class ChatSelector extends React.Component {
     constructor(props){
         super(props);
         this.state.clientusers = props.activerooms;
-        console.log(props.notificationState);
         this.state.notifications = props.notificationState;
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.state.clientusers !== this.props.activerooms)
+            this.setState({clientusers: this.props.activerooms, notifications: this.props.notificationState});
     }
 
     renderClientuser = (r) => {
@@ -19,13 +23,14 @@ class ChatSelector extends React.Component {
         var room_displayed_name = r.name;
         console.log(r);
         var room_state = this.state.notifications.get(room_id);
-        console.log(room_state);
         var color = (room_state === 0 || room_state === undefined) ? "#AAEEFF" :
+                    (room_state === 69) ? "#999999" :
                     (room_state === 1) ? "#40FF80" : "#FF8888" ;
         return(
             <li>
                 <div>
                     <Button onClick={() => this.props.onSelect(room_id)}
+                            disabled={room_state === 69}
                             style={{
                                 background: color,
                                 borderRadius: 3,
