@@ -22,6 +22,9 @@ import {Redirect, NavLink, Route, Switch, Link} from 'react-router-dom'
 import {withRouter} from 'react-router-dom'
 import compose from 'recompose/compose';
 import Cookies from 'universal-cookie';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { ToastsStore } from 'react-toasts';
+
 
 
 const cookies = new Cookies();
@@ -78,50 +81,32 @@ class ReviewTicketAgain extends React.Component {
     priority: '',
     severity: '',
     team: '',
+    status_flag: '0',
     flag: '',
     status: '0',
     redirect: false,
+    goBack: false,
+    responseDisplayed: '',
   }
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value }, function() {
-      console.log("CHANGES: " + this.state.team + " " + this.state.status);
+      console.log("CHANGES: " + this.state.status_flag + " " + this.state.team);
     });
   };
 
+
+
   handleClose = () => {
-
-    // update ticket
-    axios.put(`https://esc-ticket-service.lepak.sg/ticket/${this.props.location.state.currentTicketID}/protected`,{
-      response: this.state.response,
-      team: this.state.team,
-      },{
-      headers: {
-        'X-Parse-Session-Token': 'r:5ab3041d2ff2484950e68251589ec347',
-      },
-    })
-    .then((res) => {
-      if(res.request.status === 200){
-        this.setState({
-          response: this.state.response,
-          team: this.state.team,
-        }, function(){
-          console.log('after updating: ' + 'response: ' + this.state.response + 'team: ' + this.state.team);
-        })
-      }
-    })
-
-    this.setState({
-      redirect: true,
-    })
-
-
-  
-  }
+    ToastsStore.success('Ticket Updated');
+  this.setState({
+    goBack: true,
+  })
+}
 
   onChange = e => {
     this.setState({
-      response: e.target.value,
+      responseDisplayed: e.target.value,
     })
   }
 
@@ -144,11 +129,17 @@ class ReviewTicketAgain extends React.Component {
           priority: res.data.priority,
           severity: res.data.severity,
           team: res.data.assigned_team,
-          flag: res.data.status_flag,
+          status_flag: res.data.status_flag,
+          responseDisplayed: res.data.response,
 
           // add status(progress)
           
         })
+        if(this.state.response === null || this.state.response === 'Admins have not replied yet'){
+          this.setState({
+            responseDisplayed: 'Admins have not replied yet.',
+          })
+        }
         if(this.state.team === null){
           this.setState({
               team: 0,
@@ -219,6 +210,40 @@ class ReviewTicketAgain extends React.Component {
     }))
   }
 
+  renderChange(){
+    if(this.state.goBack){
+    console.log('handleclose RESPONSE: ' + this.state.response);
+    console.log('handleclose TEAM: ' + this.state.team);
+    console.log('handleclose FLAG: ' + this.state.status_flag)
+    // update ticket
+    axios.put(`https://ticket-service.ticket.lepak.sg/ticket/${this.props.location.state.currentTicketID}/protected`,{
+      assigned_team: this.state.team,
+      response: this.state.responseDisplayed,
+      status_flag: this.state.status_flag
+      
+      },{
+      headers: {
+        'X-Parse-Session-Token': 'r:5ab3041d2ff2484950e68251589ec347',
+      },
+    })
+    .then((res) => {
+      if(res.request.status === 200){
+       console.log('yes');
+ 
+      }
+    })
+
+    this.setState({
+      redirect: true,
+    })  
+  }
+    }
+
+    renderR(){
+      console.log('REEEEEE: ' + this.state.responseDisplayed);
+    }
+  
+
   render() {
 
     const { classes } = this.props;
@@ -226,10 +251,11 @@ class ReviewTicketAgain extends React.Component {
     if(this.state.redirect){
       this.props.history.push('/tickets');
     }
-
+  
 
     return (
       <div>
+        {this.renderChange()}
            <AppBar className="appbar" style={{backgroundColor: '#000000'}} >
             <Toolbar>
               <img src={logo} width='100px' height='40px' alt="teamwork" />
@@ -256,8 +282,27 @@ class ReviewTicketAgain extends React.Component {
               <p>{this.state.message}</p>
             </CardContent>
             </Card>
-            <AdminReplyTextField onChange={this.onChange.bind(this)}/>
-          </Grid>
+          <div className="textareadiv">
+          <label for="textarea"><h5 className="infoTitle">Admin Actions</h5></label>
+            {/* <AdminReplyTextField onChange={this.onChange.bind(this)} ticketID={this.props.location.state.currentTicketID} /> */}
+           <textarea value={this.state.responseDisplayed} onChange={this.onChange} rows="12" cols="97" className='textarea' id="textarea">
+             
+           </textarea>
+           </div>
+            
+
+            
+            {/* <TextField
+          id="outlined-name"
+          label="Name"
+          className={classes.textField}
+          value={this.state.response}
+          onChange={this.onChange}
+          margin="normal"
+          variant="outlined"
+        /> */}
+           </Grid>
+        
           
 
 
@@ -289,18 +334,19 @@ class ReviewTicketAgain extends React.Component {
               Status
             </InputLabel>
             <Select
-              value={this.state.status}
+              value={this.state.status_flag}
               onChange={this.handleChange}
               input={
               <OutlinedInput
                 labelWidth={45}
-                name="status"
-                id="outlined-status-simple"
+                name="status_flag"
+                id="outlined-status_flag-simple"
               />
             }
             >
             <MenuItem value={0}>New</MenuItem>
             <MenuItem value={1}>In Progress</MenuItem>
+            <MenuItem value={2}>Response Insufficient</MenuItem>
             <MenuItem value={3}>Closed</MenuItem>
           </Select>
         </FormControl>
@@ -321,7 +367,7 @@ class ReviewTicketAgain extends React.Component {
             >
             <MenuItem value={0}>None</MenuItem>
             <MenuItem value={1}>Billing</MenuItem>
-            <MenuItem value={2}>Support</MenuItem>
+            <MenuItem value={2}>Technical</MenuItem>
             <MenuItem value={3}>General Inquiry</MenuItem>
           </Select>
         </FormControl>

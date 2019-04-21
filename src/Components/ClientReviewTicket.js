@@ -99,7 +99,7 @@ class ClientReviewTicket extends React.Component {
         })
         if(this.state.response === null){
             this.setState({
-                response: "Admin has not replied yet."
+                response: "Admin have not replied yet."
             })
         }
         if(this.state.team === null){

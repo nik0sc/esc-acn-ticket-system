@@ -10,7 +10,6 @@ import { TextField, InputLabel, Select, OutlinedInput, Typography } from '@mater
 import 'filepond/dist/filepond.min.css';
 import * as FilePond from 'filepond';
 import FileAttach from './FileAttach';
-import MultipleSelect from './MultipleSelect';
 import FormControl from '@material-ui/core/FormControl';
 import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';

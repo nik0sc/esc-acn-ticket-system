@@ -74,14 +74,29 @@ class Tickets extends React.Component{
             //console.log(this.state.allTickets[0].assigned_team);  // null
             const allT = this.state.allTickets;
             for(var i =0;i<allT.length;i++){
-              if(allT[i].assigned_team === null){
+              if(allT[i].assigned_team === null || allT[i].assigned_team === 0){
                 allT[i].assigned_team = "-";
               }
+              if(allT[i].assigned_team === 1){
+                allT[i].assigned_team = "Billing";
+              }
+              if(allT[i].assigned_team === 2){
+                allT[i].assigned_team = "Technical";
+              }
+              if(allT[i].assigned_team === 3){
+                allT[i].assigned_team = "General";
+              }
               if(allT[i].flag === 0){
-                allT[i].flag = "-";
+                allT[i].flag = "New";
               }
               if(allT[i].flag === 1){
                 allT[i].flag = "In Progress";
+              }
+              if(allT[i].flag === 2){
+                allT[i].flag = "Response Insufficient";
+              }
+              if(allT[i].flag === 3){
+                allT[i].flag = "Closed";
               }
 
               if(allT[i].open_time){
@@ -253,6 +268,14 @@ class Tickets extends React.Component{
                 filter: true,
                 sort: true,
                 filterOptions: ['New', 'In Progress', 'Insufficent', 'Closed'],
+                setCellProps: (value) =>{
+                  return{
+                      className: classnames ({
+                       [this.props.classes.InsufficientCell]: value === "Response Insufficient",
+                      
+                      })
+                  };
+              }
               }
             },
                 {
@@ -275,6 +298,7 @@ class Tickets extends React.Component{
            
 
 const options = {
+    selectableRows: false,
     filterType: 'dropdown',
     resizableColumns: true,
     rowsPerPageOptions: [5, 10, 15],

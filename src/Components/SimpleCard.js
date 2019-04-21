@@ -190,7 +190,7 @@ class SimpleCard extends React.Component{
   componentDidMount(){
 
     this.axiosFunc();
-   
+    
     //this.interval = setInterval(this.axiosFunc, 10000);
   }
 
