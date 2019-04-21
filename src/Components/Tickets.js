@@ -52,7 +52,7 @@ class Tickets extends React.Component{
     clearInterval(this.interval);
   }
 
-  axiosFunc = (limit, start) => {
+  axiosFunc = async(limit, start) => {
     const cookies = new Cookies();
     const LoggedSessionToken = cookies.get('AdminSessionToken');
     const {datas} = this.state;
@@ -137,7 +137,7 @@ class Tickets extends React.Component{
     
   componentDidMount(){
     console.log('component mounted');
-    this.axiosFunc(15, 0);
+    this.axiosFunc(20, 0);
     //this.interval = setInterval(this.axiosFunc, 10000);
 
   }
@@ -180,15 +180,6 @@ class Tickets extends React.Component{
               sort: true,
              }
             },
-            // {
-            //  name: "topics",
-            //  label: "Topics",
-            //  options: {
-            //   filter: true,
-            //   filterOptions: ['AR City', 'DevOps', 'Smart City'],
-            //   sort: false,
-            //  }
-            // },
             {
              name: "title",
              label: "Subject Title",
@@ -206,15 +197,6 @@ class Tickets extends React.Component{
                  display: false,
                 }
                },
-              //  {
-              //   name: "fullname",
-              //   label: "Full Name",
-              //   options: {
-              //    filter: false,
-              //    sort: false,
-              //    display: false,
-              //   }
-              //  },
             {
              name: "priority",
              label: "Priority",
@@ -288,12 +270,6 @@ class Tickets extends React.Component{
                }, 
            ];
            
-          //  const data = [
-          //   { id: "1", topics: ["Smart City", "DevOps"], title:"Help!", message:'help me plzzzzzz',progress: "In Progress", priority: "Low", time: 5  },
-          //   { id: "2", topics: "AR City", title:"Please save me!", message: 'why dont you sing me a song', progress: "Open", priority: "Medium", time: 2},
-          //   { id: "3", topics: "Business Pls", title:"What is life?", message: 'what is this and how to help', progress: "Closed", priority: "High", time: 1 },
-          //   { id: "4", topics: "Driveby", title:"Can't do this", message: 'aahhhhh', progress: "Open", priority: "Medium", time: 10 },
-          //  ];
           const data = this.state.allTickets;
            
 
@@ -301,7 +277,8 @@ const options = {
     selectableRows: false,
     filterType: 'dropdown',
     resizableColumns: true,
-    rowsPerPageOptions: [5, 10, 15],
+    rowsPerPage: 20,
+    rowsPerPageOptions: [5, 10, 20],
     onChangePage: (currentPage) => {
       const {prev, limit} = this.state;
       if(currentPage > prev){

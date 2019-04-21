@@ -87,6 +87,7 @@ class ReviewTicketAgain extends React.Component {
     redirect: false,
     goBack: false,
     responseDisplayed: '',
+    userProfile: false,
   }
 
   handleChange = event => {
@@ -115,7 +116,7 @@ class ReviewTicketAgain extends React.Component {
 
     axios.get(`https://ticket-service.ticket.lepak.sg/ticket/${this.props.location.state.currentTicketID}`,{
       headers: {
-        'X-Parse-Session-Token':  'r:5ab3041d2ff2484950e68251589ec347', 
+        'X-Parse-Session-Token': LoggedSessionToken, 
       }
     })
     .then((res => {
@@ -130,7 +131,9 @@ class ReviewTicketAgain extends React.Component {
           severity: res.data.severity,
           team: res.data.assigned_team,
           status_flag: res.data.status_flag,
+          opener_user: res.data.opener_user,
           responseDisplayed: res.data.response,
+          userProfile: true,
 
           // add status(progress)
           
@@ -142,7 +145,7 @@ class ReviewTicketAgain extends React.Component {
         }
         if(this.state.team === null){
           this.setState({
-              team: 0,
+              team: '0',
           })
       }
       if(this.state.priority === 1){
@@ -160,11 +163,6 @@ class ReviewTicketAgain extends React.Component {
               priority: 'High',
           })
       }
-      if(this.state.priority === 4){
-          this.setState({
-              priority: 'Urgent',
-          })
-      }
       if(this.state.severity === 1){
           this.setState({
               severity: 'Low',
@@ -180,12 +178,6 @@ class ReviewTicketAgain extends React.Component {
               severity: 'High',
           })
       }
-      if(this.state.severity === 4){
-          this.setState({
-              severity: 'Critical',
-          })
-      }
-
         if(this.state.flag === 0){
           this.setState({
             flag: 'New',
@@ -208,6 +200,27 @@ class ReviewTicketAgain extends React.Component {
         }
       }
     }))
+    
+  }
+
+  getUserProfile(){
+    if(this.state.userProfile){
+      axios.get(`https://user-service.ticket.lepak.sg/user/acn:${this.state.opener_user}`,{
+        headers:{
+          'X-Parse-Session-Token': LoggedSessionToken,
+        }
+      })
+      .then((res => {
+        if(res.request.status === 200){
+          this.setState({
+            username: res.data.username,
+            long_name: res.data.long_name,
+            email: res.data.email,
+            phone: res.data.phone,
+          })
+        }
+      }))
+    }
   }
 
   renderChange(){
@@ -223,7 +236,7 @@ class ReviewTicketAgain extends React.Component {
       
       },{
       headers: {
-        'X-Parse-Session-Token': 'r:5ab3041d2ff2484950e68251589ec347',
+        'X-Parse-Session-Token': LoggedSessionToken,
       },
     })
     .then((res) => {
@@ -249,13 +262,15 @@ class ReviewTicketAgain extends React.Component {
     const { classes } = this.props;
 
     if(this.state.redirect){
-      this.props.history.push('/tickets');
+      // this.props.history.push('/tickets');
+      return <Redirect to="/tickets" />
     }
   
 
     return (
       <div>
         {this.renderChange()}
+        {this.getUserProfile()}
            <AppBar className="appbar" style={{backgroundColor: '#000000'}} >
             <Toolbar>
               <img src={logo} width='100px' height='40px' alt="teamwork" />
@@ -283,7 +298,7 @@ class ReviewTicketAgain extends React.Component {
             </CardContent>
             </Card>
           <div className="textareadiv">
-          <label for="textarea"><h5 className="infoTitle">Admin Actions</h5></label>
+          <label htmlFor="textarea"><h5 className="infoTitle">Admin Actions</h5></label>
             {/* <AdminReplyTextField onChange={this.onChange.bind(this)} ticketID={this.props.location.state.currentTicketID} /> */}
            <textarea value={this.state.responseDisplayed} onChange={this.onChange} rows="12" cols="97" className='textarea' id="textarea">
              
@@ -311,10 +326,10 @@ class ReviewTicketAgain extends React.Component {
             <CardContent>
               <h5 className="infoTitle"> Contact Information</h5>
               <Divider/>
-              <Typography className="guttertop">Full Name: fullname</Typography>
-              <Typography>Username: username</Typography>
-              <Typography>Email: email</Typography>
-              <Typography>Phone Number: phone</Typography>
+              <Typography className="guttertop">Full Name: {this.state.long_name}</Typography>
+              <Typography>Username: {this.state.username}</Typography>
+              <Typography>Email: {this.state.email}</Typography>
+              <Typography>Phone Number: {this.state.phone}</Typography>
               <br/>
               <h5 className="infoTitle"> Ticket Information</h5>
               <Divider />
@@ -324,7 +339,6 @@ class ReviewTicketAgain extends React.Component {
               {/* <Typography>Categories: </Typography> */}
               <Typography>Date Opened by User: {this.state.open_time.substring(0, 10)}</Typography>
               <Typography>Time Opened by User: {this.state.open_time.substring(11, 19)}</Typography> 
-              <Typography>Feedback: {this.state.flag}</Typography>
               <br />
               <h5 className="infoTitle">Admin Actions</h5>
               <Divider />
