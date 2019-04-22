@@ -51,6 +51,14 @@ const styles = (theme) => ({
     fontSize: 18,
     marginLeft: 1150,
   },
+  close:{
+    position: 'absolute',
+    fontWeight: 'bold',
+    color:'#F9C03E',
+    outline: 'none',
+    fontSize: 18,
+    marginLeft: 1050,
+  },
 });
 
 const status = [
@@ -95,6 +103,13 @@ class ReviewTicketAgain extends React.Component {
       console.log("CHANGES: " + this.state.status_flag + " " + this.state.team);
     });
   };
+
+  handleCloseNoSave = () =>{
+    this.setState({
+      redirect:true,
+
+    })
+  }
 
 
 
@@ -248,6 +263,7 @@ class ReviewTicketAgain extends React.Component {
 
     this.setState({
       redirect: true,
+      goBack: false,
     })  
   }
     }
@@ -277,6 +293,9 @@ class ReviewTicketAgain extends React.Component {
               <Typography variant="h6" color="inherit" className={classes.title}>
                 Review Ticket
               </Typography>
+              <Button color="inherit" className={classes.close} onClick={this.handleCloseNoSave}>
+                CLOSE
+              </Button>
               <Button color="inherit" className={classes.save} onClick={this.handleClose}>
                 Save
               </Button>

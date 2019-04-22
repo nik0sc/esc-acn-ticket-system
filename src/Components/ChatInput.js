@@ -30,9 +30,17 @@ class ChatInput extends React.Component {
                     required
                     style={{display: 'inline-flex'}}
                 />
-                <Button size="large" style={{fontWeight: 'bold',
+                {/* <Button size="large" style={{fontWeight: 'bold',
                 color: 'black', backgroundColor: '#F2F5F8', display: "inline-flex",}}
-                >Send</Button>
+                >Send</Button> */}
+                <Button type="submit"
+                    style={{
+                    background: '#EEAAFF',
+                    borderRadius: 3,
+                    border: 0,
+                    color: 'black',
+                    height: 40,
+                    padding: '0 30px'}}>Envoyer</Button>
             </form>
         </div>);
     }

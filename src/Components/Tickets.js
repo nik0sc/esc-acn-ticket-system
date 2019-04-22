@@ -138,7 +138,7 @@ class Tickets extends React.Component{
   componentDidMount(){
     console.log('component mounted');
     this.axiosFunc(20, 0);
-    //this.interval = setInterval(this.axiosFunc, 10000);
+    this.interval = setInterval(this.axiosFunc, 10000);
 
   }
       onClose(value){
