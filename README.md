@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+##To run the test, you need to install enzyme and jest with npm.
+
 ## Available Scripts
 
 In the project directory, you can run:
